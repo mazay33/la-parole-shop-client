@@ -9,16 +9,9 @@ export default defineNuxtConfig({
       APP_NAME: pkg.name,
       APP_MODE: process.env?.NODE_ENV,
       api: '',
+      myProxyUrl: '',
     }
   },
-  // server:{
-  //   proxy:{
-  //     '/api': {
-  //       target: 'https://la-parole.ru:3000',
-  //       changeOrigin: true
-  //     }
-  //   }
-  // },
   modules: [
     'nuxt-primevue',
     '@formkit/nuxt',

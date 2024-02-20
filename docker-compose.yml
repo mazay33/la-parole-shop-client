@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  nginx:
+    image: front-nginx
+    container_name: nginx
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - nuxt
+    volumes:
+      - /etc/letsencrypt/live/la-parole.ru/:/etc/letsencrypt/live/la-parole.ru/
+      - /etc/letsencrypt/:/etc/letsencrypt
+  nuxt:
+    image: nuxt3-app
+    container_name: nuxt
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    depends_on:
+    ports:
+      - '3000:3000'
+    restart: always
