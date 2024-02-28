@@ -12,6 +12,16 @@ export default defineNuxtConfig({
       myProxyUrl: '',
     }
   },
+  routeRules: {
+      '/api/**': { 
+	proxy: 'https://la-parole.ru/api/**',
+      }
+  },
+  nitro:{
+    prerender: {
+      failOnError: false, 
+    },
+  },
   modules: [
     'nuxt-primevue',
     '@formkit/nuxt',

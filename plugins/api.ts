@@ -3,7 +3,7 @@ export default defineNuxtPlugin(() => {
   let isRefreshing = false
 
   const $api = $fetch.create({
-    baseURL: config.public.api,
+    baseURL: 'https://la-parole.ru/api/',
     retry: 1,
     retryStatusCodes: [401],
     credentials: 'include',
@@ -27,7 +27,7 @@ export default defineNuxtPlugin(() => {
 
           const {data, status } = await useAsyncData(
             async () =>
-              await fetchWithCookie(event!, `${config.public.api}/auth/refresh`)
+              await fetchWithCookie(event!, `https://la-parole.ru/api/auth/refresh`)
           )
 
           console.log('DATAAAA',data.value);
