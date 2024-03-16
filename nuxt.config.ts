@@ -13,13 +13,13 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-      '/api/**': { 
-	proxy: 'https://la-parole.ru/api/**',
+      '/api/**': {
+	proxy: 'http://localhost:5000/api/**',
       }
   },
   nitro:{
     prerender: {
-      failOnError: false, 
+      failOnError: false,
     },
   },
   modules: [

@@ -12,9 +12,6 @@ export const useProductStore = defineStore('product', () => {
       const { data, error, pending } = await useAPI('/product', {
       })
 
-      console.log(data);
-
-
       products.value = data
 
     } catch (error) {

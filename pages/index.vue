@@ -14,9 +14,9 @@
 
 <template>
 <div>
-  <nuxt-link to="/stores">asdasd</nuxt-link>
-  <pre>{{ authStore.users }}</pre>
+  <!-- <nuxt-link to="/stores">asdasd</nuxt-link>
+  <pre>{{ authStore.users }}</pre> -->
   <!-- <pre>{{ productStore.products }}</pre> -->
-  <!-- <HomeMain/> -->
+  <HomeMain/>
 </div>
 </template>

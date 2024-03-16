@@ -1,7 +1,6 @@
 <script setup lang='ts'>
 import { computed, watch, ref } from 'vue'
 
-import AppMenu from '~/components/app/AppMenu.vue'
 const { layoutConfig, layoutState, isSidebarActive } = useLayout()
 const outsideClickListener = ref(null)
 const themeStore = useThemeStore()
@@ -56,20 +55,20 @@ const isOutsideClicked = (event) => {
 
 <template>
   <div>
-    <!-- <Link rel="stylesheet" :href="themeStore.link" />
+    <Link rel="stylesheet" :href="themeStore.link" />
     <div class="layout-wrapper" :class="containerClass">
-      <app-topbar />
+      <app-admin-topbar />
       <div class="layout-sidebar">
-        <app-menu />
+        <app-admin-menu />
       </div>
       <div class="layout-main-container">
         <div class="layout-main">
           <slot />
         </div>
-        <app-footer />
+        <app-admin-footer />
       </div>
       <div class="layout-mask" />
-    </div> -->
+    </div>
   </div>
 </template>
 

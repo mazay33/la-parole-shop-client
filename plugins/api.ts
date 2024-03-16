@@ -3,7 +3,7 @@ export default defineNuxtPlugin(() => {
   let isRefreshing = false
 
   const $api = $fetch.create({
-    baseURL: 'https://la-parole.ru/api/',
+    baseURL: 'http://localhost:5000/api/',
     retry: 1,
     retryStatusCodes: [401],
     credentials: 'include',
@@ -27,12 +27,8 @@ export default defineNuxtPlugin(() => {
 
           const {data, status } = await useAsyncData(
             async () =>
-              await fetchWithCookie(event!, `https://la-parole.ru/api/auth/refresh`)
+              await fetchWithCookie(event!, `http://localhost:5000/api/auth/refresh`)
           )
-
-          console.log('DATAAAA',data.value);
-          console.log('STATUUS',status.value);
-
 
           if (status.value === 'success') {
             await navigateTo(event.path)
