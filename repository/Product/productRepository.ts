@@ -20,27 +20,27 @@ class ProductRepository
   public async getAllProducts(): Promise<
     _AsyncData<IProductsData | null, FetchError<any> | null>
   > {
-    return await this.handleRequest<IProductsData>(this.endpoint, 'GET')
+    return await this._handleRequest<IProductsData>(this._endpoint, 'GET')
   }
 
   public async getOneProduct(
     id: number
   ): Promise<_AsyncData<IProduct | null, FetchError<any> | null>> {
-    return await this.handleRequest<IProduct>(this.endpoint + '/' + id, 'GET')
+    return await this._handleRequest<IProduct>(this._endpoint + '/' + id, 'GET')
   }
 
   public async createProduct(
     product: IProduct
   ): Promise<_AsyncData<IProduct | null, FetchError<any> | null>> {
-    return await this.handleRequest<IProduct>(this.endpoint, 'POST', product)
+    return await this._handleRequest<IProduct>(this._endpoint, 'POST', product)
   }
 
   public async updateProduct(
     id: string,
     product: IProduct
   ): Promise<_AsyncData<IProduct | null, FetchError<any> | null>> {
-    return await this.handleRequest<IProduct>(
-      this.endpoint + '/' + id,
+    return await this._handleRequest<IProduct>(
+      this._endpoint + '/' + id,
       'PUT',
       product
     )
@@ -49,8 +49,8 @@ class ProductRepository
   public async deleteProduct(
     id: string
   ): Promise<_AsyncData<{ deleted: boolean } | null, FetchError<any> | null>> {
-    return await this.handleRequest<{ deleted: boolean }>(
-      this.endpoint + '/' + id,
+    return await this._handleRequest<{ deleted: boolean }>(
+      this._endpoint + '/' + id,
       'DELETE'
     )
   }

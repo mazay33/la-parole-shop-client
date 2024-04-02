@@ -3,21 +3,13 @@ import { FetchError } from 'ofetch'
 import httpService, { type IHttpService } from '~/services/httpService'
 
 interface IBaseRepository<T> {
-  endpoint: string
-
-  handleRequest<U>(
-    url: string,
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    data?: any
-  ): Promise<_AsyncData<U | null, FetchError<any> | null>>
-
   // Сюда можно добавить другие методы для работы с API
 }
 
 class BaseRepository<T> implements IBaseRepository<T> {
-  constructor(public readonly endpoint: string) {}
+  constructor(protected readonly _endpoint: string) {}
 
-  async handleRequest<U>(
+  protected async _handleRequest<U>(
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     data?: any
