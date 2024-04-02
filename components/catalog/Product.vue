@@ -1,31 +1,30 @@
 <script setup lang="ts">
-  const props = defineProps({
-    product: {
-      type: Object,
-      default: () => ({}),
-    },
-  })
+
+import type { IProducts } from '@/utils/productRepository'
+
+  interface Props {
+    product: IProducts
+  }
+  const props = defineProps<Props>()
 </script>
 
 <template>
-  <router-link class="group" to="/">
+  <nuxt-link v-if="product" :to="`/catalog/product/${product.id}`">
     <div
       class="w-full aspect-w-1 aspect-h-1 rounded-md overflow-hidden sm:aspect-w-2 sm:aspect-h-3"
     >
-      <img
+      <!-- <img
         :src="`http://localhost:5000/${product.img[0]}`"
         class="w-full h-full object-center object-cover group-hover:opacity-75 duration-300"
-      />
+      /> -->
     </div>
-    <div
-      class="mt-2 flex items-center justify-between text-base font-medium text-gray-900"
-    >
-      <h3>
-        {{ product.name }}
-      </h3>
-      <p>{{ product.price }}&#8381;</p>
+
+    <div class="flex flex-col mt-5 text-dark">
+      <div class="font-600">{{ product.name }}</div>
+      <div class="mt-1 text-sm">{{ product.category.name }}</div>
+      <div class="mt-3">{{ product.price.toLocaleString() }} ₽</div>
     </div>
-  </router-link>
+  </nuxt-link>
 </template>
 
 <style scoped></style>

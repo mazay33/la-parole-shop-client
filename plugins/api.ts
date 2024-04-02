@@ -1,5 +1,4 @@
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig()
   let isRefreshing = false
 
   const $api = $fetch.create({
@@ -25,9 +24,12 @@ export default defineNuxtPlugin(() => {
         if (process.server) {
           const event = useRequestEvent()
 
-          const {data, status } = await useAsyncData(
+          const { data, status } = await useAsyncData(
             async () =>
-              await fetchWithCookie(event!, `http://localhost:5000/api/auth/refresh`)
+              await fetchWithCookie(
+                event!,
+                `http://localhost:5000/api/auth/refresh`
+              )
           )
 
           if (status.value === 'success') {
