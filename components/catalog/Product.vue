@@ -1,9 +1,8 @@
 <script setup lang="ts">
-
-import type { IProducts } from '@/utils/productRepository'
+  import type { IProduct } from '~/repository/Product/types.product'
 
   interface Props {
-    product: IProducts
+    product: IProduct
   }
   const props = defineProps<Props>()
 </script>
@@ -21,10 +20,11 @@ import type { IProducts } from '@/utils/productRepository'
 
     <div class="flex flex-col mt-5 text-dark">
       <div class="font-600">{{ product.name }}</div>
-      <div class="mt-1 text-sm">{{ product.category.name }}</div>
+      <div class="mt-1 text-sm">{{ product?.category?.name }}</div>
       <div class="mt-3">{{ product.price.toLocaleString() }} ₽</div>
     </div>
   </nuxt-link>
 </template>
 
 <style scoped></style>
+~/repository/productRepository

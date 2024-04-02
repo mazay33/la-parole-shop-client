@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { productRepository } from '@/utils/productRepository'
-
-
+  import { productRepository } from '@/repository/Product/productRepository'
 
   const { data: products } = await productRepository.getAllProducts()
 </script>
@@ -17,3 +15,4 @@
 </template>
 
 <style scoped></style>
+~/repository/productRepository

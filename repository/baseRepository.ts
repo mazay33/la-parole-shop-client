@@ -11,7 +11,7 @@ interface IBaseRepository<T> {
     data?: any
   ): Promise<_AsyncData<U | null, FetchError<any> | null>>
 
-    // Сюда можно добавить другие методы для работы с API
+  // Сюда можно добавить другие методы для работы с API
 }
 
 class BaseRepository<T> implements IBaseRepository<T> {
@@ -37,8 +37,5 @@ class BaseRepository<T> implements IBaseRepository<T> {
     }
   }
 }
-
-
-
 
 export default BaseRepository

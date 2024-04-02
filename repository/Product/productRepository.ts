@@ -1,58 +1,18 @@
 import type { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 import type { FetchError } from 'ofetch'
-import type { IHttpService } from '~/services/httpService'
-import httpService from '~/services/httpService'
-import BaseRepository from './baseRepository'
-
-interface IProduct {
-  id: number
-  name: string
-  img?: string[] // Optional
-  sku: string
-  price: number
-  discount: number
-  stock: number
-  isAvailable: boolean
-  categoryId: number
-  createdAt: Date
-  updatedAt: Date
-  category?: {
-    // Optional category
-    name: string
-  }
-  sub_categories?: string[] | undefined // Optional
-  cup_sizes?: string[] | undefined // Optional
-  clothing_sizes?: string[] | undefined // Optional
-  underbust_sizes?: string[] | undefined // Optional
-  variations?: IProductVariation[] | undefined // Optional
-  info?: IProductInfo[] | undefined // Optional
-}
-
-interface IProductsData {
-  data: IProduct[]
-  totalCount: number
-}
-
-interface IProductVariation {
-  id: number
-  productId: number
-  sku: string
-  price: number
-  name: string
-}
-
-interface IProductInfo {
-  id: number
-  title: string
-  description: string
-  productId: number
-  createdAt: Date
-  updatedAt: Date
-}
+import BaseRepository from '../baseRepository'
+import type {
+  IProduct,
+  IProductsData,
+  IProductRepository,
+} from './types.product'
 
 const productEndpoint = '/product'
 
-class ProductRepository extends BaseRepository<IProduct> {
+class ProductRepository
+  extends BaseRepository<IProduct>
+  implements IProductRepository
+{
   constructor() {
     super(productEndpoint)
   }
