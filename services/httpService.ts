@@ -36,10 +36,7 @@ export interface IHttpService {
 }
 
 class HttpService implements IHttpService {
-  private async _request<T>(
-    url: string,
-    { method = 'GET', body, ...options }: UseFetchOptions<T> = {}
-  ) {
+  private async _request<T>(url: string, options: UseFetchOptions<T> = {}) {
     try {
       const response = await useAPI<T>(url, options)
 

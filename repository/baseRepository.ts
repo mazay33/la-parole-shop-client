@@ -9,15 +9,15 @@ interface IBaseRepository<T> {
 class BaseRepository<T> implements IBaseRepository<T> {
   constructor(protected readonly _endpoint: string) {}
 
-  protected async _handleRequest<U>(
+  protected async _handleRequest<T, U = any>(
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    data?: any
-  ): Promise<_AsyncData<U | null, FetchError<any> | null>> {
+    data?: U
+  ): Promise<_AsyncData<T | null, FetchError<any> | null>> {
     try {
-      const response = await (httpService as IHttpService)[
-        method.toLowerCase()
-      ](url, data)
+      const response: _AsyncData<T | null, FetchError<any> | null> = await (
+        httpService as IHttpService
+      )[method.toLowerCase()](url, data)
       return response
     } catch (error) {
       if (error instanceof FetchError) {
@@ -25,7 +25,7 @@ class BaseRepository<T> implements IBaseRepository<T> {
       } else {
         console.error('Unexpected error:', error)
       }
-      return error as _AsyncData<U | null, FetchError<any> | null>
+      return error as _AsyncData<T | null, FetchError<any> | null>
     }
   }
 }
