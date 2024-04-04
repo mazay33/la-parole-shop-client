@@ -38,6 +38,12 @@ export interface IProductVariation {
   name: string
 }
 
+export interface IProductCreateVariation {
+  sku: string
+  price: number
+  name: string
+}
+
 export interface IProductInfo {
   id: number
   title: string
@@ -45,6 +51,24 @@ export interface IProductInfo {
   productId: number
   createdAt: Date
   updatedAt: Date
+}
+
+export interface IProductCreateInfo {
+  title: string
+  description: string
+}
+
+export interface IProductCreateDataForm {
+  name: string
+  price: number
+  categoryId: number
+  images: File
+  variation: IProductCreateVariation[]
+  info: IProductCreateInfo[]
+  sub_categories?: string[]
+  cup_sizes?: string[]
+  clothing_sizes?: string[]
+  underbust_sizes?: string[]
 }
 
 export interface IProductRepository {
@@ -83,17 +107,17 @@ export interface IProductRepository {
    *   - `error`: A `FetchError` object in case of a network or data creation error (null if successful).
    */
   createProduct(
-    product: IProduct
+    product: FormData
   ): Promise<_AsyncData<IProduct | null, FetchError<any> | null>>
 
   /**
    * Updates an existing product on the backend.
    *
    * @param id The ID of the product to update.
-   * @param product An `IProduct` object containing the updated product data.
+   * @param product An `IProductCreateDataForm` object containing the updated product data.
    *
    * @returns A promise that resolves to an `_AsyncData` object containing either:
-   *   - `data`: An `IProduct` object representing the updated product (null if update failed).
+   *   - `data`: An `IProductCreateDataForm` object representing the updated product (null if update failed).
    *   - `error`: A `FetchError` object in case of a network or data update error (null if successful).
    */
   updateProduct(

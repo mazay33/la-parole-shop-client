@@ -5,6 +5,7 @@ import type {
   IProduct,
   IProductsData,
   IProductRepository,
+  IProductCreateDataForm,
 } from './types.product'
 
 const productEndpoint = '/product'
@@ -30,9 +31,13 @@ class ProductRepository
   }
 
   public async createProduct(
-    product: IProduct
+    product: FormData
   ): Promise<_AsyncData<IProduct | null, FetchError<any> | null>> {
-    return await this._handleRequest<IProduct>(this._endpoint, 'POST', product)
+    return await this._handleRequest<IProduct, FormData>(
+      this._endpoint,
+      'POST',
+      product
+    )
   }
 
   public async updateProduct(
