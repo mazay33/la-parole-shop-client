@@ -1,5 +1,6 @@
 import type { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 import type { FetchError } from 'ofetch'
+import type { UseFetchOptions } from 'nuxt/app'
 import BaseRepository from '../baseRepository'
 import type {
   IProduct,
@@ -36,7 +37,9 @@ class ProductRepository
     return await this._handleRequest<IProduct, FormData>(
       this._endpoint,
       'POST',
-      product
+      {
+        body: product,
+      }
     )
   }
 
@@ -47,7 +50,9 @@ class ProductRepository
     return await this._handleRequest<IProduct>(
       this._endpoint + '/' + id,
       'PUT',
-      product
+      {
+        body: product,
+      }
     )
   }
 

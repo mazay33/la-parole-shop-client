@@ -1,6 +1,7 @@
 import type { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 import { FetchError } from 'ofetch'
 import httpService, { type IHttpService } from '~/services/httpService'
+import type { UseFetchOptions } from 'nuxt/app'
 
 interface IBaseRepository<T> {
   // Сюда можно добавить другие методы для работы с API
@@ -12,12 +13,12 @@ class BaseRepository<T> implements IBaseRepository<T> {
   protected async _handleRequest<T, U = any>(
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    data?: U
+    { body, ...options }: UseFetchOptions<T> & { body?: U } = {}
   ): Promise<_AsyncData<T | null, FetchError<any> | null>> {
     try {
       const response: _AsyncData<T | null, FetchError<any> | null> = await (
         httpService as IHttpService
-      )[method.toLowerCase()](url, data)
+      )[method.toLowerCase()](url, body, options)
       return response
     } catch (error) {
       if (error instanceof FetchError) {

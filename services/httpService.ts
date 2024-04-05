@@ -40,10 +40,6 @@ class HttpService implements IHttpService {
     try {
       const response = await useAPI<T>(url, options)
 
-      if (response.error.value) {
-        console.error('Error', response.error.value?.message)
-      }
-
       return response
     } catch (error: any) {
       throw new Error(error.message)
