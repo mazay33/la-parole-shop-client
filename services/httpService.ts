@@ -39,7 +39,6 @@ class HttpService implements IHttpService {
   private async _request<T>(url: string, options: UseFetchOptions<T> = {}) {
     try {
       const response = await useAPI<T>(url, options)
-
       return response
     } catch (error: any) {
       throw new Error(error.message)
@@ -47,11 +46,13 @@ class HttpService implements IHttpService {
   }
 
   public get<T>(
-    url: string
+    url: string,
+    body: Record<string, any> = {},
+    options: UseFetchOptions<T> = {}
   ): Promise<
     _AsyncData<PickFrom<T, KeysOf<T>> | null, FetchError<any> | null>
   > {
-    return this._request<T>(url)
+    return this._request<T>(url, options)
   }
 
   public post<T, U>(
@@ -86,9 +87,14 @@ class HttpService implements IHttpService {
     })
   }
 
-  public delete<T>(url: string) {
+  public delete<T>(
+    url: string,
+    body: Record<string, any> = {},
+    options: UseFetchOptions<T> = {}
+  ) {
     return this._request<T>(url, {
       method: 'DELETE',
+      ...options,
     })
   }
 }
