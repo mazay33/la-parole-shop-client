@@ -1,4 +1,8 @@
 <template>
+  <Button v-if="product" @click="addToCart(1, product.id)"
+    >Добавить в корзину</Button
+  >
+
   <pre>
     {{ product }}
   </pre>
@@ -9,7 +13,13 @@
 
   const productId = useRoute().params.id as string
 
-  const { data: product } = await productRepository.getOneProduct(+productId)
+  const { data: product } = await productRepository.getById(+productId)
+
+  const addToCart = async (count: number, productId: number) => {
+    await productRepository.addToCart(count, productId)
+  }
+
+
 </script>
 
 <style scoped></style>

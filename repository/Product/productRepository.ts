@@ -4,6 +4,11 @@ import type { IProduct } from './types.product'
 import type { UseFetchOptions } from 'nuxt/dist/app/composables'
 import type { FetchError } from 'ofetch'
 
+interface IProductAddToCart {
+  count: number
+  productId: number
+}
+
 const productEndpoint = '/product'
 
 /**
@@ -22,7 +27,21 @@ class ProductRepository extends Omit(BaseRepository<IProduct, FormData>, []) {
   constructor() {
     super(productEndpoint)
   }
+
+  public async addToCart(count: number, productId: number) {
+    console.log(count, productId)
+
+    return await this._handleRequest<IProduct, IProductAddToCart>(
+      this._endpoint + '/add-to-cart',
+      'POST',
+      {
+        body: {
+          count,
+          productId,
+        },
+      }
+    )
+  }
 }
 
 export const productRepository = new ProductRepository()
-

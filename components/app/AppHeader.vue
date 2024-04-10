@@ -1,5 +1,6 @@
 <script setup>
   import { ref } from 'vue'
+  import httpService from '~/services/httpService'
 
   const items = ref([
     {
@@ -78,6 +79,10 @@
       root: true,
     },
   ])
+
+
+    //TODO: add to repo and store
+  const { data: countCart } = await httpService.get('/cart/count')
 </script>
 
 <template>
@@ -107,7 +112,7 @@
 
         <a
           v-else-if="!item.image"
-          class="flex align-items-center p-2 cursor-pointer  gap-1 text-[--text-color]"
+          class="flex align-items-center p-2 cursor-pointer gap-1 text-[--text-color]"
         >
           <span class="inline-flex flex-column gap-1">
             <span class=" ">{{ item.label }}</span>
@@ -126,7 +131,13 @@
         <div class="flex gap-6 items-center">
           <i class="pi pi-heart text-3xl cursor-pointer"></i>
 
-          <i class="pi pi-shopping-cart text-3xl cursor-pointer"></i>
+          <i
+            @click="useRouter().push('/cart')"
+            class="pi pi-shopping-cart text-3xl cursor-pointer"
+          ></i>
+          <span>
+            {{ countCart.count }}
+          </span>
           <i class="pi pi-user text-3xl cursor-pointer"></i>
         </div>
       </template>

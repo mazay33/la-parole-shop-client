@@ -142,12 +142,12 @@
     ICupSize,
     IUnderbustSize,
   } from '@/repository/Sizes/sizesRepository'
-  import { useToast } from 'primevue/usetoast';
+  import { useToast } from 'primevue/usetoast'
   definePageMeta({
     layout: 'admin',
   })
 
-  const toast = useToast();
+  const toast = useToast()
 
   const { data: categories } = await categoryRepository.getAllCategories()
   const { data: sizes } = await sizesRepository.getAllSizes()
@@ -223,12 +223,26 @@
       formData.append('images', image)
     }
 
-    const { data, error } = await productRepository.createProduct(formData)
+    const { data, error } = await productRepository.create(formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
 
     if (error.value) {
-      toast.add({ severity: 'error', summary: 'Ошибка в создании продукта', detail: error.value.data.message, life: 3000 });
+      toast.add({
+        severity: 'error',
+        summary: 'Ошибка в создании продукта',
+        detail: error.value.data.message,
+        life: 3000,
+      })
     } else {
-      toast.add({ severity: 'success', summary: 'Успешно', detail: `Продукт ${data.value?.name} создан`, life: 3000 });
+      toast.add({
+        severity: 'success',
+        summary: 'Успешно',
+        detail: `Продукт ${data.value?.name} создан`,
+        life: 3000,
+      })
     }
   }
 </script>

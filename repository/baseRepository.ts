@@ -4,16 +4,14 @@ import httpService, { type IHttpService } from '~/services/httpService'
 import type { UseFetchOptions } from 'nuxt/app'
 
 class BaseRepository<Res, Data> {
-  constructor(protected readonly _endpoint: string) {}
+  constructor(readonly _endpoint: string) {}
 
-  protected async _handleRequest<T, U = any>(
+  public async _handleRequest<T, U = any>(
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     { body = undefined, ...options }: UseFetchOptions<T> = {}
   ): Promise<_AsyncData<T | null, FetchError<any> | null>> {
     try {
-      console.log({ body, options })
-
       const response: _AsyncData<T | null, FetchError<any> | null> = await (
         httpService as IHttpService
       )[method.toLowerCase()](url, body, options)
@@ -31,8 +29,6 @@ class BaseRepository<Res, Data> {
   public async getAll<T = Res>(
     options: UseFetchOptions<T> = {}
   ): Promise<_AsyncData<T | null, FetchError<any> | null>> {
-    console.log(options)
-
     return await this._handleRequest<T>(this._endpoint, 'GET', options)
   }
 
