@@ -9,17 +9,17 @@
 </template>
 
 <script setup lang="ts">
-  import { productRepository } from '@/repository/Product/productRepository'
+  const productSrore = useProductStore()
+  const { product } = storeToRefs(productSrore)
+  const cartStore = useCartStore()
 
   const productId = useRoute().params.id as string
 
-  const { data: product } = await productRepository.getById(+productId)
+  await productSrore.getProduct(+productId)
 
   const addToCart = async (count: number, productId: number) => {
-    await productRepository.addToCart(count, productId)
+    await cartStore.addProductToCart(count, productId)
   }
-
-
 </script>
 
 <style scoped></style>

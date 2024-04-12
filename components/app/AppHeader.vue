@@ -1,7 +1,4 @@
-<script setup>
-  import { ref } from 'vue'
-  import httpService from '~/services/httpService'
-
+<script lang="ts" setup>
   const items = ref([
     {
       label: 'Каталог',
@@ -80,9 +77,11 @@
     },
   ])
 
+  const cartStore = useCartStore()
 
-    //TODO: add to repo and store
-  const { data: countCart } = await httpService.get('/cart/count')
+  const { cartTotal } = storeToRefs(cartStore)
+
+  await cartStore.getCartTotal()
 </script>
 
 <template>
@@ -136,7 +135,7 @@
             class="pi pi-shopping-cart text-3xl cursor-pointer"
           ></i>
           <span>
-            {{ countCart.count }}
+            {{ cartTotal?.count }}
           </span>
           <i class="pi pi-user text-3xl cursor-pointer"></i>
         </div>
