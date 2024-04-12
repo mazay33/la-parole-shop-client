@@ -76,7 +76,7 @@ export const useAuthStore = defineStore('auth', {
       })
 
       this.authenticated = false
-      useRouter().push('/auth/login')
+      // useRouter().push('/auth/login')
 
       this.loading = pending.value
     },

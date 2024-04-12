@@ -36,8 +36,8 @@ export default defineNuxtPlugin(() => {
             await navigateTo(event.path)
             return
           } else {
-            await navigateTo('/auth/login')
-            await logout()
+            // await navigateTo('/auth/login')
+            // await logout()
           }
 
           isRefreshing = false
