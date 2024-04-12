@@ -1,47 +1,34 @@
-import { useAPI } from '~/composables/useAPI'
+import { productRepository } from '~/repository/Product/productRepository'
+import type { IProduct } from '~/repository/Product/types.product'
 
 export const useProductStore = defineStore('product', () => {
-  const products = ref()
-  const product = ref()
-  const loading = ref(false)
+  const products = ref<IProduct[]>()
+  const product = ref<IProduct | null>(null)
 
+  const getProducts: () => Promise<void> = async () => {
+    const { data, refresh, error, pending } = await productRepository.getAll<
+      IProduct[]
+    >()
 
-  const getProducts = async () => {
-    loading.value = true
-    try {
-      const { data, error, pending } = await useAPI('/product', {
-      })
-
-      products.value = data
-
-    } catch (error) {
-      console.error(error)
+    if (data.value) {
+      products.value = data.value
     }
   }
 
-  const getProductById = async (id: string) => {
-    loading.value = true
-    const { data, error, pending } = await useAPI(`/product/${id}`, {
-      lazy: true,
-      server: false,
-    })
+  const getProduct: (id: number) => Promise<void> = async (id) => {
+    const { data, refresh, error, pending } =
+      await productRepository.getById<IProduct>(id)
 
     if (data.value) {
-      product.value = data
+      product.value = data.value
     }
-
-    loading.value = pending.value
   }
 
   return {
-    products,
     getProducts,
-    loading,
-    getProductById,
+    getProduct,
+
+    products,
     product,
   }
 })
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useProductStore, import.meta.hot));
-}
