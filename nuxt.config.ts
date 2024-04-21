@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     '@formkit/nuxt',
     '@unocss/nuxt',
     '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     '@nuxt/content',
     '@vueuse/nuxt',

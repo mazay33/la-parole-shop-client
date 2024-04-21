@@ -1,153 +1,71 @@
 import { useAPI } from '~/composables/useAPI'
 import { fetchWithCookie } from '~/composables/useFetchCookie'
+import { authRepo } from '~/repository/Auth/AuthRepository'
+import log from '~/server/middleware/log'
 
-type Tokens = {
-  access_token: string
-  refresh_token: string
-  type: string
-}
+export const useAuthStore = defineStore(
+  'auth',
+  () => {
+    const isLoading = ref(false)
+    const authenticated = ref(false)
+    const user = ref()
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    loading: false,
-    authenticated: false,
-    users: null,
-  }),
-
-  actions: {
-    async login(email: string, password: string) {
-      this.loading = true
-      const { data, error, pending } = await useAPI('/auth/login', {
-        method: 'POST',
-        body: {
-          email,
-          password,
-        },
-      })
-
+    const login = async (email: string, password: string) => {
+      isLoading.value = true
+      const { data, error, pending } = await authRepo.login(email, password)
       if (data.value) {
-        this.authenticated = true
+        authenticated.value = true
+        await getMe()
       }
 
-      this.loading = pending.value
+      isLoading.value = pending.value
+    }
 
-      if (error.value) {
-        console.error(error.value)
+    const refresh = async () => {
+      const { data, error, pending } = await authRepo.refresh()
+      if (data.value) {
+        user.value = data.value
       }
-    },
+      isLoading.value = pending.value
+    }
 
-    async getUsers() {
-      this.loading = true
-      const { data, error, pending } = await useAPI('/auth/users', {})
-
-      console.log(data)
-
-      this.users = data
-
-      console.log(this.users)
-
-      this.loading = pending.value
-
-      if (error.value) {
-        console.error(error.value)
+    const logout = async () => {
+      if (authenticated) {
+        await authRepo.logout()
       }
-    },
+      authenticated.value = false
+      user.value = null
+    }
 
-    async refresh() {
-      this.loading = true
-
-      const { data, error, pending } = await useAPI('/auth/refresh', {})
-
-      console.log(error)
-
-      if(error.value) {
-        await this.logout()
+    const getMe = async () => {
+      const { data, error, pending } = await authRepo.getMe()
+      if (data.value) {
+        user.value = data.value
+        authenticated.value = true
+        console.log(user.value)
+      } else {
+        await logout()
       }
+    }
 
-      // await this.logout()
-
-      this.loading = pending.value
-    },
-
-    async logout() {
-      this.loading = true
-      const { data, error, pending } = await useAPI('/auth/logout', {
-        method: 'POST',
-      })
-
-      this.authenticated = false
-      // useRouter().push('/auth/login')
-
-      this.loading = pending.value
-    },
+    return {
+      login,
+      refresh,
+      getMe,
+      user,
+      authenticated: computed(() => {
+        return !!user.value
+      }),
+      isLoading: computed(() => isLoading.value),
+    }
   },
-})
 
-// export const useAuthStore = defineStore('auth', () => {
-//   const loading = ref(false)
-//   const authenticated = ref(false)
-//   const refreshingToken = ref(false)
-//   const users = ref()
-
-//   const setUsers = (data?: any) => (users.value = data)
-
-//   const login = async (email: string, password: string) => {
-//     loading.value = true
-//     const { data, pending } = await useAPI('/auth/login', {
-//       method: 'POST',
-//       body: {
-//         email,
-//         password,
-//       },
-//     })
-
-//     if (data.value) {
-//       authenticated.value = true
-//     }
-
-//     loading.value = pending.value
-//   }
-
-//   const getUsers = async () => {
-//     loading.value = true
-//     const { data, error, pending } = await useAPI('/auth/users', {
-//       server: false,
-//     })
-
-//     await setUsers(data.value)
-
-//     loading.value = pending.value
-//   }
-
-//   const refresh = async () => {
-//     loading.value = true
-//     const { data, error, pending } = await useAPI('/auth/refresh', {
-//       retry: 0,
-//     })
-
-//     loading.value = pending.value
-//   }
-
-// const logout = async () => {
-//   loading.value = true
-//   const { data, error, pending } = await useAPI('/auth/logout', {
-//     method: 'POST',
-//   })
-
-//   authenticated.value = false
-//   useRouter().push('/auth/login')
-
-//   loading.value = pending.value
-// }
-
-//   return {
-//     login,
-//     loading,
-//     logout,
-//     getUsers,
-//     refresh,
-//     refreshingToken,
-//     authenticated,
-//     users
-//   }
-// })
+  {
+    persist: {
+      storage: persistedState.cookiesWithOptions({
+        sameSite: 'strict',
+        secure: true,
+      }),
+    },
+  }
+)

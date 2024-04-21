@@ -26,6 +26,7 @@
     "@nuxt/test-utils": "^3.10.0",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/i18n": "8.0.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "@pinia/nuxt": "^0.5.1",
     "@sfxcode/formkit-primevue": "^1.6.4",
     "@tiptap/extension-highlight": "^2.1.16",

@@ -35,6 +35,9 @@ devDependencies:
   '@nuxtjs/i18n':
     specifier: 8.0.0
     version: 8.0.0(rollup@4.9.6)(vue-router@4.2.5)(vue@3.4.15)
+  '@pinia-plugin-persistedstate/nuxt':
+    specifier: ^1.2.0
+    version: 1.2.0(@pinia/nuxt@0.5.1)(pinia@2.1.7)(rollup@4.9.6)
   '@pinia/nuxt':
     specifier: ^0.5.1
     version: 0.5.1(rollup@4.9.6)(typescript@5.3.3)(vue@3.4.15)
@@ -749,14 +752,14 @@ packages:
   /@formkit/addons@1.5.2:
     resolution: {integrity: sha512-UegUoGzfB7cMgwAnNv1z+JdOy7AW/aDWtYAxfqNV3/UjYGi1qP3fKXsiTQdTp6P4xFIgtDEv0Ptv75SzgDhnHQ==}
     dependencies:
-      '@formkit/auto-animate': 0.8.1
+      '@formkit/auto-animate': 0.8.2
       '@formkit/core': 1.5.2
       '@formkit/inputs': 1.5.2
       '@formkit/utils': 1.5.2
     dev: true
 
-  /@formkit/auto-animate@0.8.1:
-    resolution: {integrity: sha512-0/Z2cuNXWVVIG/l0SpcHAWFhGdvLJ8DRvEfRWvmojtmRWfEy+LWNwgDazbZqY0qQYtkHcoEK3jBLkhiZaB/4Ig==}
+  /@formkit/auto-animate@0.8.2:
+    resolution: {integrity: sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==}
     dev: true
 
   /@formkit/core@1.5.2:
@@ -1911,6 +1914,21 @@ packages:
       '@parcel/watcher-win32-arm64': 2.4.0
       '@parcel/watcher-win32-ia32': 2.4.0
       '@parcel/watcher-win32-x64': 2.4.0
+    dev: true
+
+  /@pinia-plugin-persistedstate/nuxt@1.2.0(@pinia/nuxt@0.5.1)(pinia@2.1.7)(rollup@4.9.6):
+    resolution: {integrity: sha512-2rtgx5viGSMQMCoFYZMHguA2FhFKCUvw0PwETfqQegsWeBHlqk1/D0G/9xqep8Hq+c1BuFx+jNLJzoLXtYfivg==}
+    peerDependencies:
+      '@pinia/nuxt': ^0.5.0
+    dependencies:
+      '@nuxt/kit': 3.9.3(rollup@4.9.6)
+      '@pinia/nuxt': 0.5.1(rollup@4.9.6)(typescript@5.3.3)(vue@3.4.15)
+      defu: 6.1.4
+      pinia-plugin-persistedstate: 3.2.1(pinia@2.1.7)
+    transitivePeerDependencies:
+      - pinia
+      - rollup
+      - supports-color
     dev: true
 
   /@pinia/nuxt@0.5.1(rollup@4.9.6)(typescript@5.3.3)(vue@3.4.15):
@@ -8303,6 +8321,14 @@ packages:
   /picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+    dev: true
+
+  /pinia-plugin-persistedstate@3.2.1(pinia@2.1.7):
+    resolution: {integrity: sha512-MK++8LRUsGF7r45PjBFES82ISnPzyO6IZx3CH5vyPseFLZCk1g2kgx6l/nW8pEBKxxd4do0P6bJw+mUSZIEZUQ==}
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: 2.1.7(typescript@5.3.3)(vue@3.4.15)
     dev: true
 
   /pinia@2.1.7(typescript@5.3.3)(vue@3.4.15):

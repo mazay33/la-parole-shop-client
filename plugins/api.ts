@@ -17,7 +17,7 @@ export default defineNuxtPlugin(() => {
     async onResponseError({ response, options, error }) {
       if (response.status == 401 && !isRefreshing) {
         const authStore = useAuthStore()
-        const { refresh, logout } = authStore
+        const { refresh } = authStore
 
         isRefreshing = true
 
