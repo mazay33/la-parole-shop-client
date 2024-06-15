@@ -1,0 +1,25 @@
+{
+  "globals": {
+    "useAuthStore": "readonly",
+    "useLayout": "readonly",
+    "useNavigationMenu": "readonly",
+    "useAPI": "readonly",
+    "fetchWithCookie": "readonly",
+    "useCartStore": "readonly",
+    "useCounterStore": "readonly",
+    "useDataStore": "readonly",
+    "useProductStore": "readonly",
+    "updateTheme": "readonly",
+    "useThemeStore": "readonly",
+    "usePrimeVue": "readonly",
+    "useStyle": "readonly",
+    "useConfirm": "readonly",
+    "useToast": "readonly",
+    "useDialog": "readonly",
+    "defineStore": "readonly",
+    "acceptHMRUpdate": "readonly",
+    "usePinia": "readonly",
+    "storeToRefs": "readonly",
+    "persistedState": "readonly"
+  }
+}
