@@ -6,9 +6,8 @@ export enum Role {
 	USER = 'USER',
 	EMPLOYEE = 'EMPLOYEE',
 }
-export type Tokens = {
-	access_token: string;
-	refresh_token: string;
+export type AccessToken = {
+	accessToken: string;
 };
 
 export interface ILoginRequestData {

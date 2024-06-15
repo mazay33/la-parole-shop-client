@@ -8,6 +8,8 @@ export const fetchWithCookie = async (event: H3Event, url: string) => {
 		headers: useRequestHeaders(['cookie']),
 	});
 
+	console.log(res);
+
 	/* Get the cookies from the response */
 	const cookies = (res.headers.get('set-cookie') || '').split(',');
 

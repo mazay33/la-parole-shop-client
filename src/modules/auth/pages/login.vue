@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import useApiService from '~/services/apiService';
-
 definePageMeta({
 	layout: 'auth',
 });
@@ -8,27 +6,18 @@ const router = useRouter();
 
 const authStore = useAuthStore();
 
-const { loading, authenticated } = storeToRefs(authStore);
-
-const email = ref<string>('mazaev2000@gmail.com');
-const password = ref<string>('mazaev3417508');
+const email = ref<string>('user@example.com');
+const password = ref<string>('password123');
+const loading = ref<boolean>(false);
 
 const login = async () => {
+	loading.value = true;
 	await authStore.login(email.value, password.value);
-	// if (authenticated.value) {
-	// 	router.push('/');
-	// }
+	if (authStore.isAuthenticated) {
+		router.push('/');
+	}
+	loading.value = false;
 };
-
-// const refresh = async () => {
-// 	await authStore.refresh();
-// };
-
-// const getMe = async () => {
-// 	await authStore.getMe();
-// };
-const { data } = await useApiService().auth.getMe();
-// refresh()
 </script>
 <template>
 	<div class="flex justify-between items-center h-screen overflow-y-hidden">
@@ -40,7 +29,6 @@ const { data } = await useApiService().auth.getMe();
           height="50"
           class="mb-3"
         /> -->
-				{{ data }}
 				<div class="text-3xl font-medium mb-3">Welcome Back</div>
 				<span class="font-medium mr-2">Don't have an account?</span
 				><a class="font-medium no-underline text-indigo-500 cursor-pointer">Create today!</a>
@@ -92,24 +80,6 @@ const { data } = await useApiService().auth.getMe();
 					label="Sign In"
 					icon="pi pi-user"
 					class="w-full"
-				></Button>
-
-				<Button
-					@click="refresh()"
-					:loading="loading"
-					type="submit"
-					label="Sign In"
-					icon="pi pi-user"
-					class="w-full mt-3"
-				></Button>
-
-				<Button
-					@click="getMe()"
-					:loading="loading"
-					type="submit"
-					label="Sign In"
-					icon="pi pi-user"
-					class="w-full mt-3"
 				></Button>
 			</div>
 		</div>

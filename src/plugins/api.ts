@@ -1,52 +1,28 @@
-import type { UseFetchOptions } from '#app';
-import type { Tokens } from '~/services/api/auth/authApi.types';
+import type { AccessToken } from '~/services/api/auth/authApi.types';
 
 export default defineNuxtPlugin(() => {
 	const config = useRuntimeConfig();
+	const authStore = useAuthStore();
+	const { accessToken } = storeToRefs(authStore);
 
 	const $api = $fetch.create({
 		baseURL: config.public.api,
+		credentials: 'include',
+		retry: 1,
+		retryStatusCodes: [401],
 
 		onRequest({ options }) {
-			const accessToken = useCookie('access_token', { secure: true, sameSite: 'strict', httpOnly: true });
-			options.headers = accessToken.value ? { Authorization: `Bearer ${accessToken.value}` } : {};
+			options.headers = accessToken.value ? { Authorization: `${accessToken.value}` } : {};
 		},
 		onResponse: async ({ response, options, request }) => {
 			if (response.status === 401) {
-				// if (import.meta.server) {
-				// 	const event = useRequestEvent();
-				// 	console.log(event);
-
-				// 	const { status } = await useAsyncData(
-				// 		async () => await fetchWithCookie(event!, `${config.public.api}public/auth/refresh`),
-				// 	);
-
-				// 	if (status.value === 'success') {
-				// 		await navigateTo(event?.path);
-				// 		return;
-				// 	}
-				// 	// await navigateTo('/auth/login')
-
-				// 	isRefreshing = false;
-				// }
-
 				try {
-					const accessToken = useCookie('access_token', { secure: true, sameSite: 'strict', httpOnly: true });
-					const refreshToken = useCookie('refresh_token', {
-						secure: true,
-						sameSite: 'strict',
-						httpOnly: true,
-					});
 					const newToken = await refresh();
-					accessToken.value = newToken?.access_token;
-					refreshToken.value = newToken?.refresh_token;
-
-					options.headers = accessToken.value ? { Authorization: `Bearer ${accessToken.value}` } : {};
-
-					nextTick(() =>
-						useFetch(request, { headers: useRequestHeaders(), ...(options as UseFetchOptions<any>) }),
-					);
+					accessToken.value = newToken?.accessToken;
+					options.headers = accessToken.value ? { Authorization: `${accessToken.value}` } : {};
 				} catch (error) {
+					options.retry = false;
+					await authStore.logout();
 					console.error('Token refresh failed:', error);
 				}
 			}
@@ -54,12 +30,9 @@ export default defineNuxtPlugin(() => {
 	});
 
 	async function refresh() {
-		const refreshToken = useCookie('refresh_token', { secure: true, sameSite: 'strict', httpOnly: true });
-		const { data, status } = await useFetch<Tokens>(`${config.public.api}auth/refresh`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${refreshToken.value}`,
-			},
+		const { data, status } = await useFetch<AccessToken>(`${config.public.api}auth/refresh-tokens`, {
+			method: 'GET',
+			credentials: 'include',
 		});
 
 		if (status.value === 'success') {
