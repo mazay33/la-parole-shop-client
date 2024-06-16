@@ -3,7 +3,7 @@ import useApiService from '~/services/apiService';
 const apiService = useApiService();
 
 export const useAuthStore = defineStore('auth', () => {
-	const user = ref();
+	const userStore = useUserStore();
 	const accessToken = ref<string>();
 	const isAuthenticated = computed(() => {
 		return !!accessToken.value;
@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
 		const { data, error } = await apiService.auth.login(email, password);
 		if (data.value) {
 			accessToken.value = data?.value?.accessToken;
-			await getMe();
+			await userStore.getMe();
 		}
 		if (error.value) {
 			console.error(error.value.data);
@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
 		if (data.value) {
 			accessToken.value = data?.value?.accessToken;
 
-			await getMe();
+			await userStore.getMe();
 			nextTick(async () => {
 				await useRouter().push('/');
 			});
@@ -43,20 +43,10 @@ export const useAuthStore = defineStore('auth', () => {
 		if (data.value) {
 			accessToken.value = data?.value?.accessToken;
 
-			await getMe();
+			await userStore.getMe();
 			nextTick(async () => {
 				await useRouter().push('/');
 			});
-		}
-		if (error.value) {
-			console.error(error.value.data);
-		}
-	};
-
-	const getMe = async () => {
-		const { data, error } = await apiService.auth.getMe();
-		if (data.value) {
-			user.value = data.value;
 		}
 		if (error.value) {
 			console.error(error.value.data);
@@ -67,6 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
 		const { data, error } = await apiService.auth.logout();
 		if (data.value) {
 			accessToken.value = undefined;
+			userStore.user = undefined;
 		}
 		if (error.value) {
 			console.error(error.value.data);
@@ -75,8 +66,6 @@ export const useAuthStore = defineStore('auth', () => {
 
 	return {
 		login,
-		user,
-		getMe,
 		loginWithGoogle,
 		loginWithYandex,
 		logout,

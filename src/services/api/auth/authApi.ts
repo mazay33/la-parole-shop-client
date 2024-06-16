@@ -3,17 +3,9 @@ import useApiService from '~/services/apiService';
 import type HttpService from '../../httpService';
 import { HttpMethod, type HttpReturnType } from '../../httpService';
 import BaseApi from '../base';
-import type {
-	IAuthApi,
-	ILoginRequestData,
-	IRegistrationRequestData,
-	IRegistrationResponseData,
-	IUpdatePasswordRequestBody,
-	IUser,
-	AccessToken,
-} from './authApi.types';
+import type { IAuthApi, ILoginRequestData, AccessToken } from './authApi.types';
 
-export default class AuthApi extends BaseApi {
+export default class AuthApi extends BaseApi implements IAuthApi {
 	constructor(private httpService: HttpService) {
 		super();
 	}
@@ -63,15 +55,7 @@ export default class AuthApi extends BaseApi {
 		});
 	}
 
-	public async getMe(options?: UseFetchOptions<IUser>): Promise<HttpReturnType<IUser>> {
-		const url = '/user/me';
-		return await this.sendRequest<IUser>(HttpMethod.GET, url, {
-			...options,
-			server: false,
-		});
-	}
-
-	public async refresh(options: UseFetchOptions<AccessToken>): Promise<HttpReturnType<AccessToken>> {
+	public async refresh(options?: UseFetchOptions<AccessToken>): Promise<HttpReturnType<AccessToken>> {
 		const url = '/auth/refresh-tokens';
 		return await this.sendRequest<AccessToken>(HttpMethod.GET, url, {
 			...options,

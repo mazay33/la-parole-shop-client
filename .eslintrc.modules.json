@@ -1,6 +1,7 @@
 {
   "globals": {
     "useAuthStore": "readonly",
+    "useUserStore": "readonly",
     "useLayout": "readonly",
     "useNavigationMenu": "readonly",
     "useAPI": "readonly",

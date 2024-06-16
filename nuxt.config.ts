@@ -34,6 +34,7 @@ export default defineNuxtConfig({
 		'@pinia-plugin-persistedstate/nuxt',
 		'@vueuse/nuxt',
 		'~/modules/auth/module',
+		'~/modules/product/module',
 	],
 	// eslint: {
 	// 	lintOnStart: false,
