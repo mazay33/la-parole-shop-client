@@ -41,6 +41,28 @@ export default class AuthApi extends BaseApi {
 		);
 	}
 
+	public async loginWithGoogle(
+		tokenQuery: string,
+		options?: UseFetchOptions<AccessToken>,
+	): Promise<HttpReturnType<AccessToken>> {
+		const url = `/auth/success-google?token=${tokenQuery}`;
+		return await this.sendRequest<AccessToken>(HttpMethod.GET, url, {
+			...options,
+			server: false,
+		});
+	}
+
+	public async loginWithYandex(
+		tokenQuery: string,
+		options?: UseFetchOptions<AccessToken>,
+	): Promise<HttpReturnType<AccessToken>> {
+		const url = `/auth/success-yandex?token=${tokenQuery}`;
+		return await this.sendRequest<AccessToken>(HttpMethod.GET, url, {
+			...options,
+			server: false,
+		});
+	}
+
 	public async getMe(options?: UseFetchOptions<IUser>): Promise<HttpReturnType<IUser>> {
 		const url = '/user/me';
 		return await this.sendRequest<IUser>(HttpMethod.GET, url, {

@@ -20,6 +20,10 @@ export default defineNuxtConfig({
 			// APP_MODE: process.env?.NODE_ENV,
 		},
 	},
+	routeRules: {
+		'/auth/success-google': { ssr: false },
+		'/auth/success-yandex': { ssr: false },
+	},
 
 	modules: [
 		// '@nuxtjs/eslint-module',

@@ -1,4 +1,3 @@
-import { authRepo } from '~/repository/Auth/AuthRepository';
 import useApiService from '~/services/apiService';
 
 const apiService = useApiService();
@@ -15,6 +14,39 @@ export const useAuthStore = defineStore('auth', () => {
 		if (data.value) {
 			accessToken.value = data?.value?.accessToken;
 			await getMe();
+		}
+		if (error.value) {
+			console.error(error.value.data);
+		}
+	};
+
+	const loginWithGoogle = async (tokenQuery: string) => {
+		const { data, error } = await apiService.auth.loginWithGoogle(tokenQuery);
+		console.log(data);
+
+		if (data.value) {
+			accessToken.value = data?.value?.accessToken;
+
+			await getMe();
+			nextTick(async () => {
+				await useRouter().push('/');
+			});
+		}
+		if (error.value) {
+			console.error(error.value.data);
+		}
+	};
+
+	const loginWithYandex = async (tokenQuery: string) => {
+		const { data, error } = await apiService.auth.loginWithYandex(tokenQuery);
+
+		if (data.value) {
+			accessToken.value = data?.value?.accessToken;
+
+			await getMe();
+			nextTick(async () => {
+				await useRouter().push('/');
+			});
 		}
 		if (error.value) {
 			console.error(error.value.data);
@@ -45,6 +77,8 @@ export const useAuthStore = defineStore('auth', () => {
 		login,
 		user,
 		getMe,
+		loginWithGoogle,
+		loginWithYandex,
 		logout,
 		accessToken,
 		isAuthenticated,

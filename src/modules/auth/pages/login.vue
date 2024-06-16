@@ -18,6 +18,7 @@ const login = async () => {
 	}
 	loading.value = false;
 };
+const config = useRuntimeConfig();
 </script>
 <template>
 	<div class="flex justify-between items-center h-screen overflow-y-hidden">
@@ -81,6 +82,26 @@ const login = async () => {
 					icon="pi pi-user"
 					class="w-full"
 				></Button>
+
+				<nuxt-link :to="config.public.api + 'auth/google'">
+					<Button
+						:loading="loading"
+						type="submit"
+						label="Sign In with Google"
+						icon="pi pi-user"
+						class="w-full mt-4"
+					></Button>
+				</nuxt-link>
+
+				<nuxt-link :to="config.public.api + 'auth/yandex'">
+					<Button
+						:loading="loading"
+						type="submit"
+						label="Sign In with Yandex"
+						icon="pi pi-user"
+						class="w-full mt-4"
+					></Button>
+				</nuxt-link>
 			</div>
 		</div>
 
