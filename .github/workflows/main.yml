@@ -26,4 +26,4 @@ jobs:
           cd  la-parole-shop-client
           git pull origin main
           git status
-          docker compose up --build -d nuxt-app
+          docker compose up --build -d nuxtapp
