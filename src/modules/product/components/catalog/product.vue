@@ -16,7 +16,7 @@ const config = useRuntimeConfig();
 		<div class="w-full aspect-w-1 aspect-h-1 rounded-md overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
 			<img
 				v-if="product.img"
-				:src="`${config.public.apiBase}/uploads/${product.img[0]?.url}`"
+				:src="`${config.public.api.replace('/api/', '')}/uploads/${product.img[0]?.url}`"
 				class="w-full h-full object-center object-cover group-hover:opacity-75 duration-300"
 			/>
 		</div>
