@@ -4,7 +4,7 @@ import useApiService from '~/services/apiService';
 const apiService = useApiService();
 
 const page = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(50);
 
 const { data: products } = await apiService.product.getProducts({
 	query: {
@@ -24,6 +24,23 @@ const { data: products } = await apiService.product.getProducts({
 				v-for="product in products.data"
 				:product="product"
 			/>
+			<!-- FOR TEST, Потом убрать лишние -->
+			<ProductCatalogProduct
+				v-if="products.data"
+				v-for="product in products.data"
+				:product="product"
+			/>
+			<ProductCatalogProduct
+				v-if="products.data"
+				v-for="product in products.data"
+				:product="product"
+			/>
+			<ProductCatalogProduct
+				v-if="products.data"
+				v-for="product in products.data"
+				:product="product"
+			/>
+			<!--  ______________________ -->
 		</div>
 	</div>
 </template>

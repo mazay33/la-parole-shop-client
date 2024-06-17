@@ -10,17 +10,17 @@ const config = useRuntimeConfig();
 
 <template>
 	<nuxt-link
+		class="product flex-col overflow-hidden"
 		v-if="product"
 		:to="`/catalog/product/${product.id}`"
 	>
-		<div class="w-full aspect-w-1 aspect-h-1 rounded-md overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
+		<div class="product__image">
 			<img
 				v-if="product.img"
 				:src="`${config.public.api.replace('/api/', '')}/uploads/${product.img[0]?.url}`"
-				class="w-full h-full object-center object-cover group-hover:opacity-75 duration-300"
 			/>
 		</div>
-		<div class="flex flex-col mt-5 text-dark">
+		<div class="flex-1 mt-5 text-dark">
 			<div class="font-600">{{ product.name }}</div>
 			<div class="mt-1 text-sm">{{ product?.category?.name }}</div>
 			<div class="mt-3">{{ product.price }} ₽</div>
@@ -28,4 +28,26 @@ const config = useRuntimeConfig();
 	</nuxt-link>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.product {
+	&__image {
+		position: relative;
+		& img {
+			height: 100%;
+			left: 0;
+			-o-object-fit: cover;
+			object-fit: cover;
+			position: absolute;
+			top: 0;
+			width: 100%;
+		}
+		&::after {
+			background-color: inherit;
+			content: '';
+			display: block;
+			padding-top: 134%;
+			pointer-events: none;
+		}
+	}
+}
+</style>
