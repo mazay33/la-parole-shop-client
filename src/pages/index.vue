@@ -12,6 +12,6 @@ const { data: user } = await apiService.user.getMe();
 	<div>
 		{{ user }}
 
-		<HomeMain />
+		<!-- <HomeMain /> -->
 	</div>
 </template>
