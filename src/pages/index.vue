@@ -10,7 +10,12 @@ const { data: user } = await apiService.user.getMe();
 
 <template>
 	<div>
-		{{ user }}
+		<nuxt-link to="/product/catalog">catalog</nuxt-link>
+
+		<pre>
+			{{ user }}
+		</pre
+		>
 
 		<!-- <HomeMain /> -->
 	</div>

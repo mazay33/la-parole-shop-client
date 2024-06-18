@@ -23,8 +23,10 @@ export default class ProductApi extends BaseApi {
 		});
 	}
 
-	public async getProductById(id: string): Promise<HttpReturnType<IProduct>> {
+	public async getProductById(id: string, options?: UseFetchOptions<IProduct>): Promise<HttpReturnType<IProduct>> {
 		const url = `/product/${id}`;
-		return await this.sendRequest<IProduct>(HttpMethod.GET, url);
+		return await this.sendRequest<IProduct>(HttpMethod.GET, url, {
+			...options,
+		});
 	}
 }

@@ -12,7 +12,7 @@ const config = useRuntimeConfig();
 	<nuxt-link
 		class="product flex-col overflow-hidden"
 		v-if="product"
-		:to="`/catalog/product/${product.id}`"
+		:to="`/product/${product.id}`"
 	>
 		<div class="product__image">
 			<img
@@ -35,7 +35,6 @@ const config = useRuntimeConfig();
 		& img {
 			height: 100%;
 			left: 0;
-			-o-object-fit: cover;
 			object-fit: cover;
 			position: absolute;
 			top: 0;

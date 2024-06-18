@@ -10,6 +10,11 @@ export default defineNuxtConfig({
 		assets: `${__dirname}/src/assets/`,
 		public: `${__dirname}/src/public/`,
 	},
+
+	app: {
+		pageTransition: { name: 'page', mode: 'out-in' },
+	},
+
 	devtools: true,
 	ssr: true,
 	runtimeConfig: {
@@ -35,6 +40,7 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'~/modules/auth/module',
 		'~/modules/product/module',
+		'@nuxt/image',
 	],
 	// eslint: {
 	// 	lintOnStart: false,

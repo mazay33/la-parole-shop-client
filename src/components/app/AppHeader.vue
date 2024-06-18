@@ -86,7 +86,7 @@ const items = ref([
 </script>
 
 <template>
-	<header class="app-header pt-2 fixed w-full z-10 bg-[#f4f4f4]/[0.25] backdrop-blur-md">
+	<header class="app-header fixed w-full z-50 bg-[#f4f4f4]/[0.25] backdrop-blur-md">
 		<MegaMenu
 			class="max-w-[1180px] mx-auto"
 			:model="items"
