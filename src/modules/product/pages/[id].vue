@@ -138,7 +138,11 @@ const toggleFavorite = () => {
 				данного комплекта
 			</div>
 		</div>
-		<slider v-model:imgNum="imgNum" />
+		<slider
+			v-if="product?.img.length"
+			:images="product?.img"
+			v-model:imgNum="imgNum"
+		/>
 	</div>
 </template>
 
