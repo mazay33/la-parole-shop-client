@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import useApiService from '~/services/apiService';
+const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const items = ref([
 	{
@@ -78,6 +80,16 @@ const items = ref([
 	},
 ]);
 
+const { data: cart } = await useApiService().cart.getCartItems();
+
+const cartTotal = computed(() => {
+	if (cart.value) {
+		return cart.value?.cart_items.reduce((acc, item) => acc + item?.count, 0);
+	}
+});
+
+const isAuthModalOpen = ref(false);
+
 // const cartStore = useCartStore()
 
 // const { cartTotal } = storeToRefs(cartStore)
@@ -125,72 +137,39 @@ const items = ref([
 				<div class="flex gap-6 items-center">
 					<i class="pi pi-heart text-3xl cursor-pointer"></i>
 
-					<!-- <i
-						v-badge="cartTotal?.count !== 0 ? cartTotal?.count : null"
+					<i
+						v-badge="cartTotal !== 0 ? cartTotal : null"
 						@click="useRouter().push('/cart')"
 						class="pi pi-shopping-cart text-3xl cursor-pointer"
-					></i> -->
+					></i>
 					<!-- <span>
             {{ cartTotal?.count }}
           </span> -->
-					<!-- <i
+					<i
 						@click="isAuthModalOpen = true"
-						:class="!authenticated ? 'pi pi-sign-in ' : 'pi pi-user'"
+						:class="!authStore.isAuthenticated ? 'pi pi-sign-in ' : 'pi pi-user'"
 						class="text-3xl cursor-pointer"
-					></i> -->
+					></i>
 				</div>
 			</template>
 		</MegaMenu>
 	</header>
 
-	<!-- <Dialog
+	<Dialog
 		v-model:visible="isAuthModalOpen"
 		modal
 		header="Login"
 		:style="{ width: '25rem' }"
 	>
-		<span class="p-text-secondary block mb-5">Login to your account</span>
-		<div class="flex align-items-center gap-3 mb-3">
-			<label
-				for="username"
-				class="font-semibold w-6rem"
-				>E-mail</label
-			>
-			<InputText
-				v-model="authState.email"
-				id="username"
-				class="flex-auto"
-				autocomplete="off"
-			/>
-		</div>
-		<div class="flex align-items-center gap-3 mb-5">
-			<label
-				for="email"
-				class="font-semibold w-6rem"
-				>Password</label
-			>
-			<InputText
-				v-model="authState.password"
-				id="email"
-				class="flex-auto"
-				autocomplete="off"
-			/>
-		</div>
-		<div class="flex justify-content-end gap-2">
+		<nuxt-link :to="config.public.api + 'auth/yandex'">
 			<Button
-				type="button"
-				label="Cancel"
-				severity="secondary"
-				@click="isAuthModalOpen = false"
+				type="submit"
+				label="Sign In with Yandex"
+				icon="pi pi-user"
+				class="w-full mt-4"
 			></Button>
-			<Button
-				:loading="isLoadingAuth"
-				type="button"
-				label="Save"
-				@click="login"
-			></Button>
-		</div>
-	</Dialog> -->
+		</nuxt-link>
+	</Dialog>
 </template>
 
 <style lang="scss">
