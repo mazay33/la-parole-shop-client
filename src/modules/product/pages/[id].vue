@@ -19,19 +19,14 @@ watchEffect(() => {
 });
 
 const imgNum = ref(0);
-
 const selectedVariation = ref();
+const ff1 = ref(false);
 
 const selectVariation = (variation: IVariation) => {
 	if (!product.value) return;
 	product.value.sku = variation.sku;
 	product.value.price = variation.price;
 	selectedVariation.value = variation.id;
-};
-
-const isFavorite = ref(false);
-const toggleFavorite = () => {
-	isFavorite.value = !isFavorite.value;
 };
 </script>
 
@@ -119,14 +114,11 @@ const toggleFavorite = () => {
 					class="uppercase px-[30px] py-4 font-500 bg-black border-black hover:bg-red-300 hover:border-red-300 rounded-xl"
 					>Добавить в корзину</Button
 				>
-				<Button
-					:class="[
-						'ml-3 pr-2 text-black bg-white rounded-full border border-slate-300 hover:border-slate-400',
-						isFavorite ? 'pi pi-heart-fill text-red-300' : 'pi pi-heart',
-					]"
-					style="font-size: 1.2rem"
-					@click="toggleFavorite()"
-				></Button>
+				<likes
+					:likeId="product?.id"
+					:isFavorite1="ff1"
+					@click="ff1 = !ff1"
+				/>
 			</div>
 			<div class="mt-10">
 				Закажите

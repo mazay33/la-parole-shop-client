@@ -9,23 +9,29 @@ const config = useRuntimeConfig();
 </script>
 
 <template>
-	<nuxt-link
-		class="product flex-col overflow-hidden"
-		v-if="product"
-		:to="`/product/${product.id}`"
-	>
-		<div class="product__image">
-			<img
-				v-if="product.img"
-				:src="`${config.public.api.replace('/api/', '')}/uploads/${product.img[0]?.url}`"
-			/>
-		</div>
-		<div class="flex-1 mt-5 text-dark">
-			<div class="font-600">{{ product.name }}</div>
-			<div class="mt-1 text-sm">{{ product?.category?.name }}</div>
-			<div class="mt-3">{{ product.price }} ₽</div>
-		</div>
-	</nuxt-link>
+	<div class="relative">
+		<nuxt-link
+			class="product flex-col overflow-hidden"
+			v-if="product"
+			:to="`/product/${product.id}`"
+		>
+			<div class="product__image">
+				<img
+					v-if="product.img"
+					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.img[0]?.url}`"
+				/>
+			</div>
+			<div class="flex-1 mt-5 text-dark">
+				<div class="font-600">{{ product.name }}</div>
+				<div class="mt-1 text-sm">{{ product?.category?.name }}</div>
+				<div class="mt-3">{{ product.price }} ₽</div>
+			</div>
+		</nuxt-link>
+		<likes
+			:like-id="product.id"
+			class="absolute top-5 right-3 pt-4 pb-4"
+		/>
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -48,5 +54,13 @@ const config = useRuntimeConfig();
 			pointer-events: none;
 		}
 	}
+}
+
+.likes {
+	position: absolute;
+	top: 5px;
+	right: 3px;
+	z-index: 10;
+	pointer-events: auto;
 }
 </style>
