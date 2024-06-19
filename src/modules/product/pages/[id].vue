@@ -12,18 +12,33 @@ const { data: product } = await apiService.product.getProductById(productId, {
 const imgNum = ref(0);
 
 const cupSizes = product.value?.cup_sizes.map(size => size.size) || [];
-const selectedCupSize = ref();
+const selectedCupSize = ref('A');
 
 const underbust_sizes = product.value?.underbust_sizes.map(size => size.size) || [];
-const selectedUnderbust_sizes = ref();
+const selectedUnderbust_sizes = ref('70');
 
 const clothing_sizes = product.value?.clothing_sizes.map(size => size.size) || [];
-const selectedClothing_sizes = ref();
+const selectedClothing_sizes = ref('XS');
+
+const sku = ref(product.value?.sku);
+const price = ref(product.value?.price);
+const selectedVariation = ref(null);
+
+const selectVariation = variation => {
+	sku.value = variation.sku;
+	price.value = variation.price;
+	selectedVariation.value = variation.id;
+};
+
+const isFavorite = ref(false);
+const toggleFavorite = () => {
+	isFavorite.value = !isFavorite.value;
+};
 </script>
 
 <template>
 	<div>
-		<div class="grid grid-cols-2 gap-10">
+		<div class="grid grid-cols-2 gap-10 font-['Raleway'] text-lg">
 			<div
 				class="flex max-w-[560px] max-h-[745px] w-full h-full"
 				v-if="product"
@@ -39,15 +54,22 @@ const selectedClothing_sizes = ref();
 			<div class="flex flex-col justify-start mx-5">
 				<h4>{{ product?.name }}</h4>
 
-				<p>Артикул: {{ product?.sku }}</p>
-				<p>{{ product?.price.toLocaleString() }} ₽</p>
+				<p>Артикул: {{ sku }}</p>
+				<p class="font-semibold text-xl">{{ price?.toLocaleString() }} ₽</p>
 
 				<div v-if="product?.variations">
 					<p>Комплектация</p>
 					<div class="flex gap-2">
 						<Button
-							class="bg-white text-black border-black"
 							v-for="variation in product?.variations"
+							:key="variation.id"
+							:class="[
+								'border-black font-light text-black',
+								selectedVariation === variation.id
+									? 'bg-red-200 border-black'
+									: 'bg-white border-gray-300',
+							]"
+							@click="selectVariation(variation)"
 						>
 							{{ variation.name }}
 						</Button>
@@ -90,11 +112,19 @@ const selectedClothing_sizes = ref();
 					></Dropdown>
 				</div>
 
-				<div class="mt-10">
+				<div class="mt-10 flex">
 					<Button
 						class="uppercase px-[30px] py-4 font-500 bg-black border-black hover:bg-red-300 hover:border-red-300 rounded-xl"
 						>Добавить в корзину</Button
 					>
+					<Button
+						:class="[
+							'ml-3 pr-2 text-black bg-white rounded-full border border-slate-300 hover:border-slate-400',
+							isFavorite ? 'pi pi-heart-fill text-red-300' : 'pi pi-heart',
+						]"
+						style="font-size: 1.2rem"
+						@click="toggleFavorite()"
+					></Button>
 				</div>
 				<P class="mt-10"
 					>Закажите
@@ -106,24 +136,12 @@ const selectedClothing_sizes = ref();
 					данного комплекта</P
 				>
 			</div>
-			<div class="flex flex-wrap max-w-[560px] max-h-[140px] w-full h-full gap-1 mt--9">
-				<NuxtImg
-					v-for="(img, i) in product.img"
-					:key="i"
-					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.img[i]?.url}`"
-					alt=""
-					:class="[
-						'w-16 h-20 transition-opacity duration-400 ease-in-out hover:opacity-70 cursor-pointer',
-						imgNum === i ? 'border-debug' : '',
-					]"
-					@click="imgNum = i"
-				/>
-			</div>
+			<slider v-model:imgNum="imgNum" />
 		</div>
-		<pre mt-10>
+		<!-- <pre mt-10>
 			{{ product }}
 		</pre
-		>
+		> -->
 	</div>
 </template>
 
