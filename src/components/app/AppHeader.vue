@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import useApiService from '~/services/apiService';
+import { provide } from 'vue';
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const items = ref([
@@ -95,6 +96,21 @@ const isAuthModalOpen = ref(false);
 // const { cartTotal } = storeToRefs(cartStore)
 
 // await cartStore.getCartTotal()
+
+const wishListOpen = ref(false);
+
+const closeWishList = () => {
+	wishListOpen.value = false;
+};
+
+const openWishList = () => {
+	wishListOpen.value = true;
+};
+
+provide('wishs', {
+	closeWishList,
+	openWishList,
+});
 </script>
 
 <template>
@@ -135,7 +151,11 @@ const isAuthModalOpen = ref(false);
 
 			<template #end>
 				<div class="flex gap-6 items-center">
-					<i class="pi pi-heart text-3xl cursor-pointer"></i>
+					<i
+						class="pi pi-heart text-3xl cursor-pointer"
+						@click="openWishList"
+					></i>
+					<favorite v-if="wishListOpen" />
 
 					<i
 						v-badge="cartTotal !== 0 ? cartTotal : null"

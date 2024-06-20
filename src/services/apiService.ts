@@ -3,23 +3,27 @@ import AuthApi from './api/auth/authApi';
 import UserApi from './api/user/userApi';
 import ProductApi from './api/product/productApi';
 import CartApi from './api/cart/cartApi';
+import FavoriteApi from './api/wishlist/favoriteApi.js';
 
 export * from './api/auth/authApi';
 export * from './api/user/userApi';
 export * from './api/product/productApi';
 export * from './api/cart/cartApi';
+export * from './api/wishlist/favoriteApi.js';
 
 class ApiService {
 	readonly auth: AuthApi;
 	readonly user: UserApi;
 	readonly product: ProductApi;
 	readonly cart: CartApi;
+	readonly favorite: FavoriteApi;
 
 	constructor(httpService: HttpService) {
 		this.auth = new AuthApi(httpService);
 		this.user = new UserApi(httpService);
 		this.product = new ProductApi(httpService);
 		this.cart = new CartApi(httpService);
+		this.favorite = new FavoriteApi(httpService);
 	}
 }
 

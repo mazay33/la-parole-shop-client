@@ -28,6 +28,17 @@ const selectVariation = (variation: IVariation) => {
 	product.value.price = variation.price;
 	selectedVariation.value = variation.id;
 };
+
+const cartArr = {
+	variation: selectedVariation.value,
+	cup: selectedCupSize.value,
+	under: selectedUnderbustSize.value,
+	clothing: selectedClothingSize.value,
+};
+
+const cart = useLocalStorage('cartArr', []);
+
+const isFavorite = ref(cartArr.value);
 </script>
 
 <template>
