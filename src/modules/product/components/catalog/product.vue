@@ -1,34 +1,51 @@
 <script setup lang="ts">
+import { computed } from '#imports';
 import type { ProductListItem } from '~/services/api/product/productApi.types';
+
 interface Props {
 	product: ProductListItem;
 }
-defineProps<Props>();
 
+const props = defineProps<Props>();
 const config = useRuntimeConfig();
+
+const cartArr = computed(() => {
+	const variationId = props.product?.variations?.length > 0 ? props.product.variations[0].id : null;
+
+	return {
+		productId: props.product.id,
+		variationId: variationId,
+		cup: 1,
+		under: 1,
+		clothing: 1,
+		price: props.product?.price,
+	};
+});
 </script>
 
 <template>
-	<div class="relative">
+	<div
+		class="relative"
+		v-if="props.product"
+	>
 		<nuxt-link
 			class="product flex-col overflow-hidden"
-			v-if="product"
-			:to="`/product/${product.id}`"
+			:to="`/product/${props.product.id}`"
 		>
 			<div class="product__image">
 				<img
-					v-if="product.img"
-					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.img[0]?.url}`"
+					v-if="props.product.img && props.product.img.length > 0"
+					:src="`${config.public.api.replace('/api/', '')}/uploads/${props.product.img[0].url}`"
 				/>
 			</div>
 			<div class="flex-1 mt-5 text-dark">
-				<div class="font-600">{{ product.name }}</div>
-				<div class="mt-1 text-sm">{{ product?.category?.name }}</div>
-				<div class="mt-3">{{ product.price }} ₽</div>
+				<div class="font-600">{{ props.product.name }}</div>
+				<div class="mt-1 text-sm">{{ props.product.category?.name }}</div>
+				<div class="mt-3">{{ props.product.price }} ₽</div>
 			</div>
 		</nuxt-link>
 		<likes
-			:like-id="product.id"
+			:like-id="cartArr"
 			class="absolute top-5 right-3 pt-4 pb-4"
 		/>
 	</div>

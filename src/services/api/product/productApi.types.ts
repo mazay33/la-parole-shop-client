@@ -59,5 +59,4 @@ export interface IProduct {
 	img: IProductImage[];
 }
 
-export interface ProductListItem
-	extends Omit<IProduct, 'cup_sizes' | 'clothing_sizes' | 'underbust_sizes' | 'variations' | 'info'> {}
+export interface ProductListItem extends Omit<IProduct, 'cup_sizes' | 'clothing_sizes' | 'underbust_sizes' | 'info'> {}

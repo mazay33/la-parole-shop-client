@@ -19,7 +19,7 @@ watchEffect(() => {
 });
 
 const imgNum = ref(0);
-const selectedVariation = ref();
+const selectedVariation = ref(product.value?.variations[0].id);
 const ff1 = ref(false);
 
 const selectVariation = (variation: IVariation) => {

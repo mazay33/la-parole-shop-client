@@ -50,10 +50,20 @@ const removeFromList = () => {
 					</h4></nuxt-link
 				>
 
-				<p class="text-xs font-normal mt--2">Чашка бюста: {{ props.cartItem.cup }}</p>
-				<p class="text-xs font-normal mt--3">Объем под грудью: {{ props.cartItem.clothing }}</p>
-				<p class="text-xs font-normal mt--3">Трусики: {{ props.cartItem.under }}</p>
-				<p class="text-sm font-normal mt--2">{{ props.cartItem.variationId }}</p>
+				<p class="text-xs font-normal mt--2">
+					Чашка бюста: {{ product?.cup_sizes.find(size => size.id === props.cartItem.cup)?.size }}
+				</p>
+				<p class="text-xs font-normal mt--3">
+					Объем под грудью:
+					{{ product?.underbust_sizes.find(under => under.id === props.cartItem.under)?.size }}
+				</p>
+				<p class="text-xs font-normal mt--3">
+					Трусики:
+					{{ product?.clothing_sizes.find(clothing => clothing.id === props.cartItem.clothing)?.size }}
+				</p>
+				<p class="text-sm font-normal mt--2">
+					{{ product?.variations.find(variationId => variationId.id === props.cartItem.variationId)?.sku }}
+				</p>
 			</div>
 		</div>
 
