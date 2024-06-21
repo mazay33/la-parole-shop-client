@@ -2,7 +2,7 @@
 const props = defineProps({
 	cartArr: {
 		productId: Number,
-		variationId: Number,
+		variationId: String,
 		cup: Number,
 		under: Number,
 		clothing: Number,

@@ -19,14 +19,14 @@ watchEffect(() => {
 });
 
 const imgNum = ref(0);
-const selectedVariation = ref(product.value?.variations[0].id);
+const selectedVariation = ref(product.value?.variations[0].sku);
 const ff1 = ref(false);
 
 const selectVariation = (variation: IVariation) => {
 	if (!product.value) return;
 	product.value.sku = variation.sku;
 	product.value.price = variation.price;
-	selectedVariation.value = variation.id;
+	selectedVariation.value = variation.sku;
 };
 
 const cartArr = computed(() => ({
@@ -68,7 +68,9 @@ const cartArr = computed(() => ({
 						:key="variation.id"
 						:class="[
 							'border-black font-light text-black',
-							selectedVariation === variation.id ? 'bg-red-200 border-black' : 'bg-white border-gray-300',
+							selectedVariation === variation.sku
+								? 'bg-red-200 border-black'
+								: 'bg-white border-gray-300',
 						]"
 					>
 						{{ variation.name }}

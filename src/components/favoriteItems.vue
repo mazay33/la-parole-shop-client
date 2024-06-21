@@ -62,7 +62,7 @@ const removeFromList = () => {
 					{{ product?.clothing_sizes.find(clothing => clothing.id === props.cartItem.clothing)?.size }}
 				</p>
 				<p class="text-sm font-normal mt--2">
-					{{ product?.variations.find(variationId => variationId.id === props.cartItem.variationId)?.sku }}
+					{{ props.cartItem.variationId }}
 				</p>
 			</div>
 		</div>
