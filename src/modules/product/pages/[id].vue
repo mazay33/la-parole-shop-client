@@ -1,42 +1,46 @@
 <script setup lang="ts">
-import type { IVariation } from '~/services/api/product/productApi.types';
+import type { IConfiguration } from '~/services/api/product/productApi.types';
 import useApiService from '~/services/apiService';
 
 const config = useRuntimeConfig();
 const apiService = useApiService();
 const productId = useRoute().params.id;
 
-const { data: product } = await apiService.product.getProductById(String(productId), { lazy: true });
+const { data: product } = await apiService.product.getProductById(String(productId), { server: false });
 
-const selectedCupSize = ref();
-const selectedUnderbustSize = ref();
-const selectedClothingSize = ref();
+const selectedCupSize = ref<number | null>();
+const selectedBeltSize = ref<number | null>();
+const selectedClothingSize = ref<number | null>();
+const selectedConiguration = ref<IConfiguration | null>();
 
 watchEffect(() => {
-	selectedCupSize.value = product.value?.cup_sizes[0].id;
-	selectedUnderbustSize.value = product.value?.underbust_sizes[0]?.id;
-	selectedClothingSize.value = product.value?.clothing_sizes[0]?.id;
+	selectedCupSize.value = product.value?.cupSizes[0].id;
+	selectedBeltSize.value = product.value?.beltSizes[0]?.id;
+	selectedClothingSize.value = product.value?.clothingSizes[0]?.id;
+
+	if (product.value?.productConfigurations.length) {
+		selectedConiguration.value = product.value?.productConfigurations[0];
+	}
 });
 
 const imgNum = ref(0);
-const selectedVariation = ref(product.value?.variations[0].sku);
 const ff1 = ref(false);
 
-const selectVariation = (variation: IVariation) => {
+const selectVariation = (configuration: IConfiguration) => {
 	if (!product.value) return;
-	product.value.sku = variation.sku;
-	product.value.price = variation.price;
-	selectedVariation.value = variation.sku;
+	product.value.sku = configuration.sku;
+	product.value.price = configuration.price;
+	selectedConiguration.value = configuration;
 };
 
-const cartArr = computed(() => ({
-	productId: product.value?.id,
-	variationId: selectedVariation.value,
-	cup: selectedCupSize.value,
-	under: selectedUnderbustSize.value,
-	clothing: selectedClothingSize.value,
-	price: product.value?.price,
-}));
+// const cartArr = computed(() => ({
+// 	productId: product.value?.id,
+// 	variationId: selectedVariation.value,
+// 	cup: selectedCupSize.value,
+// 	under: selectedUnderbustSize.value,
+// 	clothing: selectedClothingSize.value,
+// 	price: product.value?.price,
+// }));
 </script>
 
 <template>
@@ -45,13 +49,13 @@ const cartArr = computed(() => ({
 			class="flex max-w-[560px] max-h-[745px] w-full h-full"
 			v-if="product"
 		>
-			<NuxtImg
-				:src="`${config.public.api.replace('/api/', '')}/uploads/${product.img[imgNum]?.url}`"
+			<!-- <NuxtImg
+				:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[imgNum]?.url}`"
 				alt=""
 				weight="560"
 				height="745"
 				class="transition-opacity duration-500 ease-in-out"
-			/>
+			/> -->
 		</div>
 		<div class="flex flex-col justify-start mx-5">
 			<h4>{{ product?.name }}</h4>
@@ -59,18 +63,18 @@ const cartArr = computed(() => ({
 			<p>Артикул: {{ product?.sku }}</p>
 			<p class="font-semibold text-xl">{{ product?.price.toLocaleString() }} ₽</p>
 
-			<div v-if="product?.variations.length">
+			<div v-if="product?.productConfigurations.length">
 				<p>Комплектация</p>
 				<div class="flex gap-2">
 					<Button
 						@click="selectVariation(variation)"
-						v-for="variation in product?.variations"
+						v-for="variation in product?.productConfigurations"
 						:key="variation.id"
 						:class="[
-							'border-black font-light text-black',
-							selectedVariation === variation.sku
-								? 'bg-red-200 border-black'
-								: 'bg-white border-gray-300',
+							'font-light  hover:bg-gray-100 ',
+							selectedConiguration?.id === variation.id
+								? ' border-[#e4aa9f] bg-white text-[#e4aa9f]'
+								: 'bg-white border-gray-300 text-black',
 						]"
 					>
 						{{ variation.name }}
@@ -78,46 +82,65 @@ const cartArr = computed(() => ({
 				</div>
 			</div>
 
-			<div
-				class="mt-8"
-				v-if="product?.cup_sizes.length"
-			>
-				<p>Чашка бюста</p>
-				<Dropdown
-					optionLabel="size"
-					optionValue="id"
-					:options="product.cup_sizes"
-					v-model="selectedCupSize"
-					class="mt--3"
-				></Dropdown>
+			<p class="mt-8 mb-1">Бюстгальтер</p>
+			<div class="flex items-center gap-4 flex-wrap w-90%">
+				<Button
+					@click="selectedCupSize = size.id"
+					:class="[
+						selectedCupSize === size.id
+							? 'border-[#e4aa9f]  text-[#e4aa9f]'
+							: ' border-gray-300 text-black',
+					]"
+					v-for="size in product?.cupSizes"
+					:key="size.id"
+					class="font-['Raleway'] h-2rem font-300 w-2rem sm:h-3rem sm:w-3rem border-1 border-solid rounded-md bg-white inline-flex justify-center items-center flex-shrink-0 cursor-pointer hover:bg-gray-100 transition-duration-150 transition-colors"
+				>
+					{{ size.size }}
+				</Button>
 			</div>
 
-			<div
-				class="mt-3"
-				v-if="product?.underbust_sizes.length"
-			>
-				<p>Объем под грудью</p>
-				<Dropdown
-					optionLabel="size"
-					optionValue="id"
-					:options="product?.underbust_sizes"
-					v-model="selectedUnderbustSize"
-					class="mt--3"
-				></Dropdown>
+			<p class="mt-4 mb-1">Трусики</p>
+			<div class="flex items-center gap-4 flex-wrap w-90%">
+				<Button
+					@click="selectedClothingSize = size.id"
+					:class="[
+						selectedClothingSize === size.id
+							? 'border-[#e4aa9f]  text-[#e4aa9f]'
+							: ' border-gray-300 text-black',
+					]"
+					v-for="size in product?.clothingSizes"
+					:key="size.id"
+					class="font-['Raleway'] h-2rem font-300 w-2rem sm:h-3rem sm:w-3rem border-1 border-solid rounded-md bg-white inline-flex justify-center items-center flex-shrink-0 cursor-pointer hover:bg-gray-100 transition-duration-150 transition-colors"
+				>
+					{{ size.size }}
+				</Button>
 			</div>
 
-			<div
-				class="mt-3"
-				v-if="product?.clothing_sizes.length"
+			<p
+				v-if="selectedConiguration?.name.includes('пояс')"
+				class="mt-4 mb-1"
 			>
-				<p>Трусики</p>
-				<Dropdown
-					optionLabel="size"
-					optionValue="id"
-					:options="product?.clothing_sizes"
-					v-model="selectedClothingSize"
-					class="mt--3"
-				></Dropdown>
+				Пояс
+			</p>
+			<div class="flex items-center gap-4 flex-wrap w-90%">
+				<Button
+					v-if="selectedConiguration?.name.includes('пояс')"
+					@click="selectedCupSize = size.id"
+					:class="[
+						selectedCupSize === size.id
+							? 'border-[#e4aa9f]  text-[#e4aa9f]'
+							: ' border-gray-300 text-black',
+					]"
+					v-for="size in product?.beltSizes"
+					:key="size.id"
+					class="font-['Raleway'] h-2rem font-300 w-2rem sm:h-3rem sm:w-3rem border-1 border-solid rounded-md bg-white inline-flex justify-center items-center flex-shrink-0 cursor-pointer hover:bg-gray-100 transition-duration-150 transition-colors"
+				>
+					{{ size.size }}
+				</Button>
+				<div v-if="selectedConiguration?.name.includes('С поясом и гартерами')">
+					<p m-0>Гартеры:</p>
+					<p font-300>Соответствует размеру трусиков*</p>
+				</div>
 			</div>
 
 			<div class="mt-10 flex">
@@ -125,10 +148,10 @@ const cartArr = computed(() => ({
 					class="uppercase px-[30px] py-4 font-500 bg-black border-black hover:bg-red-300 hover:border-red-300 rounded-xl"
 					>Добавить в корзину</Button
 				>
-				<likes
+				<!-- <likes
 					:cartArr="cartArr"
 					@click="ff1 = !ff1"
-				/>
+				/> -->
 			</div>
 			<div class="mt-10">
 				Закажите
@@ -140,11 +163,11 @@ const cartArr = computed(() => ({
 				данного комплекта
 			</div>
 		</div>
-		<slider
-			v-if="product?.img.length"
-			:images="product?.img"
+		<!-- <slider
+			v-if="product?.images.length"
+			:images="product?.images"
 			v-model:imgNum="imgNum"
-		/>
+		/> -->
 	</div>
 </template>
 

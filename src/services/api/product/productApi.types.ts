@@ -1,18 +1,12 @@
 export interface ICategory {
-	createdAt: Date;
-	description: string | null;
 	id: number;
+	description: string | null;
 	name: string;
-	updatedAt: Date;
 }
 
 export interface ISubCategory {
 	id: number;
 	name: string;
-	description: string;
-	categoryId: number;
-	createdAt: Date;
-	updatedAt: Date;
 }
 
 export interface ISize {
@@ -20,9 +14,8 @@ export interface ISize {
 	size: string;
 }
 
-export interface IVariation {
+export interface IConfiguration {
 	id: number;
-	productId: number;
 	sku: string;
 	price: number;
 	name: string;
@@ -34,7 +27,6 @@ export interface IInfo {
 }
 export interface IProductImage {
 	id: number;
-	productId: number;
 	url: string;
 }
 
@@ -50,15 +42,14 @@ export interface IProduct {
 	createdAt: Date;
 	updatedAt: Date;
 	category: ICategory;
-	sub_categories: ISubCategory[];
-	cup_sizes: ISize[];
-	clothing_sizes: ISize[];
-	underbust_sizes: ISize[];
-	variations: IVariation[];
+	subCategories: ISubCategory[];
+	cupSizes: ISize[];
+	clothingSizes: ISize[];
+	beltSizes: ISize[];
+	productConfigurations: IConfiguration[];
 	info: IInfo[];
-	img: IProductImage[];
+	images: IProductImage[];
 }
 
-export interface ProductListItem extends Omit<IProduct, 'cup_sizes' | 'clothing_sizes' | 'underbust_sizes' | 'info'> {
-	variations: IVariation[];
-}
+export interface ProductListItem
+	extends Omit<IProduct, 'cupSizes' | 'clothingSizes' | 'beltSizes' | 'productConfigurations' | 'info'> {}

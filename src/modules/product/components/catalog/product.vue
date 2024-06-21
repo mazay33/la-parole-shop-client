@@ -34,8 +34,8 @@ const cartArr = computed(() => {
 		>
 			<div class="product__image">
 				<img
-					v-if="props.product.img && props.product.img.length > 0"
-					:src="`${config.public.api.replace('/api/', '')}/uploads/${props.product.img[0].url}`"
+					v-if="product.images[0]?.url"
+					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[0]?.url}`"
 				/>
 			</div>
 			<div class="flex-1 mt-5 text-dark">
