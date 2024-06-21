@@ -13,7 +13,7 @@ const selectedUnderbustSize = ref();
 const selectedClothingSize = ref();
 
 watchEffect(() => {
-	selectedCupSize.value = product.value?.cup_sizes[0]?.id;
+	selectedCupSize.value = product.value?.cup_sizes[0].id;
 	selectedUnderbustSize.value = product.value?.underbust_sizes[0]?.id;
 	selectedClothingSize.value = product.value?.clothing_sizes[0]?.id;
 });
@@ -29,16 +29,14 @@ const selectVariation = (variation: IVariation) => {
 	selectedVariation.value = variation.id;
 };
 
-const cartArr = {
-	variation: selectedVariation.value,
+const cartArr = computed(() => ({
+	productId: product.value?.id,
+	variationId: selectedVariation.value,
 	cup: selectedCupSize.value,
 	under: selectedUnderbustSize.value,
 	clothing: selectedClothingSize.value,
-};
-
-const cart = useLocalStorage('cartArr', []);
-
-const isFavorite = ref(cartArr.value);
+	price: product.value?.price,
+}));
 </script>
 
 <template>
@@ -126,8 +124,7 @@ const isFavorite = ref(cartArr.value);
 					>Добавить в корзину</Button
 				>
 				<likes
-					:likeId="product?.id"
-					:isFavorite1="ff1"
+					:cartArr="cartArr"
 					@click="ff1 = !ff1"
 				/>
 			</div>

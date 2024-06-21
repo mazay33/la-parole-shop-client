@@ -1,24 +1,40 @@
 <script setup>
 const props = defineProps({
-	likeId: Number,
+	cartArr: {
+		productId: Number,
+		variationId: Number,
+		cup: Number,
+		under: Number,
+		clothing: Number,
+		price: Number,
+	},
 });
 
 const favorite = useLocalStorage('favorite', []);
-const isFavorite = ref(favorite.value.includes(props.likeId));
+const isFavorite = ref(
+	favorite.value.some(
+		item => item.productId === props.cartArr.productId && item.variationId === props.cartArr.variationId,
+	),
+);
 
 const favoriteFunction = () => {
 	const currentFavorites = [...favorite.value];
+	const index = currentFavorites.findIndex(
+		item => item.productId === props.cartArr.productId && item.variationId === props.cartArr.variationId,
+	);
 
-	const index = currentFavorites.indexOf(props.likeId);
 	if (index === -1) {
-		currentFavorites.push(props.likeId);
+		currentFavorites.push(props.cartArr);
 	} else {
 		currentFavorites.splice(index, 1);
 	}
 	favorite.value = currentFavorites;
 };
+
 watch(favorite, newFavorites => {
-	isFavorite.value = newFavorites.includes(props.likeId);
+	isFavorite.value = newFavorites.some(
+		item => item.productId === props.cartArr.productId && item.variationId === props.cartArr.variationId,
+	);
 });
 </script>
 
@@ -29,6 +45,9 @@ watch(favorite, newFavorites => {
 			isFavorite ? 'pi pi-heart-fill text-red-300' : 'pi pi-heart',
 		]"
 		style="font-size: 1.2rem"
-		@click="favoriteFunction()"
+		@click="
+			favoriteFunction();
+			console.log(props.cartArr);
+		"
 	></Button>
 </template>

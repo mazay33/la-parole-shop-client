@@ -20,9 +20,9 @@ const favorite = useLocalStorage('favorite', []);
 			<hr class="border-slate-300" />
 
 			<favoriteItems
-				v-for="id in favorite"
-				:key="id"
-				:productId="id"
+				v-for="item in favorite"
+				:key="item.productId"
+				:cartItem="item"
 			/>
 		</div>
 	</div>

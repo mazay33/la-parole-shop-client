@@ -1,17 +1,36 @@
 <script setup lang="ts">
 import type { IVariation } from '~/services/api/product/productApi.types';
 import useApiService from '~/services/apiService';
+import { inject } from '#imports';
 
 const config = useRuntimeConfig();
 const apiService = useApiService();
 
 const props = defineProps({
-	productId: Number,
+	cartItem: {
+		type: Object,
+		required: true,
+	},
 });
 
-const productId = props.productId;
+const productId = props.cartItem.productId;
 
 const { data: product } = await apiService.product.getProductById(String(productId), { lazy: true });
+
+const { closeWishList } = inject('wishs');
+
+const favorite = useLocalStorage('favorite', []);
+
+const removeFromList = () => {
+	const currentFavorites = [...favorite.value];
+	const index = currentFavorites.findIndex(
+		item => item.productId === props.cartItem.productId && item.variationId === props.cartItem.variationId,
+	);
+	if (index !== -1) {
+		currentFavorites.splice(index, 1);
+	}
+	favorite.value = currentFavorites;
+};
 </script>
 
 <template>
@@ -22,22 +41,28 @@ const { data: product } = await apiService.product.getProductById(String(product
 				alt=""
 				class="rounded-lg w-20 h-25 mt-10"
 			/>
-			<div class="ml-5">
-				<h4 class="font-light">{{ product?.name }}</h4>
-				<!-- <p class="font-['Raleway'] text-xs font-normal">Артикул:</p>
-				<p class="font-['Raleway'] text-xs font-normal mt--3">Чашка бюста:</p>
-				<p class="font-['Raleway'] text-xs font-normal mt--3">Объем под грудью:</p>
-				<p class="font-['Raleway'] text-xs font-normal mt--3">Пояс для чулок:</p>
-				<p class="font-['Raleway'] text-xs font-normal mt--3">Трусики:</p> -->
-				<p class="font-['Raleway'] text-sm font-normal mt--2">{{ product?.sku }}</p>
+			<div class="ml-5 font-['Raleway']">
+				<nuxt-link
+					:to="`/product/${product?.id}`"
+					@click="closeWishList"
+					><h4 class="font-normal">
+						{{ product?.name }}
+					</h4></nuxt-link
+				>
+
+				<p class="text-xs font-normal mt--2">Чашка бюста: {{ props.cartItem.cup }}</p>
+				<p class="text-xs font-normal mt--3">Объем под грудью: {{ props.cartItem.clothing }}</p>
+				<p class="text-xs font-normal mt--3">Трусики: {{ props.cartItem.under }}</p>
+				<p class="text-sm font-normal mt--2">{{ props.cartItem.variationId }}</p>
 			</div>
 		</div>
 
 		<div class="flex mt-20">
-			<p class="mr-15">{{ product?.price }} р.</p>
+			<p class="mr-15">{{ props.cartItem.price.toLocaleString() }} ₽</p>
 			<i
 				class="pi pi-minus-circle cursor-pointer opacity-50 hover:opacity-100"
 				style="font-size: 1.3rem"
+				@click="removeFromList"
 			></i>
 		</div>
 	</div>
