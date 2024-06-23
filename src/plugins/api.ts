@@ -29,17 +29,32 @@ export default defineNuxtPlugin(() => {
 		},
 	});
 
-	async function refresh() {
-		const { data, status } = await useFetch<AccessToken>(`${config.public.api}auth/refresh-tokens`, {
-			method: 'GET',
-			credentials: 'include',
-		});
+	let refreshTokenPromise: Promise<AccessToken | null> | null = null;
 
-		if (status.value === 'success') {
-			return data.value;
-		} else {
-			throw new Error('Token refresh failed');
+	async function refresh() {
+		if (!refreshTokenPromise) {
+			refreshTokenPromise = (async () => {
+				try {
+					const { data, status } = await useFetch<AccessToken>(`${config.public.api}auth/refresh-tokens`, {
+						method: 'GET',
+						credentials: 'include',
+					});
+
+					if (status.value === 'success') {
+						return data.value;
+					} else {
+						throw new Error('Token refresh failed');
+					}
+				} catch (error) {
+					console.error('Token refresh failed:', error);
+					throw error;
+				} finally {
+					refreshTokenPromise = null;
+				}
+			})();
 		}
+
+		return refreshTokenPromise;
 	}
 
 	// Expose to useNuxtApp().$api
