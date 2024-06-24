@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import useApiService from '~/services/apiService';
 
 const apiService = useApiService();
@@ -12,31 +13,45 @@ const { data: products } = await apiService.product.getProducts({
 		pageSize,
 	},
 });
+
+const gridClass = ref('grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4');
+
+const setGridClass = (size: 'small' | 'medium' | 'large') => {
+	switch (size) {
+		case 'small':
+			gridClass.value = 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+			break;
+		case 'medium':
+			gridClass.value = 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+			break;
+		case 'large':
+			gridClass.value = 'grid-cols-1 sm:grid-cols-2';
+			break;
+	}
+};
 </script>
+
 <template>
 	<div
 		v-if="products?.data"
 		class="max-w-[1180px] mx-auto"
 	>
-		<div class="grid grid-cols-1 gap-y-5 sm:grid-cols-2 gap-x-5 lg:grid-cols-3 xl:gap-x-5">
+		<div class="flex justify-end mb-4 gap-3">
+			<Button @click="setGridClass('small')"> Small </Button>
+			<Button @click="setGridClass('medium')"> Medium </Button>
+			<Button @click="setGridClass('large')"> Large </Button>
+		</div>
+		<div :class="`grid gap-y-5 gap-x-5 ${gridClass}`">
 			<ProductCatalogProduct
 				v-for="product in products.data"
-				:product="product"
-			/>
-			<!-- FOR TEST, Потом убрать лишние -->
-			<ProductCatalogProduct
-				v-for="product in products.data"
-				:product="product"
-			/>
-			<ProductCatalogProduct
-				v-for="product in products.data"
+				:key="product.id"
 				:product="product"
 			/>
 			<ProductCatalogProduct
 				v-for="product in products.data"
+				:key="product.id"
 				:product="product"
 			/>
-			<!--  ______________________ -->
 		</div>
 	</div>
 </template>

@@ -10,8 +10,6 @@ const props = defineProps<Props>();
 const config = useRuntimeConfig();
 
 const cartArr = computed(() => {
-	// const variationId = props.product?.variations?.length > 0 ? props.product.variations[0].id : null;
-
 	return {
 		productId: props.product?.id,
 		variationId: props.product.sku,
@@ -37,6 +35,10 @@ const cartArr = computed(() => {
 					v-if="props.product.img && props.product.img.length > 0"
 					:src="`${config.public.api.replace('/api/', '')}/uploads/${props.product.img[0].url}`"
 				/>
+				<!-- <img
+					v-if="product.images[0]?.url"
+					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[0]?.url}`"
+				/> -->
 			</div>
 			<div class="flex-1 mt-5 text-dark">
 				<div class="font-600">{{ props.product.name }}</div>

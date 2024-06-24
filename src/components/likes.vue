@@ -45,9 +45,6 @@ watch(favorite, newFavorites => {
 			isFavorite ? 'pi pi-heart-fill text-red-300' : 'pi pi-heart',
 		]"
 		style="font-size: 1.2rem"
-		@click="
-			favoriteFunction();
-			console.log(props.cartArr);
-		"
+		@click="favoriteFunction()"
 	></Button>
 </template>

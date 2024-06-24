@@ -31,4 +31,6 @@ export default class CartApi extends BaseApi {
 			},
 		);
 	}
+
+	public async getWishListItems(options?: UseFetchOptions<ICart>): Promise<HttpReturnType<ICart>> {}
 }

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { IVariation } from '~/services/api/product/productApi.types';
+import type { IConfiguration } from '~/services/api/product/productApi.types';
 import useApiService from '~/services/apiService';
 
 const config = useRuntimeConfig();
 const apiService = useApiService();
 const productId = useRoute().params.id;
 
-const { data: product } = await apiService.product.getProductById(String(productId), { lazy: true });
+const { data: product } = await apiService.product.getProductById(String(productId), { server: false });
 
 const selectedCupSize = ref();
 const selectedUnderbustSize = ref();
