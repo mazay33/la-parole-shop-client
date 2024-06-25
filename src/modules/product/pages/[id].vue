@@ -20,6 +20,7 @@ watchEffect(() => {
 
 const imgNum = ref(0);
 const selectedVariation = ref(product.value?.variations[0].sku);
+const selectedVariationId = ref(product.value?.variations[0].id);
 const ff1 = ref(false);
 
 const selectVariation = (variation: IVariation) => {
@@ -27,6 +28,7 @@ const selectVariation = (variation: IVariation) => {
 	product.value.sku = variation.sku;
 	product.value.price = variation.price;
 	selectedVariation.value = variation.sku;
+	selectedVariationId.value = variation.id;
 };
 
 const cartArr = computed(() => ({
@@ -37,6 +39,41 @@ const cartArr = computed(() => ({
 	clothing: selectedClothingSize.value,
 	price: product.value?.price,
 }));
+
+// const wishListAdd = computed(() => ({
+// 	cartId: product.value?.id,
+// 	productId: selectedVariationId.value,
+// 	count: 1,
+// 	createdAt: product.value?.createdAt,
+// 	updatedAt: product.value?.updatedAt,
+// }));
+
+import type { IWishListItem } from './favoriteApi.types';
+
+const wishListAdd = computed<IWishListItem>(() => ({
+	cartId: product.value?.id ?? 0,
+	productId: selectedVariationId.value ?? 0,
+	count: 1,
+	createdAt: product.value?.createdAt ?? new Date(),
+	updatedAt: product.value?.updatedAt ?? new Date(),
+}));
+
+const ProductToWishList = async () => {
+	const cartId = wishListAdd.value.cartId;
+	if (cartId) {
+		const { data } = await apiService.favorite.addProductToWishList(cartId, 1, {
+			productId: wishListAdd.value.productId,
+			createdAt: wishListAdd.value.createdAt,
+			updatedAt: wishListAdd.value.updatedAt,
+		});
+
+		if (data.value) {
+			console.log('success');
+		}
+	} else {
+		console.error('идика в ..');
+	}
+};
 </script>
 
 <template>
@@ -145,6 +182,7 @@ const cartArr = computed(() => ({
 			:images="product?.img"
 			v-model:imgNum="imgNum"
 		/>
+		<Button @click="ProductToWishList()">+</Button>
 	</div>
 </template>
 

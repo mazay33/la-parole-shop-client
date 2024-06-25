@@ -1,8 +1,12 @@
 <script lang="ts" setup>
-import useApiService from '~/services/apiService';
-import { provide } from 'vue';
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
+const cartStore = useCartStore();
+
+const { isAuthenticated } = authStore;
+
+await cartStore.getCartQuantity();
+
 const items = ref([
 	{
 		label: 'Каталог',
@@ -12,7 +16,7 @@ const items = ref([
 				{
 					label: 'КОМПЛЕКТЫ',
 					items: [
-						{ label: 'ВСЕ КОМПЛЕКТЫ' },
+						{ label: 'ВСЕ КОМПЛЕКТЫ', link: '/product/catalog' },
 						{ label: 'BESTSELLERS' },
 						{ label: 'БАЗОВЫЕ КОМПЛЕКТЫ' },
 						{ label: 'КРУЖЕВНОЕ БЕЛЬЕ' },
@@ -81,36 +85,22 @@ const items = ref([
 	},
 ]);
 
-const { data: cart } = await useApiService().cart.getCartItems();
-
-const cartTotal = computed(() => {
-	if (cart.value) {
-		return cart.value?.cart_items.reduce((acc, item) => acc + item?.count, 0);
-	}
-});
-
 const isAuthModalOpen = ref(false);
 
-// const cartStore = useCartStore()
+// const wishListOpen = ref(false);
 
-// const { cartTotal } = storeToRefs(cartStore)
+// const closeWishList = () => {
+// 	wishListOpen.value = false;
+// };
 
-// await cartStore.getCartTotal()
+// const openWishList = () => {
+// 	wishListOpen.value = true;
+// };
 
-const wishListOpen = ref(false);
-
-const closeWishList = () => {
-	wishListOpen.value = false;
-};
-
-const openWishList = () => {
-	wishListOpen.value = true;
-};
-
-provide('wishs', {
-	closeWishList,
-	openWishList,
-});
+// provide('wishs', {
+// 	closeWishList,
+// 	openWishList,
+// });
 </script>
 
 <template>
@@ -131,7 +121,7 @@ provide('wishs', {
 
 			<template #item="{ item }">
 				<nuxt-link
-					to=""
+					:to="item.link"
 					v-if="item.root"
 					class="flex items-center px-3 py-2 cursor-pointer overflow-hidden relative uppercase text-[--text-color]"
 				>
@@ -139,37 +129,43 @@ provide('wishs', {
 					<span class="">{{ item.label }}</span>
 				</nuxt-link>
 
-				<a
+				<div
 					v-else-if="!item.image"
 					class="flex items-center p-2 cursor-pointer gap-1 text-[--text-color]"
 				>
-					<span class="inline-flex flex-column gap-1">
-						<span class=" ">{{ item.label }}</span>
-					</span>
-				</a>
+					<nuxt-link
+						:to="item.link"
+						class="inline-flex flex-column gap-1"
+					>
+						<span class=" ">{{ item.label }} </span>
+					</nuxt-link>
+				</div>
 			</template>
 
 			<template #end>
 				<div class="flex gap-6 items-center">
-					<i
-						class="pi pi-heart text-3xl cursor-pointer"
-						@click="openWishList"
-					></i>
-					<favorite v-if="wishListOpen" />
+					<i class="pi pi-heart text-3xl cursor-pointer"></i>
+					<!-- <favorite v-if="wishListOpen" /> -->
+					<ClientOnly>
+						<i
+							v-if="cartStore.cartQuantity && cartStore.cartQuantity > 0"
+							v-badge="cartStore.cartQuantity"
+							@click="cartStore.isCartSidebarVisible = true"
+							class="pi pi-shopping-cart text-3xl cursor-pointer"
+						></i>
 
-					<i
-						v-badge="cartTotal !== 0 ? cartTotal : null"
-						@click="useRouter().push('/cart')"
-						class="pi pi-shopping-cart text-3xl cursor-pointer"
-					></i>
-					<!-- <span>
-            {{ cartTotal?.count }}
-          </span> -->
-					<i
-						@click="isAuthModalOpen = true"
-						:class="!authStore.isAuthenticated ? 'pi pi-sign-in ' : 'pi pi-user'"
-						class="text-3xl cursor-pointer"
-					></i>
+						<i
+							v-else
+							@click="cartStore.isCartSidebarVisible = true"
+							class="pi pi-shopping-cart text-3xl cursor-pointer"
+						></i>
+
+						<i
+							@click="isAuthModalOpen = true"
+							:class="!isAuthenticated ? 'pi pi-sign-in ' : 'pi pi-user'"
+							class="text-3xl cursor-pointer"
+						></i>
+					</ClientOnly>
 				</div>
 			</template>
 		</MegaMenu>
