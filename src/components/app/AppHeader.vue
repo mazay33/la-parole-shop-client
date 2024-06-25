@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import useApiService from '~/services/apiService';
-import { provide } from 'vue';
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
@@ -89,20 +87,20 @@ const items = ref([
 
 const isAuthModalOpen = ref(false);
 
-const wishListOpen = ref(false);
+// const wishListOpen = ref(false);
 
-const closeWishList = () => {
-	wishListOpen.value = false;
-};
+// const closeWishList = () => {
+// 	wishListOpen.value = false;
+// };
 
-const openWishList = () => {
-	wishListOpen.value = true;
-};
+// const openWishList = () => {
+// 	wishListOpen.value = true;
+// };
 
-provide('wishs', {
-	closeWishList,
-	openWishList,
-});
+// provide('wishs', {
+// 	closeWishList,
+// 	openWishList,
+// });
 </script>
 
 <template>
@@ -146,11 +144,8 @@ provide('wishs', {
 
 			<template #end>
 				<div class="flex gap-6 items-center">
-					<i
-						class="pi pi-heart text-3xl cursor-pointer"
-						@click="openWishList"
-					></i>
-					<favorite v-if="wishListOpen" />
+					<i class="pi pi-heart text-3xl cursor-pointer"></i>
+					<!-- <favorite v-if="wishListOpen" /> -->
 					<ClientOnly>
 						<i
 							v-if="cartStore.cartQuantity && cartStore.cartQuantity > 0"

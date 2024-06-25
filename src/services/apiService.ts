@@ -3,14 +3,14 @@ import AuthApi from './api/auth/authApi';
 import UserApi from './api/user/userApi';
 import ProductApi from './api/product/productApi';
 import CartApi from './api/cart/cartApi';
-import FavoriteApi from './api/wishlist/favoriteApi.js';
+import FavoriteApi from './api/wishlist/favoriteApi';
 import SizesApi from './api/sizes/sizesApi';
 
 export * from './api/auth/authApi';
 export * from './api/user/userApi';
 export * from './api/product/productApi';
 export * from './api/cart/cartApi';
-export * from './api/wishlist/favoriteApi.js';
+export * from './api/wishlist/favoriteApi';
 export * from './api/sizes/sizesApi';
 
 class ApiService {
