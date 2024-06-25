@@ -14,8 +14,6 @@ export default class AuthApi extends BaseApi implements IUserApi {
 
 	public async getMe(): Promise<HttpReturnType<IUser>> {
 		const url = '/user/me';
-		return await this.sendRequest<IUser>(HttpMethod.GET, url, {
-			server: false,
-		});
+		return await this.sendRequest<IUser>(HttpMethod.GET, url, {});
 	}
 }

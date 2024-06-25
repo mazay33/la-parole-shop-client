@@ -8,17 +8,31 @@ export interface IAddProductToCartResponse {
 	updatedAt: Date;
 }
 
-export interface ICartItem {
+export interface IAddProductToCartRequest {
+	quantity: number;
+	configurataionId?: number;
+	cupSizeId?: number;
+	clothingSizeId?: number;
+	beltSizeId?: number;
+}
+
+export interface ICartProductItem {
+	id: number;
 	cartId: string;
 	productId: number;
-	count: number;
+	quantity: number;
+	configurataionId: number | null;
+	cupSizeId: number | null;
+	clothingSizeId: number | null;
+	beltSizeId: number | null;
 	createdAt: Date;
 	updatedAt: Date;
-	product: ProductListItem;
+	product: Omit<IProduct, 'cupSizes' | 'clothingSizes' | 'beltSizes' | 'info'>;
 }
 export interface ICart {
 	userId: string;
 	createdAt: Date;
 	updatedAt: Date;
-	cart_items: ICartItem[];
+
+	cartProducts: ICartProductItem[];
 }

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-	middleware: 'auth-middleware',
-});
 import useApiService from '~/services/apiService';
 
 const apiService = useApiService();

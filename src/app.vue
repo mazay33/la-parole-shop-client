@@ -1,9 +1,8 @@
 <script setup>
-import useApiService from './services/apiService';
-
 useHead({
 	title: 'La Parole',
 });
+
 const authStore = useAuthStore();
 const userStore = useUserStore();
 if (authStore.isAuthenticated) {

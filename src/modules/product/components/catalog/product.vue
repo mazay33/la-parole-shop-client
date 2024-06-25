@@ -9,18 +9,18 @@ interface Props {
 const props = defineProps<Props>();
 const config = useRuntimeConfig();
 
-const cartArr = computed(() => {
-	// const variationId = props.product?.variations?.length > 0 ? props.product.variations[0].id : null;
+// const cartArr = computed(() => {
+// 	// const variationId = props.product?.variations?.length > 0 ? props.product.variations[0].id : null;
 
-	return {
-		productId: props.product?.id,
-		variationId: props.product.sku,
-		cup: 1,
-		under: 1,
-		clothing: 1,
-		price: props.product?.price,
-	};
-});
+// 	return {
+// 		productId: props.product?.id,
+// 		variationId: props.product.sku,
+// 		cup: 1,
+// 		under: 1,
+// 		clothing: 1,
+// 		price: props.product?.price,
+// 	};
+// });
 </script>
 
 <template>
@@ -44,10 +44,10 @@ const cartArr = computed(() => {
 				<div class="mt-3">{{ props.product.price }} ₽</div>
 			</div>
 		</nuxt-link>
-		<likes
+		<!-- <likes
 			:cartArr="cartArr"
 			class="absolute top-5 right-3 pt-4 pb-4"
-		/>
+		/> -->
 	</div>
 </template>
 

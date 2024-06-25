@@ -40,6 +40,7 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'~/modules/auth/module',
 		'~/modules/product/module',
+		'~/modules/cart/module',
 		'@nuxt/image',
 	],
 	// eslint: {

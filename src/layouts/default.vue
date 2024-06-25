@@ -13,6 +13,15 @@
 				<div class="layout-main">
 					<slot />
 				</div>
+				<Sidebar
+					class="w-1/3"
+					blockScroll
+					v-model:visible="cartStore.isCartSidebarVisible"
+					header="Корзина"
+					position="right"
+				>
+					<CartView />
+				</Sidebar>
 				<!-- <AppFooter /> -->
 			</div>
 			<div class="layout-mask" />
@@ -22,6 +31,7 @@
 
 <script setup lang="ts">
 const themeStore = useThemeStore();
+const cartStore = useCartStore();
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 

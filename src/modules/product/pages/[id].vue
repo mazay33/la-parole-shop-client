@@ -6,7 +6,7 @@ const config = useRuntimeConfig();
 const apiService = useApiService();
 const productId = useRoute().params.id;
 
-const { data: product } = await apiService.product.getProductById(String(productId), { server: false });
+const { data: product } = await apiService.product.getProductById(String(productId));
 
 const selectedCupSize = ref<number | null>();
 const selectedBeltSize = ref<number | null>();
@@ -15,7 +15,6 @@ const selectedConiguration = ref<IConfiguration | null>();
 
 watchEffect(() => {
 	selectedCupSize.value = product.value?.cupSizes[0].id;
-	selectedBeltSize.value = product.value?.beltSizes[0]?.id;
 	selectedClothingSize.value = product.value?.clothingSizes[0]?.id;
 
 	if (product.value?.productConfigurations.length) {
@@ -26,7 +25,7 @@ watchEffect(() => {
 const imgNum = ref(0);
 const ff1 = ref(false);
 
-const selectVariation = (configuration: IConfiguration) => {
+const selectConfiguration = (configuration: IConfiguration) => {
 	if (!product.value) return;
 	product.value.sku = configuration.sku;
 	product.value.price = configuration.price;
@@ -41,6 +40,25 @@ const selectVariation = (configuration: IConfiguration) => {
 // 	clothing: selectedClothingSize.value,
 // 	price: product.value?.price,
 // }));
+
+const buttonClass = ref('');
+const addToCart = async () => {
+	if (!product.value) return;
+
+	await useCartStore().addProductToCart(product.value, {
+		beltSizeId: selectedBeltSize.value ?? undefined,
+		clothingSizeId: selectedClothingSize.value ?? undefined,
+		configurataionId: selectedConiguration.value?.id ?? undefined,
+		cupSizeId: selectedCupSize.value ?? undefined,
+		quantity: 1,
+	});
+
+	// Trigger the animation
+	buttonClass.value = 'add-to-cart-animation';
+	setTimeout(() => {
+		buttonClass.value = '';
+	}, 500);
+};
 </script>
 
 <template>
@@ -49,35 +67,35 @@ const selectVariation = (configuration: IConfiguration) => {
 			class="flex max-w-[560px] max-h-[745px] w-full h-full"
 			v-if="product"
 		>
-			<!-- <NuxtImg
+			<NuxtImg
 				:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[imgNum]?.url}`"
 				alt=""
 				weight="560"
 				height="745"
 				class="transition-opacity duration-500 ease-in-out"
-			/> -->
+			/>
 		</div>
 		<div class="flex flex-col justify-start mx-5">
-			<h4>{{ product?.name }}</h4>
+			<h4 class="text-[20px] font-bold">{{ product?.name }}</h4>
 
 			<p>Артикул: {{ product?.sku }}</p>
-			<p class="font-semibold text-xl">{{ product?.price.toLocaleString() }} ₽</p>
+			<p class="text-[20px]">{{ product?.price.toLocaleString() }} ₽</p>
 
 			<div v-if="product?.productConfigurations.length">
 				<p>Комплектация</p>
 				<div class="flex gap-2">
 					<Button
-						@click="selectVariation(variation)"
-						v-for="variation in product?.productConfigurations"
-						:key="variation.id"
+						@click="selectConfiguration(configuration)"
+						v-for="configuration in product?.productConfigurations"
+						:key="configuration.id"
 						:class="[
 							'font-light  hover:bg-gray-100 ',
-							selectedConiguration?.id === variation.id
+							selectedConiguration?.id === configuration.id
 								? ' border-[#e4aa9f] bg-white text-[#e4aa9f]'
 								: 'bg-white border-gray-300 text-black',
 						]"
 					>
-						{{ variation.name }}
+						{{ configuration.name }}
 					</Button>
 				</div>
 			</div>
@@ -117,17 +135,17 @@ const selectVariation = (configuration: IConfiguration) => {
 			</div>
 
 			<p
-				v-if="selectedConiguration?.name.includes('пояс')"
+				v-if="selectedConiguration?.name.includes('поясом')"
 				class="mt-4 mb-1"
 			>
 				Пояс
 			</p>
 			<div class="flex items-center gap-4 flex-wrap w-90%">
 				<Button
-					v-if="selectedConiguration?.name.includes('пояс')"
-					@click="selectedCupSize = size.id"
+					v-if="selectedConiguration?.name.includes('поясом')"
+					@click="selectedBeltSize = size.id"
 					:class="[
-						selectedCupSize === size.id
+						selectedBeltSize === size.id
 							? 'border-[#e4aa9f]  text-[#e4aa9f]'
 							: ' border-gray-300 text-black',
 					]"
@@ -145,7 +163,9 @@ const selectVariation = (configuration: IConfiguration) => {
 
 			<div class="mt-10 flex">
 				<Button
-					class="uppercase px-[30px] py-4 font-500 bg-black border-black hover:bg-red-300 hover:border-red-300 rounded-xl"
+					@click="addToCart()"
+					:class="buttonClass"
+					class="uppercase px-[30px] py-4 font-500 bg-black border-black hover:bg-[#e4aa9f] hover:border-[#e4aa9f] rounded-xl"
 					>Добавить в корзину</Button
 				>
 				<!-- <likes
@@ -163,16 +183,32 @@ const selectVariation = (configuration: IConfiguration) => {
 				данного комплекта
 			</div>
 		</div>
-		<!-- <slider
+		<slider
 			v-if="product?.images.length"
 			:images="product?.images"
 			v-model:imgNum="imgNum"
-		/> -->
+		/>
 	</div>
 </template>
 
 <style scoped>
 .border-debug {
 	border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+@keyframes add-to-cart {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.add-to-cart-animation {
+	animation: add-to-cart 0.5s ease-in-out;
 }
 </style>

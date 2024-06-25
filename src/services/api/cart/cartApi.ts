@@ -2,7 +2,7 @@ import type { IPaginatedResult } from '~/@types/pagination';
 import type HttpService from '../../httpService';
 import { HttpMethod, type HttpReturnType } from '../../httpService';
 import BaseApi from '../base';
-import type { IAddProductToCartResponse, ICart } from './cartApi.types';
+import type { IAddProductToCartRequest, IAddProductToCartResponse, ICart, ICartProductItem } from './cartApi.types';
 import type { UseFetchOptions } from '#app';
 
 export default class CartApi extends BaseApi {
@@ -14,26 +14,36 @@ export default class CartApi extends BaseApi {
 		return this.httpService;
 	}
 
-	public async getCartItems(options?: UseFetchOptions<ICart>): Promise<HttpReturnType<ICart>> {
-		const url = '/cart';
-		return await this.sendRequest<ICart>(HttpMethod.GET, url, {
+	public async getCartQuantity(
+		options?: UseFetchOptions<{ totalQuantity: number }>,
+	): Promise<HttpReturnType<{ totalQuantity: number }>> {
+		const url = '/cart/quantity';
+		return await this.sendRequest<{ totalQuantity: number }>(HttpMethod.GET, url, {
 			...options,
-			server: false,
+		});
+	}
+
+	public async getCartItems(
+		options?: UseFetchOptions<ICartProductItem[]>,
+	): Promise<HttpReturnType<ICartProductItem[]>> {
+		const url = '/cart';
+		return await this.sendRequest<ICartProductItem[]>(HttpMethod.GET, url, {
+			...options,
 		});
 	}
 
 	public async addProductToCart(
 		productId: number,
-		count: number,
+		body: IAddProductToCartRequest,
 		options?: UseFetchOptions<IAddProductToCartResponse>,
 	): Promise<HttpReturnType<IAddProductToCartResponse>> {
 		const url = `/cart/add/${productId}`;
-		return await this.sendRequest<IAddProductToCartResponse, { count: number }>(
+		return await this.sendRequest<IAddProductToCartResponse, IAddProductToCartRequest>(
 			HttpMethod.POST,
 			url,
-			{
-				count,
-			},
+
+			body,
+
 			{
 				...options,
 			},
