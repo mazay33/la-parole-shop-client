@@ -1,9 +1,12 @@
 import type { AccessToken } from '~/services/api/auth/authApi.types';
+import { appendResponseHeader, H3Event } from 'h3';
 
 export default defineNuxtPlugin(() => {
 	const config = useRuntimeConfig();
 	const authStore = useAuthStore();
 	const { accessToken } = storeToRefs(authStore);
+	const event = useRequestEvent();
+	const headers = useRequestHeaders(['cookie']);
 
 	const $api = $fetch.create({
 		baseURL: config.public.api,
@@ -18,8 +21,10 @@ export default defineNuxtPlugin(() => {
 			if (response.status === 401) {
 				try {
 					const newToken = await refresh();
-					accessToken.value = newToken?.accessToken;
-					options.headers = accessToken.value ? { Authorization: `${accessToken.value}` } : {};
+					if (newToken) {
+						accessToken.value = newToken.accessToken;
+						options.headers = { Authorization: `${newToken.accessToken}` };
+					}
 				} catch (error) {
 					options.retry = false;
 					await authStore.logout();
@@ -34,26 +39,36 @@ export default defineNuxtPlugin(() => {
 	async function refresh() {
 		if (!refreshTokenPromise) {
 			refreshTokenPromise = (async () => {
-				try {
-					const { data, status } = await useFetch<AccessToken>(`${config.public.api}auth/refresh-tokens`, {
+				if (import.meta.server) {
+					const res = await $fetch.raw(`${config.public.api}auth/refresh-tokens`, {
 						method: 'GET',
 						credentials: 'include',
+						headers: headers,
 					});
-
-					if (status.value === 'success') {
-						return data.value;
-					} else {
-						throw new Error('Token refresh failed');
+					const cookies = (res.headers.get('set-cookie') || '').split(',');
+					for (const cookie of cookies) {
+						appendResponseHeader(event!, 'set-cookie', cookie + '; SameSite=Lax; Secure; HttpOnly=true');
 					}
-				} catch (error) {
-					console.error('Token refresh failed:', error);
-					throw error;
-				} finally {
-					refreshTokenPromise = null;
+					return res._data as AccessToken;
+				} else if (import.meta.client) {
+					try {
+						const res = await $fetch(`${config.public.api}auth/refresh-tokens`, {
+							method: 'GET',
+							credentials: 'include',
+							headers: headers,
+						});
+						return res as AccessToken;
+					} catch (error) {
+						console.error('Token refresh failed:', error);
+						throw error;
+					} finally {
+						refreshTokenPromise = null;
+					}
+				} else {
+					return null;
 				}
 			})();
 		}
-
 		return refreshTokenPromise;
 	}
 
