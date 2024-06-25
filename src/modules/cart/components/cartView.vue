@@ -7,7 +7,7 @@ await cartStore.getCart();
 	<CartProduct
 		v-for="product in cartStore.cart"
 		:key="product.id"
-		:product="product"
+		:cartProduct="product"
 	/>
 </template>
 

@@ -21,7 +21,7 @@ export interface ICartProductItem {
 	cartId: string;
 	productId: number;
 	quantity: number;
-	configurataionId: number | null;
+	productConfigurationId: number | null;
 	cupSizeId: number | null;
 	clothingSizeId: number | null;
 	beltSizeId: number | null;
