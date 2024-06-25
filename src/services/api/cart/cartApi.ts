@@ -38,15 +38,18 @@ export default class CartApi extends BaseApi {
 		options?: UseFetchOptions<IAddProductToCartResponse>,
 	): Promise<HttpReturnType<IAddProductToCartResponse>> {
 		const url = `/cart/add/${productId}`;
-		return await this.sendRequest<IAddProductToCartResponse, IAddProductToCartRequest>(
-			HttpMethod.POST,
-			url,
+		return await this.sendRequest<IAddProductToCartResponse, IAddProductToCartRequest>(HttpMethod.POST, url, body, {
+			...options,
+		});
+	}
 
-			body,
+	public async deleteCartProduct(cartProductId: number): Promise<HttpReturnType<{ message: string }>> {
+		const url = `/cart/remove/${cartProductId}`;
+		return await this.sendRequest<{ message: string }>(HttpMethod.DELETE, url);
+	}
 
-			{
-				...options,
-			},
-		);
+	public async deleteAllCartProducts(): Promise<HttpReturnType<{ message: string }>> {
+		const url = '/cart/clear';
+		return await this.sendRequest<{ message: string }>(HttpMethod.DELETE, url);
 	}
 }

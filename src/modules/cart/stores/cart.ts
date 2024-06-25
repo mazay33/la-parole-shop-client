@@ -102,13 +102,22 @@ export const useCartStore = defineStore(
 			cartQuantity.value = totalQuantity;
 		};
 
+		const deleteCartProduct = async (productId: number) => {
+			const { data } = await apiService.cart.deleteCartProduct(productId);
+			if (data.value) {
+				await getCartQuantity();
+				await getCart();
+			}
+		};
+
 		return {
 			isCartSidebarVisible,
 			getCart,
-			cart: cartProducts,
+			cartProducts,
 			cartQuantity: computed(() => cartQuantity.value),
 			getCartQuantity,
 			addProductToCart,
+			deleteCartProduct,
 		};
 	},
 	// {

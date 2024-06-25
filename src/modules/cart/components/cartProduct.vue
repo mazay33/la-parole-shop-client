@@ -7,8 +7,9 @@ const props = defineProps<{
 }>();
 
 const sizesStore = useSizesStore();
-
 const { sizes } = storeToRefs(sizesStore);
+
+const cartStore = useCartStore();
 </script>
 
 <template>
@@ -48,7 +49,10 @@ const { sizes } = storeToRefs(sizesStore);
 
 		<div class="flex ml-a items-center gap-4">
 			<p class="ml-auto">{{ props.cartProduct.product.price }} р.</p>
-			<i class="pi pi-times-circle cursor-pointer text-2xl text-gray-300"></i>
+			<i
+				@click="cartStore.deleteCartProduct(props.cartProduct.id)"
+				class="pi pi-times-circle cursor-pointer text-2xl text-gray-300"
+			></i>
 		</div>
 	</div>
 </template>
