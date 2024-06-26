@@ -176,6 +176,11 @@ const ProductToWishList = async () => {
 				>
 				данного комплекта
 			</div>
+			<div class="pt-10">
+				Комплект из графитового кружева с перламутровой цветочной вышивкой. Бюстгальтер балконет на косточках с
+				мягкой чашкой, регулируемые бретели, застежка на крючки. Трусики бразильяно регулируемые по бокам. Пояс
+				возможно носить как с чулками, так и с гартерами.
+			</div>
 		</div>
 		<slider
 			v-if="product?.img.length"
@@ -183,6 +188,9 @@ const ProductToWishList = async () => {
 			v-model:imgNum="imgNum"
 		/>
 		<Button @click="ProductToWishList()">+</Button>
+	</div>
+	<div class="mt-15">
+		<accordion />
 	</div>
 </template>
 
