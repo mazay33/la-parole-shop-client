@@ -3,6 +3,16 @@ import InputText from 'primevue/inputtext';
 
 const router = useRouter();
 const userEmail = ref();
+
+const gid = ref('center');
+const visible = ref(false);
+
+const openPosition = pos => {
+	gid.value = pos;
+	visible.value = true;
+};
+
+const recomendation = ref(false);
 </script>
 
 <template>
@@ -36,16 +46,61 @@ const userEmail = ref();
 							to="/product/catalog"
 							>ОБМЕН И ВОЗРАТ</nuxt-link
 						>
-						<nuxt-link
-							class="nlink"
-							to="/"
-							>ГИД ПО РАЗМЕРАМ</nuxt-link
+						<p1
+							class="nlink cursor-pointer"
+							@click="openPosition('bottom')"
 						>
-						<nuxt-link
-							class="nlink"
-							to="/product/catalog"
-							>РЕКОМЕНДАЦИИ ПО РАЗМЕРАМ</nuxt-link
+							ГИД ПО РАЗМЕРАМ
+						</p1>
+						<Dialog
+							v-model:visible="visible"
+							header="Гид по размерам"
+							:style="{ width: '100%' }"
+							:position="gid"
+							:modal="true"
+							:draggable="false"
 						>
+							<div class="grid place-content-center">
+								<img
+									class="w-full"
+									src="https://static.tildacdn.com/tild3138-6362-4566-b236-316139353630/_980_.svg"
+								/>
+							</div>
+						</Dialog>
+
+						<p1
+							class="nlink cursor-pointer"
+							@click="recomendation = true"
+						>
+							РЕКОМЕНДАЦИИ ПО УХОДУ
+						</p1>
+						<Dialog
+							v-model:visible="recomendation"
+							modal
+							header="Рекомендации по уходу"
+							:style="{ width: '60%' }"
+						>
+							<div class="text-center">
+								<img
+									class="w-full"
+									src="https://optim.tildacdn.com/tild6663-3734-4266-a231-636134636334/-/resize/756x/-/format/webp/photo.png"
+								/></div>
+							<div class="flex-col">
+									<div class="content">
+										
+										<p class="flex">
+											<p pr-3>&#9679</p> Ручная стирка 30 градусов. Нижнее белье шьётся из деликатных тканей, поэтому не стирайте его в
+											машинке (даже при деликатном режиме).
+										</p>
+										<p class="flex">
+											<p pr-3>&#9679</p> Отжимайте белье аккуратно, не выкручивая, иначе вы рискуете нарушить форму.</p>
+											<p class="flex">
+												<p pr-3>&#9679</p> Сушите белье естественным путём в расправленном виде. Ни в коем случае на батарее или в
+											сушилке. Высокая температура деформирует нежную структуру ткани.
+										</p>
+									</div>
+							</div>
+						</Dialog>
 						<nuxt-link
 							class="nlink"
 							to="/"
@@ -55,7 +110,7 @@ const userEmail = ref();
 				</div>
 				<div class="flex-1 mt-10">
 					<nuxt-link
-						to="/"
+						to="/product/catalog"
 						class="font block mb-3"
 						>СВЯЖИТЕСЬ С НАМИ</nuxt-link
 					>
@@ -113,8 +168,8 @@ const userEmail = ref();
 								<label for="username">Email</label>
 							</FloatLabel>
 							<Button
-								class="pi pi-arrow-right bg-black border-black ml-2 text-center w-12"
-								style="font-size: 0.7rem"
+								class="bg-black border-black ml-2 text-center w-12"
+								icon="pi pi-arrow-right"
 							></Button>
 						</div>
 					</div>
@@ -133,5 +188,9 @@ const userEmail = ref();
 	color: rgb(51 65 85);
 	display: block;
 	padding-top: 15px;
+}
+.content p {
+	font-family: 'Raleway', sans-serif;
+    font-size: 15px;
 }
 </style>

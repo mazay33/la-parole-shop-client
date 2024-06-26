@@ -19,7 +19,7 @@ const updateImgNum = (i: number) => {
 </script>
 
 <template>
-	<div class="flex flex-wrap max-w-[560px] max-h-[140px] w-full h-full gap-1 mt--9">
+	<div class="flex flex-wrap max-w-[560px] max-h-[140px] w-full h-full gap-1 mt--5">
 		<NuxtImg
 			v-for="(img, i) in images"
 			:key="i"
