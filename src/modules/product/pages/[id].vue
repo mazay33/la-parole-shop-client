@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { configure } from 'vee-validate';
 import type { IConfiguration } from '~/services/api/product/productApi.types';
 import useApiService from '~/services/apiService';
 
@@ -24,6 +25,7 @@ watchEffect(() => {
 
 const imgNum = ref(0);
 const ff1 = ref(false);
+const buttonClass = ref('');
 
 const selectConfiguration = (configuration: IConfiguration) => {
 	if (!product.value) return;
@@ -32,16 +34,28 @@ const selectConfiguration = (configuration: IConfiguration) => {
 	selectedConiguration.value = configuration;
 };
 
-// const cartArr = computed(() => ({
-// 	productId: product.value?.id,
+const selectedWish = (configuration: IConfiguration) => {
+	if (!product.value) return;
+	product.value.sku = configuration.sku;
+	product.value.price = configuration.price;
+	selectedConiguration.value = configuration;
+};
+
+//cartArr
+// productId: product.value?.id,
 // 	variationId: selectedVariation.value,
 // 	cup: selectedCupSize.value,
 // 	under: selectedUnderbustSize.value,
 // 	clothing: selectedClothingSize.value,
 // 	price: product.value?.price,
-// }));
 
-const buttonClass = ref('');
+const addToWishList = async () => {
+	buttonClass.value = 'add-to-cart-animation';
+	setTimeout(() => {
+		buttonClass.value = '';
+	}, 500);
+};
+
 const addToCart = async () => {
 	if (!product.value) return;
 
@@ -170,7 +184,7 @@ const addToCart = async () => {
 				>
 				<!-- <likes
 					:cartArr="cartArr"
-					@click="ff1 = !ff1"
+					@click="addToWishList()"
 				/> -->
 			</div>
 			<div class="mt-10">

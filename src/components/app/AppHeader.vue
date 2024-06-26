@@ -2,6 +2,7 @@
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
+const router = useRouter();
 
 const { isAuthenticated } = authStore;
 
@@ -112,9 +113,10 @@ const isAuthModalOpen = ref(false);
 			<template #start>
 				<div class="">
 					<img
-						class="w-19"
+						class="w-19 cursor-pointer"
 						src="https://static.tildacdn.com/tild3231-6432-4035-b065-626135383237/01.svg"
 						alt=""
+						@click="router.push('/')"
 					/>
 				</div>
 			</template>
@@ -123,7 +125,7 @@ const isAuthModalOpen = ref(false);
 				<nuxt-link
 					:to="item.link"
 					v-if="item.root"
-					class="flex items-center px-3 py-2 cursor-pointer overflow-hidden relative uppercase text-[--text-color]"
+					class="flex items-center px-3 py-2 cursor-pointer overflow-hidden relative uppercase text-[--text-color] text-sm"
 				>
 					<span :class="item.icon" />
 					<span class="">{{ item.label }}</span>
@@ -144,26 +146,26 @@ const isAuthModalOpen = ref(false);
 
 			<template #end>
 				<div class="flex gap-6 items-center">
-					<i class="pi pi-heart text-3xl cursor-pointer"></i>
+					<i class="pi pi-heart text-2xl cursor-pointer"></i>
 					<!-- <favorite v-if="wishListOpen" /> -->
 					<ClientOnly>
 						<i
 							v-if="cartStore.cartQuantity && cartStore.cartQuantity > 0"
 							v-badge="cartStore.cartQuantity"
 							@click="cartStore.isCartSidebarVisible = true"
-							class="pi pi-shopping-cart text-3xl cursor-pointer"
+							class="pi pi-shopping-cart text-2xl cursor-pointer"
 						></i>
 
 						<i
 							v-else
 							@click="cartStore.isCartSidebarVisible = true"
-							class="pi pi-shopping-cart text-3xl cursor-pointer"
+							class="pi pi-shopping-cart text-2xl cursor-pointer"
 						></i>
 
 						<i
 							@click="isAuthModalOpen = true"
 							:class="!isAuthenticated ? 'pi pi-sign-in ' : 'pi pi-user'"
-							class="text-3xl cursor-pointer"
+							class="text-2xl cursor-pointer"
 						></i>
 					</ClientOnly>
 				</div>

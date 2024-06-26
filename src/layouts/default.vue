@@ -25,6 +25,7 @@
 				<!-- <AppFooter /> -->
 			</div>
 			<div class="layout-mask" />
+			<AppFooter />
 		</div>
 	</div>
 </template>
