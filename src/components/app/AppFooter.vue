@@ -38,14 +38,12 @@ const recomendation = ref(false);
 					<div class="flex-col">
 						<nuxt-link
 							class="nlink"
-							to="/"
+							to="/product/dostavka_i_oplata"
 							>ДОСТАВКА И ОПЛАТА</nuxt-link
 						>
-						<nuxt-link
-							class="nlink"
-							to="/product/catalog"
-							>ОБМЕН И ВОЗРАТ</nuxt-link
-						>
+						<nuxt-link class="nlink" to="/product/dostavka_i_oplata#obmen-i-vozvrat">
+							ОБМЕН И ВОЗВРАТ
+						</nuxt-link>
 						<p1
 							class="nlink cursor-pointer"
 							@click="openPosition('bottom')"
