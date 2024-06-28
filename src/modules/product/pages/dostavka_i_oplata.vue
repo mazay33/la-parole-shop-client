@@ -149,13 +149,14 @@
 				</li>
 			</ul>
 			<div class="mt-40 text-center">
-				<p>
-					<NuxtLink
-						to="/product/catalog"
-						class="text-black"
-						>Вернуться назад</NuxtLink
-					>
-				</p>
+				<NuxtLink
+					to="/product/catalog"
+					class="text-black"
+					>Вернуться назад</NuxtLink
+				>
+			</div>
+			<div class="ml-50%">
+				<div><Circle /></div>
 			</div>
 		</div>
 	</div>
@@ -173,6 +174,7 @@
 	font-size: 60px;
 	font-weight: 100;
 	margin-top: 150px;
+	margin-bottom: 40px;
 }
 .content li {
 	font-family: 'Raleway', Arial, sans-serif;
@@ -187,6 +189,6 @@
 }
 .content p {
 	font-family: 'Raleway', Arial, sans-serif;
-	font-size: 19px;
+	font-size: 16px;
 }
 </style>

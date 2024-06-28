@@ -29,11 +29,12 @@
 				/>
 			</div>
 		</div>
-		<NuxtLink
+		<nuxt-link
 			to="product/components"
-			class="text-lg font-300"
-			>В каталог</NuxtLink
+			class="text-lg font-300 text-black"
+			>в каталог</nuxt-link
 		>
+		<Circle />
 	</div>
 </template>
 

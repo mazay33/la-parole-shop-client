@@ -7,13 +7,7 @@ const { data: user } = await apiService.user.getMe();
 
 <template>
 	<div>
-		<nuxt-link to="/product/catalog">catalog</nuxt-link>
-
-		<pre>
-			{{ user }}
-		</pre
-		>
-
-		<!-- <HomeMain /> -->
+		<pre>{{ user }}</pre>
+		<HomeMain />
 	</div>
 </template>
