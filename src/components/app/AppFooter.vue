@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import InputText from 'primevue/inputtext';
-
 const router = useRouter();
 const userEmail = ref();
 
@@ -16,7 +14,6 @@ const recomendation = ref(false);
 </script>
 
 <template>
-	<div>
 		<footer class="max-w-[1180px] mx-auto w-full font-['Raleway'] pb-20">
 			<hr class="border-gray-300" />
 			<div class="flex flex-col md-flex-row text-sm text-center">
@@ -85,7 +82,7 @@ const recomendation = ref(false);
 								/></div>
 							<div class="flex-col">
 									<div class="content">
-										
+
 										<p class="flex">
 											<p pr-3>&#9679</p> Ручная стирка 30 градусов. Нижнее белье шьётся из деликатных тканей, поэтому не стирайте его в
 											машинке (даже при деликатном режиме).
@@ -174,10 +171,9 @@ const recomendation = ref(false);
 				</div>
 			</div>
 		</footer>
-	</div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .font {
 	font-weight: 600;
 	color: black;
