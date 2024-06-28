@@ -3,11 +3,9 @@ useHead({
 	title: 'La Parole',
 });
 const sizesStore = useSizesStore();
-const authStore = useAuthStore();
 const userStore = useUserStore();
-if (authStore.isAuthenticated) {
-	await userStore.getMe();
-}
+
+await userStore.getMe();
 
 await sizesStore.getSizes();
 </script>
