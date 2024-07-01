@@ -46,10 +46,10 @@ import AccordionTab from 'primevue/accordiontab';
 	</div>
 </template>
 
-<style >
+<style lang="scss" >
 .transparent-accordion .p-accordion .p-accordion-tab .p-accordion-header,
 .transparent-accordion .p-accordion .p-accordion-tab .p-accordion-content {
-	background-color: transparent !important;
+	background-color: inherit !important;
 	color: inherit;
 	border: none;
 }
@@ -60,8 +60,11 @@ import AccordionTab from 'primevue/accordiontab';
     font-family: 'Raleway', sans-serif;
     padding-bottom: 20px;
     padding-top: 20px;
+		background-color: inherit;
+}
 
-    
+.p-accordion .p-accordion-content{
+	background: inherit;
 }
 
 .content p {
