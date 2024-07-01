@@ -6,9 +6,6 @@ const props = defineProps<{
 	cartProduct: ICartProductItem;
 }>();
 
-const sizesStore = useSizesStore();
-const { sizes } = storeToRefs(sizesStore);
-
 const cartStore = useCartStore();
 </script>
 
@@ -24,33 +21,22 @@ const cartStore = useCartStore();
 		</div>
 
 		<div class="flex flex-col ml-6">
-			<h3>{{ props.cartProduct.product.name }}</h3>
+			<h3>{{ cartProduct.product.name }}</h3>
 
 			<p v-if="props.cartProduct.productConfigurationId">
 				Комплектация:
-				{{
-					props.cartProduct.product.productConfigurations.find(
-						config => config.id === props.cartProduct.productConfigurationId,
-					)?.name
-				}}
+				{{ cartProduct.productConfiguration?.name }}
 			</p>
-			<p v-if="props.cartProduct.cupSizeId">
-				Чашка бюста: {{ sizes?.bustSizes.find(bust => bust.id === props.cartProduct.cupSizeId)?.size }}
-			</p>
-			<p v-if="props.cartProduct.beltSizeId">
-				Пояс для чулок: {{ sizes?.beltSizes.find(belt => belt.id === props.cartProduct.beltSizeId)?.size }}
-			</p>
-			<p v-if="props.cartProduct.clothingSizeId">
-				Трусики:
-				{{ sizes?.clothingSizes.find(clothing => clothing.id === props.cartProduct.clothingSizeId)?.size }}
-			</p>
-			<p v-if="props.cartProduct.product.sku">{{ props.cartProduct.product.sku }}</p>
+			<p v-if="props.cartProduct.cupSizeId">Чашка бюста: {{ cartProduct.cupSize?.size }}</p>
+			<p v-if="props.cartProduct.clothingSizeId">Трусики: {{ cartProduct.clothingSize?.size }}</p>
+			<p v-if="props.cartProduct.beltSizeId">Пояс для чулок: {{ cartProduct.beltSize?.size }}</p>
+			<p v-if="props.cartProduct.product.sku">{{ cartProduct.product.sku }}</p>
 		</div>
 
 		<div class="flex ml-a items-center gap-4">
-			<p class="ml-auto">{{ props.cartProduct.product.price }} р.</p>
+			<p class="ml-auto">{{ cartProduct.product.price }} р.</p>
 			<i
-				@click="cartStore.deleteCartProduct(props.cartProduct.id)"
+				@click="cartStore.deleteCartProduct(cartProduct.id)"
 				class="pi pi-times-circle cursor-pointer text-2xl text-gray-300"
 			></i>
 		</div>
