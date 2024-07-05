@@ -23,14 +23,14 @@ const cartStore = useCartStore();
 		<div class="flex flex-col ml-6">
 			<h3>{{ cartProduct.product.name }}</h3>
 
-			<p v-if="props.cartProduct.productConfigurationId">
+			<p v-if="cartProduct.productConfigurationId">
 				Комплектация:
 				{{ cartProduct.productConfiguration?.name }}
 			</p>
-			<p v-if="props.cartProduct.cupSizeId">Чашка бюста: {{ cartProduct.cupSize?.size }}</p>
-			<p v-if="props.cartProduct.clothingSizeId">Трусики: {{ cartProduct.clothingSize?.size }}</p>
-			<p v-if="props.cartProduct.beltSizeId">Пояс для чулок: {{ cartProduct.beltSize?.size }}</p>
-			<p v-if="props.cartProduct.product.sku">{{ cartProduct.product.sku }}</p>
+			<p v-if="cartProduct.cupSizeId">Чашка бюста: {{ cartProduct.cupSize?.size }}</p>
+			<p v-if="cartProduct.clothingSizeId">Трусики: {{ cartProduct.clothingSize?.size }}</p>
+			<p v-if="cartProduct.beltSizeId">Пояс для чулок: {{ cartProduct.beltSize?.size }}</p>
+			<p v-if="cartProduct.product.sku">{{ cartProduct.product.sku }}</p>
 		</div>
 
 		<div class="flex ml-a items-center gap-4">

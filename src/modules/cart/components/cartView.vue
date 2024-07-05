@@ -3,7 +3,7 @@ const cartStore = useCartStore();
 
 await cartStore.getCart();
 
-const { cartProducts } = storeToRefs(cartStore);
+const { cartProducts, cartTotalPrice } = storeToRefs(cartStore);
 </script>
 <template>
 	<CartProduct
@@ -11,6 +11,8 @@ const { cartProducts } = storeToRefs(cartStore);
 		:key="product.id"
 		:cartProduct="product"
 	/>
+
+	<div class="mt-10 font-bold text-xl">total: {{ cartTotalPrice }}</div>
 </template>
 
 <style scoped></style>

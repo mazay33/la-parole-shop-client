@@ -4,6 +4,7 @@ import { HttpMethod, type HttpReturnType } from '../../httpService';
 import BaseApi from '../base';
 import type { IAddProductToCartRequest, IAddProductToCartResponse, ICart, ICartProductItem } from './cartApi.types';
 import type { UseFetchOptions } from '#app';
+import type { IProduct } from '../product/productApi.types';
 
 export default class CartApi extends BaseApi {
 	constructor(private httpService: HttpService) {
@@ -23,13 +24,23 @@ export default class CartApi extends BaseApi {
 		});
 	}
 
+	public async getCartTotalAmount(): Promise<HttpReturnType<{ totalPrice: number }>> {
+		const url = '/cart/total';
+		return await this.sendRequest<{ totalPrice: number }>(HttpMethod.GET, url);
+	}
+
 	public async getCartItems(
 		options?: UseFetchOptions<ICartProductItem[]>,
 	): Promise<HttpReturnType<ICartProductItem[]>> {
-		const url = '/cart';
+		const url = '/cart/products';
 		return await this.sendRequest<ICartProductItem[]>(HttpMethod.GET, url, {
 			...options,
 		});
+	}
+
+	public async getProductsForCartByIds(ids: number[]): Promise<HttpReturnType<Omit<IProduct[], 'info'>>> {
+		const url = '/cart/products';
+		return await this.sendRequest<Omit<IProduct[], 'info'>, number[]>(HttpMethod.POST, url, ids);
 	}
 
 	public async addProductToCart(

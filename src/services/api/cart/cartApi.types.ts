@@ -10,10 +10,14 @@ export interface IAddProductToCartResponse {
 
 export interface IAddProductToCartRequest {
 	quantity: number;
-	configurataionId?: number;
-	cupSizeId?: number;
-	clothingSizeId?: number;
-	beltSizeId?: number;
+	productConfigurationId: number | null;
+	cupSizeId: number | null;
+	clothingSizeId: number | null;
+	beltSizeId: number | null;
+	id: number;
+	cartId: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 export interface ICartProductItem {
@@ -31,7 +35,7 @@ export interface ICartProductItem {
 	beltSize: ISize | null;
 	createdAt: Date;
 	updatedAt: Date;
-	product: Omit<IProduct, 'cupSizes' | 'clothingSizes' | 'beltSizes' | 'info'>;
+	product: Omit<IProduct, 'info'>;
 }
 export interface ICart {
 	userId: string;
