@@ -32,6 +32,7 @@ export default defineNuxtConfig({
 
 	modules: [
 		// '@nuxtjs/eslint-module',
+		'@vueuse/nuxt',
 		'nuxt-primevue',
 		'@formkit/nuxt',
 		'@unocss/nuxt',

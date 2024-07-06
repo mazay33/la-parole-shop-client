@@ -1,7 +1,6 @@
 import type { IAddProductToCartRequest, ICart, ICartProductItem } from '~/services/api/cart/cartApi.types';
 import type { IProduct } from '~/services/api/product/productApi.types';
 import useApiService from '~/services/apiService';
-import { useLocalStorage } from '#imports';
 
 const apiService = useApiService();
 interface ILocaleStorageCartProduct {
