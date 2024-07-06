@@ -1,7 +1,7 @@
 import type { IAddProductToCartRequest, ICart, ICartProductItem } from '~/services/api/cart/cartApi.types';
 import type { IProduct } from '~/services/api/product/productApi.types';
-import type { IUser } from '~/services/api/user/userApi.types';
 import useApiService from '~/services/apiService';
+import { useLocalStorage } from '#imports';
 
 const apiService = useApiService();
 interface ILocaleStorageCartProduct {
@@ -41,6 +41,7 @@ export const useCartStore = defineStore('cart', () => {
 	};
 
 	const getCartLocalStorage = async () => {
+		if (import.meta.server) return;
 		const cartStorage = useLocalStorage('cart', []) as Ref<ILocaleStorageCartProduct[]>;
 
 		const { data } = await apiService.cart.getProductsForCartByIds(cartStorage.value.map(item => item.productId));
@@ -91,6 +92,7 @@ export const useCartStore = defineStore('cart', () => {
 	};
 
 	const addProductToLocalStorage = (product: IProduct, body: IAddProductToCartRequest) => {
+		if (import.meta.server) return;
 		const cartStorage = useLocalStorage('cart', []) as Ref<ILocaleStorageCartProduct[]>;
 
 		const existingProductIndex = cartStorage.value.findIndex(
@@ -159,6 +161,7 @@ export const useCartStore = defineStore('cart', () => {
 	};
 
 	const deleteCartProductFromLocaleStorage = (cartProductId: number) => {
+		if (import.meta.server) return;
 		const cartStorage = useLocalStorage('cart', []) as Ref<ILocaleStorageCartProduct[]>;
 
 		cartStorage.value = cartStorage.value.filter(cartProduct => cartProduct.id !== cartProductId);
