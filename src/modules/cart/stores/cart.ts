@@ -31,7 +31,7 @@ export const useCartStore = defineStore('cart', () => {
 
 	const getCart = async () => {
 		if (authStore.isAuthenticated) {
-			const { data } = await apiService.cart.getCartItems();
+			const { data } = await apiService.cart.getCartProducts();
 			if (data.value) {
 				cartProducts.value = data.value;
 			}
@@ -116,10 +116,10 @@ export const useCartStore = defineStore('cart', () => {
 				productConfigurationId: body.productConfigurationId || null,
 				quantity: body.quantity,
 				productId: product.id,
-				id: body.id,
-				cartId: body.cartId,
-				createdAt: body.createdAt,
-				updatedAt: body.updatedAt,
+				id: new Date().getTime(),
+				cartId: 'locale-cart',
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			});
 		}
 	};

@@ -14,10 +14,6 @@ export interface IAddProductToCartRequest {
 	cupSizeId: number | null;
 	clothingSizeId: number | null;
 	beltSizeId: number | null;
-	id: number;
-	cartId: string;
-	createdAt: Date;
-	updatedAt: Date;
 }
 
 export interface ICartProductItem {

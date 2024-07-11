@@ -15,32 +15,13 @@ export default class CartApi extends BaseApi {
 		return this.httpService;
 	}
 
-	public async getCartQuantity(
-		options?: UseFetchOptions<{ totalQuantity: number }>,
-	): Promise<HttpReturnType<{ totalQuantity: number }>> {
-		const url = '/cart/quantity';
-		return await this.sendRequest<{ totalQuantity: number }>(HttpMethod.GET, url, {
-			...options,
-		});
-	}
-
-	public async getCartTotalAmount(): Promise<HttpReturnType<{ totalPrice: number }>> {
-		const url = '/cart/total';
-		return await this.sendRequest<{ totalPrice: number }>(HttpMethod.GET, url);
-	}
-
-	public async getCartItems(
+	public async getCartProducts(
 		options?: UseFetchOptions<ICartProductItem[]>,
 	): Promise<HttpReturnType<ICartProductItem[]>> {
 		const url = '/cart/products';
 		return await this.sendRequest<ICartProductItem[]>(HttpMethod.GET, url, {
 			...options,
 		});
-	}
-
-	public async getProductsForCartByIds(ids: number[]): Promise<HttpReturnType<Omit<IProduct[], 'info'>>> {
-		const url = '/cart/products';
-		return await this.sendRequest<Omit<IProduct[], 'info'>, number[]>(HttpMethod.POST, url, ids);
 	}
 
 	public async addProductToCart(
@@ -54,6 +35,20 @@ export default class CartApi extends BaseApi {
 		});
 	}
 
+	public async updateCartProduct(cartProductId: number, body: IAddProductToCartRequest) {
+		const url = `/cart/update/${cartProductId}`;
+		return await this.sendRequest<IAddProductToCartResponse, IAddProductToCartRequest>(HttpMethod.POST, url, body);
+	}
+
+	public async getCartQuantity(
+		options?: UseFetchOptions<{ totalQuantity: number }>,
+	): Promise<HttpReturnType<{ totalQuantity: number }>> {
+		const url = '/cart/quantity';
+		return await this.sendRequest<{ totalQuantity: number }>(HttpMethod.GET, url, {
+			...options,
+		});
+	}
+
 	public async deleteCartProduct(cartProductId: number): Promise<HttpReturnType<{ message: string }>> {
 		const url = `/cart/remove/${cartProductId}`;
 		return await this.sendRequest<{ message: string }>(HttpMethod.DELETE, url);
@@ -62,5 +57,11 @@ export default class CartApi extends BaseApi {
 	public async deleteAllCartProducts(): Promise<HttpReturnType<{ message: string }>> {
 		const url = '/cart/clear';
 		return await this.sendRequest<{ message: string }>(HttpMethod.DELETE, url);
+	}
+
+	// Получение товаров, ессли юзер не залогинен
+	public async getProductsForCartByIds(ids: number[]): Promise<HttpReturnType<Omit<IProduct[], 'info'>>> {
+		const url = '/cart/products';
+		return await this.sendRequest<Omit<IProduct[], 'info'>, number[]>(HttpMethod.POST, url, ids);
 	}
 }

@@ -14,7 +14,7 @@
 					<slot />
 				</div>
 				<Sidebar
-					class="w-1/3"
+					class="xl:w-[45vw] w-[55vw]"
 					blockScroll
 					v-model:visible="cartStore.isCartSidebarVisible"
 					header="Корзина"
@@ -50,7 +50,7 @@ const containerClass = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .layout-default-container {
 	display: flex;
 	flex-direction: column;
@@ -64,5 +64,12 @@ const containerClass = computed(() => {
 	width: 100%;
 	padding: 7px;
 	margin: auto;
+}
+
+.p-sidebar .p-sidebar-header {
+	@apply border-b-1 border-b-solid border-gray-300;
+	&-content {
+		@apply text-2xl font-['Raleway'] font-600 py-3;
+	}
 }
 </style>

@@ -65,10 +65,6 @@ const addToCart = async () => {
 		clothingSizeId: selectedClothingSize.value ?? null,
 		productConfigurationId: selectedConiguration.value?.id ?? null,
 		cupSizeId: selectedCupSize.value ?? null,
-		id: new Date().getTime(),
-		cartId: 'locale-cart',
-		createdAt: new Date(),
-		updatedAt: new Date(),
 		quantity: 1,
 	});
 	buttonClass.value = 'add-to-cart-animation';
@@ -95,11 +91,11 @@ const addToCart = async () => {
 		<div class="flex flex-col justify-start mx-5">
 			<h4 class="text-[20px] font-bold">{{ product?.name }}</h4>
 
-			<p>Артикул: {{ product?.sku }}</p>
-			<p class="text-[20px]">{{ product?.price.toLocaleString() }} ₽</p>
+			<p class="mb-2">Артикул: {{ product?.sku }}</p>
+			<p class="text-[20px] mb-2">{{ product?.price.toLocaleString() }} ₽</p>
 
 			<div v-if="product?.productConfigurations.length">
-				<p>Комплектация</p>
+				<p class="mb-2">Комплектация</p>
 				<div class="flex gap-2">
 					<Button
 						@click="selectConfiguration(configuration)"
