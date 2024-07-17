@@ -19,14 +19,14 @@ const updateImgNum = (i: number) => {
 </script>
 
 <template>
-	<div class="flex flex-wrap max-w-[560px] max-h-[140px] w-full h-full gap-1 mt--5">
+	<div class="flex flex-wrap max-h-[140px] w-full h-full gap-1">
 		<NuxtImg
 			v-for="(img, i) in images"
 			:key="i"
 			:src="`${config.public.api.replace('/api/', '')}/uploads/${images[i]?.url}`"
 			alt=""
 			:class="[
-				'w-16 h-20 transition-opacity duration-400 ease-in-out hover:opacity-70 cursor-pointer',
+				'w-16 h-20 transition-opacity object-cover object-center duration-400 ease-in-out hover:opacity-70 cursor-pointer',
 				imgNum === i ? 'border-debug' : '',
 			]"
 			@click="updateImgNum(i)"

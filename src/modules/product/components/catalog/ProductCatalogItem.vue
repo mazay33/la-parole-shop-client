@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from '#imports';
 import type { ProductListItem } from '~/services/api/product/productApi.types';
 
 interface Props {
@@ -8,19 +7,6 @@ interface Props {
 
 const props = defineProps<Props>();
 const config = useRuntimeConfig();
-
-// const cartArr = computed(() => {
-// 	// const variationId = props.product?.variations?.length > 0 ? props.product.variations[0].id : null;
-
-// 	return {
-// 		productId: props.product?.id,
-// 		variationId: props.product.sku,
-// 		cup: 1,
-// 		under: 1,
-// 		clothing: 1,
-// 		price: props.product?.price,
-// 	};
-// });
 </script>
 
 <template>
@@ -34,8 +20,15 @@ const config = useRuntimeConfig();
 		>
 			<div class="product__image">
 				<img
+					:class="product.images[1] ? 'hover:opacity-100 duration-200' : ''"
 					v-if="product.images[0]?.url"
 					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[0]?.url}`"
+				/>
+				<img
+					v-if="product.images[1]?.url"
+					class="opacity-0 hover:opacity-100 duration-200"
+					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[1]?.url}`"
+					alt=""
 				/>
 			</div>
 			<div class="flex-1 mt-5 text-dark">
@@ -44,10 +37,6 @@ const config = useRuntimeConfig();
 				<div class="mt-3">{{ props.product.price }} ₽</div>
 			</div>
 		</nuxt-link>
-		<!-- <likes
-			:cartArr="cartArr"
-			class="absolute top-5 right-3 pt-4 pb-4"
-		/> -->
 	</div>
 </template>
 

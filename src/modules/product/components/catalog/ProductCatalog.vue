@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import useApiService from '~/services/apiService';
 
 const apiService = useApiService();
@@ -42,12 +41,12 @@ const setGridClass = (size: 'small' | 'medium' | 'large') => {
 			<Button @click="setGridClass('large')"> Large </Button>
 		</div>
 		<div :class="`grid gap-y-5 gap-x-5 ${gridClass}`">
-			<ProductCatalogProduct
+			<ProductCatalogItem
 				v-for="product in products.data"
 				:key="product.id"
 				:product="product"
 			/>
-			<ProductCatalogProduct
+			<ProductCatalogItem
 				v-for="product in products.data"
 				:key="product.id"
 				:product="product"
