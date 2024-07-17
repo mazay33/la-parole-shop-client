@@ -2,7 +2,7 @@
 const router = useRouter();
 const userEmail = ref();
 
-const gid = ref('center');
+const gid = ref<'center'>('center');
 const visible = ref(false);
 
 const openPosition = pos => {
@@ -41,12 +41,12 @@ const recomendation = ref(false);
 						<nuxt-link class="nlink" to="/product/dostavka_i_oplata#obmen-i-vozvrat">
 							ОБМЕН И ВОЗВРАТ
 						</nuxt-link>
-						<p1
+						<p
 							class="nlink cursor-pointer"
 							@click="openPosition('bottom')"
 						>
 							ГИД ПО РАЗМЕРАМ
-						</p1>
+						</p>
 						<Dialog
 							v-model:visible="visible"
 							header="Гид по размерам"
@@ -63,12 +63,12 @@ const recomendation = ref(false);
 							</div>
 						</Dialog>
 
-						<p1
+						<p
 							class="nlink cursor-pointer"
 							@click="recomendation = true"
 						>
 							РЕКОМЕНДАЦИИ ПО УХОДУ
-						</p1>
+						</p>
 						<Dialog
 							v-model:visible="recomendation"
 							modal
