@@ -2,10 +2,10 @@ import type { IPaginatedResult } from '~/@types/pagination';
 import type HttpService from '../../httpService';
 import { HttpMethod, type HttpReturnType } from '../../httpService';
 import BaseApi from '../base';
-import type { IAddProductToWishListResponse, IWishListProductItem } from './favoriteApi.types';
+import type { IAddProductToWishListResponse, IWishListProductItem } from './wishlistApi.types';
 import type { UseFetchOptions } from '#app';
 
-export default class CartApi extends BaseApi {
+export default class WishlistApi extends BaseApi {
 	constructor(private httpService: HttpService) {
 		super();
 	}
@@ -14,7 +14,7 @@ export default class CartApi extends BaseApi {
 		return this.httpService;
 	}
 
-	public async getCartItems(
+	public async getWishlistProducts(
 		options?: UseFetchOptions<IWishListProductItem[]>,
 	): Promise<HttpReturnType<IWishListProductItem[]>> {
 		const url = '/wishlist';

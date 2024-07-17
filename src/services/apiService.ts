@@ -3,14 +3,14 @@ import AuthApi from './api/auth/authApi';
 import UserApi from './api/user/userApi';
 import ProductApi from './api/product/productApi';
 import CartApi from './api/cart/cartApi';
-import FavoriteApi from './api/wishlist/favoriteApi';
+import WishlistApi from './api/wishlist/wishlistApi';
 import SizesApi from './api/sizes/sizesApi';
 
 export * from './api/auth/authApi';
 export * from './api/user/userApi';
 export * from './api/product/productApi';
 export * from './api/cart/cartApi';
-export * from './api/wishlist/favoriteApi';
+export * from './api/wishlist/wishlistApi';
 export * from './api/sizes/sizesApi';
 
 class ApiService {
@@ -18,7 +18,7 @@ class ApiService {
 	readonly user: UserApi;
 	readonly product: ProductApi;
 	readonly cart: CartApi;
-	readonly favorite: FavoriteApi;
+	readonly wishlist: WishlistApi;
 	readonly sizes: SizesApi;
 
 	constructor(httpService: HttpService) {
@@ -26,7 +26,7 @@ class ApiService {
 		this.user = new UserApi(httpService);
 		this.product = new ProductApi(httpService);
 		this.cart = new CartApi(httpService);
-		this.favorite = new FavoriteApi(httpService);
+		this.wishlist = new WishlistApi(httpService);
 		this.sizes = new SizesApi(httpService);
 	}
 }

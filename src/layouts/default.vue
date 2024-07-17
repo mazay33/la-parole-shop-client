@@ -22,6 +22,15 @@
 				>
 					<CartView />
 				</Sidebar>
+				<Sidebar
+					class="xl:w-[45vw] w-[55vw]"
+					blockScroll
+					v-model:visible="isSidebarActive"
+					header="Избранное"
+					position="right"
+				>
+					фыфв
+				</Sidebar>
 				<AppFooter />
 			</div>
 			<div class="layout-mask" />
