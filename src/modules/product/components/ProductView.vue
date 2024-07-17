@@ -5,19 +5,62 @@ const apiService = useApiService();
 const productId = useRoute().params.id;
 
 const { data: product } = await apiService.product.getProductById(String(productId));
+
+const { data: productCollections } = await apiService.product.getProducts({
+	query: {
+		name: `${product.value?.name}`,
+		page: 1,
+		pageSize: 4,
+	},
+});
+
+// Фильтра по категориям еще нет на бэке
+const { data: similarProducts } = await apiService.product.getProducts({
+	query: {
+		category: product.value?.category?.id,
+		page: 1,
+		pageSize: 8,
+	},
+});
 </script>
 
 <template>
-	<div class="grid grid-cols-2 gap-10 font-['Raleway'] text-lg">
-		<ProductImageGallery
-			v-if="product?.images.length"
-			:images="product?.images"
-		/>
+	<div class="flex flex-col font-['Raleway']">
+		<div class="grid grid-cols-2 gap-10 text-lg">
+			<ProductImageGallery
+				v-if="product?.images.length"
+				:images="product?.images"
+			/>
 
-		<ProductInfo
-			v-if="product"
-			:product="product"
-		/>
+			<ProductInfo
+				v-if="product"
+				:product="product"
+			/>
+		</div>
+
+		<div class="flex flex-col gap-20 w-full">
+			<div class="flex flex-col gap-6">
+				<h3 class="uppercase font-300">{{ product?.name }} collection</h3>
+				<div class="grid grid-cols-4 gap-3 gap-y-6">
+					<ProductCatalogItem
+						v-for="product in productCollections?.data"
+						:key="product.id"
+						:product="product"
+					/>
+				</div>
+			</div>
+
+			<div class="flex flex-col gap-6">
+				<h3 class="uppercase font-300">Вам может понравится</h3>
+				<div class="grid grid-cols-4 gap-3 gap-y-6">
+					<ProductCatalogItem
+						v-for="product in similarProducts?.data"
+						:key="product.id"
+						:product="product"
+					/>
+				</div>
+			</div>
+		</div>
 	</div>
 	<!-- <div class="mt-15">
 			<accordion />
