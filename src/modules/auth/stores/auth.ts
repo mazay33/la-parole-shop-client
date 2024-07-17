@@ -28,15 +28,14 @@ export const useAuthStore = defineStore('auth', () => {
 			accessToken.value = data?.value?.accessToken;
 
 			await userStore.getMe();
-			nextTick(async () => {
-				await useRouter().push('/');
+			nextTick(() => {
+				useRouter().go(-1);
 			});
 		}
 		if (error.value) {
 			console.error(error.value.data);
 		}
 	};
-
 	const loginWithYandex = async (tokenQuery: string) => {
 		const { data, error } = await apiService.auth.loginWithYandex(tokenQuery);
 
@@ -45,7 +44,13 @@ export const useAuthStore = defineStore('auth', () => {
 
 			await userStore.getMe();
 			nextTick(async () => {
-				await useRouter().push('/');
+				const previousRoute = localStorage.getItem('previousRoute');
+				if (previousRoute) {
+					await useRouter().push(previousRoute);
+					localStorage.removeItem('previousRoute');
+				} else {
+					await useRouter().push('/');
+				}
 			});
 		}
 		if (error.value) {
