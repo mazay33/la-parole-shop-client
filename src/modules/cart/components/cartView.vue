@@ -7,7 +7,7 @@ const { cartProducts, cartTotalPrice } = storeToRefs(cartStore);
 </script>
 <template>
 	<div class="flex flex-col gap-4 font-['Raleway']">
-		<div class="flex flex-col justify-center gap-4 pb-20">
+		<div class="flex flex-col justify-center gap-4 pt-4 pb-20">
 			<CartProduct
 				v-for="product in cartProducts"
 				:key="product.id"
