@@ -167,24 +167,6 @@ export const useCartStore = defineStore('cart', () => {
 		cartStorage.value = cartStorage.value.filter(cartProduct => cartProduct.id !== cartProductId);
 	};
 
-	// const getCartTotalAmount = async () => {
-	// 	if (authStore.isAuthenticated) {
-	// 		const { data } = await apiService.cart.getCartTotalAmount();
-	// 		if (data.value) {
-	// 			cartTotalPrice.value = data.value.totalPrice;
-	// 		}
-	// 	} else {
-	// 		getCartTotalAmountFromLocaleStorage();
-	// 	}
-	// };
-
-	// const getCartTotalAmountFromLocaleStorage = () => {
-	// 	if (import.meta.server) return;
-	// 	cartTotalPrice.value = cartProducts.value.reduce((total, cartProduct) => {
-	// 		return total + cartProduct.quantity * cartProduct.product.price;
-	// 	}, 0);
-	// };
-
 	return {
 		isCartSidebarVisible,
 		getCart,

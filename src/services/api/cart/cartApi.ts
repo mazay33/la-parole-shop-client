@@ -37,7 +37,7 @@ export default class CartApi extends BaseApi {
 
 	public async updateCartProduct(cartProductId: number, body: IAddProductToCartRequest) {
 		const url = `/cart/update/${cartProductId}`;
-		return await this.sendRequest<IAddProductToCartResponse, IAddProductToCartRequest>(HttpMethod.POST, url, body);
+		return await this.sendRequest<IAddProductToCartResponse, IAddProductToCartRequest>(HttpMethod.PUT, url, body);
 	}
 
 	public async getCartQuantity(
