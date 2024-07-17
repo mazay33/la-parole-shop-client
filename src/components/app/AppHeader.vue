@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRuntimeConfig, useRouter } from '#imports';
 import { onClickOutside } from '@vueuse/core';
 

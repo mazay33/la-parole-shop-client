@@ -2,6 +2,7 @@ import pkg from './package.json';
 
 export default defineNuxtConfig({
 	srcDir: 'src',
+
 	alias: {
 		'~': `${__dirname}/src/`,
 		'@': `${__dirname}/src/`,
@@ -17,6 +18,7 @@ export default defineNuxtConfig({
 
 	devtools: true,
 	ssr: true,
+
 	runtimeConfig: {
 		public: {
 			APP_VERSION: pkg.version,
@@ -25,6 +27,7 @@ export default defineNuxtConfig({
 			// APP_MODE: process.env?.NODE_ENV,
 		},
 	},
+
 	routeRules: {
 		'/auth/success-google': { ssr: false },
 		'/auth/success-yandex': { ssr: false },
@@ -44,6 +47,7 @@ export default defineNuxtConfig({
 		'~/modules/cart/module',
 		'@nuxt/image',
 	],
+
 	// eslint: {
 	// 	lintOnStart: false,
 	// },
@@ -56,18 +60,22 @@ export default defineNuxtConfig({
 			ripple: true,
 		},
 	},
+
 	css: [
 		'primevue/resources/primevue.css',
 		'primeicons/primeicons.css',
 		'@sfxcode/formkit-primevue/dist/sass/formkit-primevue.scss',
 	],
+
 	build: {
 		transpile: ['nuxt', 'primevue', 'formkit-primevue'],
 	},
+
 	sourcemap: {
 		client: false,
 		server: true,
 	},
+
 	nitro: {
 		prerender: {
 			failOnError: false,
@@ -75,4 +83,6 @@ export default defineNuxtConfig({
 		minify: true,
 		compressPublicAssets: true,
 	},
+
+	compatibilityDate: '2024-07-15',
 });

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-
 interface Link {
 	text: string;
 	to: string;
