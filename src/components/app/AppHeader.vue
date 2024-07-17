@@ -1,4 +1,8 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRuntimeConfig, useRouter } from '#imports';
+import { onClickOutside } from '@vueuse/core';
+
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
@@ -8,146 +12,61 @@ const { isAuthenticated } = authStore;
 
 await cartStore.getCartQuantity();
 
-const items = ref([
-	{
-		label: 'Каталог',
-		root: true,
-		items: [
-			[
-				{
-					label: 'КОМПЛЕКТЫ',
-					items: [
-						{ label: 'ВСЕ КОМПЛЕКТЫ', link: '/product/catalog' },
-						{ label: 'BESTSELLERS' },
-						{ label: 'БАЗОВЫЕ КОМПЛЕКТЫ' },
-						{ label: 'КРУЖЕВНОЕ БЕЛЬЕ' },
-						{ label: 'ЧЕРНОЕ БЕЛЬЕ' },
-						{ label: 'ТЕЛЕСНОЕ БЕЛЬЕ' },
-						{ label: 'НЕЖНОЕ БЕЛЬЕ' },
-						{ label: 'КРАСНОЕ БЕЛЬЕ' },
-						{ label: 'КРАСНОЕ БЕЛЬЕ' },
-						{ label: 'БЕЛЬЕ ДЛЯ СВИДАНИЙ' },
-					],
-				},
-			],
-			[
-				{
-					label: 'БЮСТГАЛЬТЕРЫ',
-					items: [
-						{ label: 'ВСЕ БЮСТГАЛЬТЕРЫ' },
-						{ label: 'КЛАССИЧЕСКАЯ ЧАШКА' },
-						{ label: 'УКОРОЧЕННАЯ ЧАШКА' },
-						{ label: 'БАЛКОНЕТ' },
-						{ label: 'КОРСЕТ' },
-					],
-				},
-			],
-			[
-				{
-					label: 'ТРУСИКИ',
-					items: [
-						{ label: 'ВСЕ ТРУСИКИ' },
-						{ label: 'СТРИНГИ' },
-						{ label: 'СТРИНГИ НА РЕГУЛЯТОРАХ' },
-						{ label: 'БРАЗИЛЬЯНО' },
-						{ label: 'БРАЗИЛЬЯНО НА РЕГУЛЯТОРАХ' },
-						{ label: 'ВЫСОКИЕ' },
-						{ label: 'КРУЖЕВНЫЕ' },
-					],
-				},
-			],
-			[
-				{
-					label: 'АКСЕССУАРЫ',
-					items: [{ label: 'ПОЯСА' }, { label: 'Посмотреть все' }],
-				},
-			],
-		],
-	},
-	{
-		label: 'Новиники',
-		root: true,
-	},
-	{
-		label: 'Сертификаты',
-		root: true,
-	},
-	{
-		label: 'Индивидуальный пошив',
-		root: true,
-	},
-	{
-		label: 'Скидки',
-		root: true,
-	},
-	{
-		label: 'О нас',
-		root: true,
-	},
-]);
-
 const isAuthModalOpen = ref(false);
+const isHeaderPanelOpen = ref(false);
 
-// const wishListOpen = ref(false);
+const target = ref(null);
 
-// const closeWishList = () => {
-// 	wishListOpen.value = false;
-// };
+onClickOutside(target, event => {
+	isHeaderPanelOpen.value = false;
+});
 
-// const openWishList = () => {
-// 	wishListOpen.value = true;
-// };
-
-// provide('wishs', {
-// 	closeWishList,
-// 	openWishList,
-// });
+const menuItems = ref([
+	{ text: 'Каталог', to: '/', isPanel: true },
+	{ text: 'Сертификаты', to: '/' },
+	{ text: 'Индивидуальный пошив', to: '/' },
+	{ text: 'О нас', to: '/' },
+]);
 </script>
 
 <template>
-	<header class="app-header fixed w-full z-50 bg-[#f4f4f4]/[0.25] backdrop-blur-md">
-		<MegaMenu
-			class="max-w-[1180px] mx-auto"
-			:model="items"
-		>
-			<template #start>
-				<div class="">
+	<header
+		ref="target"
+		class="fixed top-0 left-0 right-0 z-50 bg-[#f4f4f4]/[0.25] backdrop-blur-md w-full"
+	>
+		<div class="max-w-[1180px] mx-auto">
+			<div class="h-[84px] flex items-center">
+				<nuxt-link to="/">
 					<img
 						class="w-19 cursor-pointer"
-						src="https://static.tildacdn.com/tild3231-6432-4035-b065-626135383237/01.svg"
+						src="https://optim.tildacdn.com/tild3465-6133-4137-b136-333565323731/-/cover/404x364/center/center/-/format/webp/_r_.png"
 						alt=""
-						@click="router.push('/')"
 					/>
-				</div>
-			</template>
-
-			<template #item="{ item }">
-				<nuxt-link
-					:to="item.link"
-					v-if="item.root"
-					class="flex items-center px-3 py-2 cursor-pointer overflow-hidden relative uppercase text-[--text-color] text-sm"
-				>
-					<span :class="item.icon" />
-					<span class="">{{ item.label }}</span>
 				</nuxt-link>
 
-				<div
-					v-else-if="!item.image"
-					class="flex items-center p-2 cursor-pointer gap-1 text-[--text-color]"
-				>
-					<nuxt-link
-						:to="item.link"
-						class="inline-flex flex-column gap-1"
-					>
-						<span class=" ">{{ item.label }} </span>
-					</nuxt-link>
+				<div class="flex items-center gap-2 ml-a mr-12">
+					<ul class="flex items-center gap-6 list-none">
+						<transition name="fade">
+							<AppHeaderPanel
+								@@close="() => (isHeaderPanelOpen = false)"
+								v-if="isHeaderPanelOpen"
+							/>
+						</transition>
+						<li
+							v-for="(item, index) in menuItems"
+							:key="index"
+							@click="item.isPanel ? (isHeaderPanelOpen = !isHeaderPanelOpen) : router.push(item.to)"
+							class="p-1 cursor-pointer"
+						>
+							<span class="uppercase text-[--text-color] hover:text-[--primary-color] duration-200">
+								{{ item.text }}
+							</span>
+						</li>
+					</ul>
 				</div>
-			</template>
 
-			<template #end>
 				<div class="flex gap-6 items-center">
 					<i class="pi pi-heart text-2xl cursor-pointer"></i>
-					<!-- <favorite v-if="wishListOpen" /> -->
 					<ClientOnly>
 						<i
 							v-if="cartStore.cartQuantity && cartStore.cartQuantity > 0"
@@ -169,49 +88,32 @@ const isAuthModalOpen = ref(false);
 						></i>
 					</ClientOnly>
 				</div>
-			</template>
-		</MegaMenu>
+			</div>
+		</div>
 	</header>
-
 	<Dialog
 		v-model:visible="isAuthModalOpen"
 		modal
-		header="Login"
-		:style="{ width: '25rem' }"
+		header="Вход"
+		:style="{ width: '40rem' }"
+		:pt="{
+			mask: {
+				style: 'backdrop-filter: blur(4px)',
+			},
+		}"
 	>
-		<nuxt-link :to="config.public.api + 'auth/yandex'">
-			<Button
-				type="submit"
-				label="Sign In with Yandex"
-				icon="pi pi-user"
-				class="w-full mt-4"
-			></Button>
-		</nuxt-link>
+		<AuthModal @@close="isAuthModalOpen = false" />
 	</Dialog>
 </template>
 
-<style lang="scss">
-.app-header {
-	.p-megamenu {
-		justify-content: space-between;
-		align-items: center;
-		background: inherit;
-		border: none;
-		text-transform: uppercase;
-		font-weight: 300;
-		&-root-list {
-			margin-left: auto;
-			gap: 16px;
-		}
-		.p-menuitem:nth-child(1) {
-			padding-top: 1.5px;
-		}
-		.p-megamenu-panel {
-			top: 60px;
-		}
-		&-end {
-			margin-left: 32px;
-		}
-	}
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+	transition: all 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+	transform: translateY(-2rem);
+	opacity: 0;
 }
 </style>
