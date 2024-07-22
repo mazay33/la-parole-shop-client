@@ -19,6 +19,7 @@ const login = async () => {
 		emit('@close');
 	}
 	loading.value = false;
+	authStore.authModalCustomText = '';
 };
 
 const loginWithYadnex = async () => {
@@ -27,10 +28,20 @@ const loginWithYadnex = async () => {
 	localStorage.setItem('previousRoute', previousRoute);
 
 	navigateTo(config.public.api + 'auth/yandex', { external: true });
+	authStore.authModalCustomText = '';
 };
 </script>
 <template>
 	<div class="w-full surface-card px-3 py-2">
+		<div
+			class="flex items-center justify-center p-3 bg-[--surface-100] mb-7 rounded-xl"
+			v-if="authStore.isAuthCustomTextVisible"
+		>
+			<i class="pi pi-exclamation-circle mr-4 text-2xl"></i>
+			<span>
+				{{ authStore.authModalCustomText }}
+			</span>
+		</div>
 		<div class="flex flex-col gap-2">
 			<label for="email">Электронная почта</label>
 			<InputText

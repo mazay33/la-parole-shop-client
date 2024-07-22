@@ -8,6 +8,11 @@ export const useAuthStore = defineStore('auth', () => {
 	const isAuthenticated = computed(() => {
 		return !!accessToken.value;
 	});
+	const isAuthModalOpen = ref(false);
+	const authModalCustomText = ref('');
+	const isAuthCustomTextVisible = computed(() => {
+		return !!authModalCustomText.value;
+	});
 
 	const login = async (email: string, password: string) => {
 		const { data, error } = await apiService.auth.login(email, password);
@@ -76,5 +81,8 @@ export const useAuthStore = defineStore('auth', () => {
 		logout,
 		accessToken,
 		isAuthenticated,
+		isAuthModalOpen,
+		authModalCustomText,
+		isAuthCustomTextVisible,
 	};
 });
