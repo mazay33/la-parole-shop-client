@@ -5,6 +5,7 @@ import ProductApi from './api/product/productApi';
 import CartApi from './api/cart/cartApi';
 import WishlistApi from './api/wishlist/wishlistApi';
 import SizesApi from './api/sizes/sizesApi';
+import CategoryApi from './api/category/categoryApi';
 
 export * from './api/auth/authApi';
 export * from './api/user/userApi';
@@ -12,6 +13,7 @@ export * from './api/product/productApi';
 export * from './api/cart/cartApi';
 export * from './api/wishlist/wishlistApi';
 export * from './api/sizes/sizesApi';
+export * from './api/category/categoryApi';
 
 class ApiService {
 	readonly auth: AuthApi;
@@ -20,6 +22,7 @@ class ApiService {
 	readonly cart: CartApi;
 	readonly wishlist: WishlistApi;
 	readonly sizes: SizesApi;
+	readonly category: CategoryApi;
 
 	constructor(httpService: HttpService) {
 		this.auth = new AuthApi(httpService);
@@ -28,6 +31,7 @@ class ApiService {
 		this.cart = new CartApi(httpService);
 		this.wishlist = new WishlistApi(httpService);
 		this.sizes = new SizesApi(httpService);
+		this.category = new CategoryApi(httpService);
 	}
 }
 

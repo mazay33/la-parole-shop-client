@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { useRuntimeConfig, useRouter } from '#imports';
 import { onClickOutside } from '@vueuse/core';
+import { useWishlistStore } from '~/modules/wishlist/stores/wishlist';
 
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 const router = useRouter();
 
 const { isAuthenticated } = authStore;
+const { isAuthModalOpen } = storeToRefs(authStore);
 
 await cartStore.getCartQuantity();
 
-const isAuthModalOpen = ref(false);
 const isHeaderPanelOpen = ref(false);
 
 const target = ref(null);
@@ -65,8 +67,19 @@ const menuItems = ref([
 				</div>
 
 				<div class="flex gap-6 items-center">
-					<i class="pi pi-heart text-2xl cursor-pointer"></i>
 					<ClientOnly>
+						<i
+							v-if="wishlistStore.wishlistProductsQuantity && wishlistStore.wishlistProductsQuantity > 0"
+							v-badge="wishlistStore.wishlistProductsQuantity"
+							@click="wishlistStore.isWishlistSidebarOpen = true"
+							class="pi pi-heart text-2xl cursor-pointer"
+						></i>
+
+						<i
+							v-else
+							@click="wishlistStore.isWishlistSidebarOpen = true"
+							class="pi pi-heart text-2xl cursor-pointer"
+						></i>
 						<i
 							v-if="cartStore.cartQuantity && cartStore.cartQuantity > 0"
 							v-badge="cartStore.cartQuantity"
@@ -81,7 +94,7 @@ const menuItems = ref([
 						></i>
 
 						<i
-							@click="isAuthModalOpen = true"
+							@click="!isAuthenticated ? (isAuthModalOpen = true) : useRouter().push('/profile/user')"
 							:class="!isAuthenticated ? 'pi pi-sign-in ' : 'pi pi-user'"
 							class="text-2xl cursor-pointer"
 						></i>
@@ -90,19 +103,6 @@ const menuItems = ref([
 			</div>
 		</div>
 	</header>
-	<Dialog
-		v-model:visible="isAuthModalOpen"
-		modal
-		header="Вход"
-		:style="{ width: '40rem' }"
-		:pt="{
-			mask: {
-				style: 'backdrop-filter: blur(4px)',
-			},
-		}"
-	>
-		<AuthModal @@close="isAuthModalOpen = false" />
-	</Dialog>
 </template>
 
 <style scoped>

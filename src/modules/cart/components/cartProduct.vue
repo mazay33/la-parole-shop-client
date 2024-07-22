@@ -34,7 +34,7 @@ const updateCartProduct = async () => {
 			<div>
 				<img
 					v-if="cartProduct.product.images.length"
-					class="w-20 object-cover rounded-lg"
+					class="w-30 object-cover rounded-lg"
 					:src="`${config.public.api.replace('/api/', '')}/uploads/${props.cartProduct.product.images[0]?.url}`"
 					alt=""
 				/>
@@ -44,7 +44,7 @@ const updateCartProduct = async () => {
 					<p class="text-xl">{{ cartProduct.product.name }}</p>
 				</div>
 
-				<div class="flex flex-col justify-center items-start text-[##323232] text-[12px]">
+				<div class="flex flex-col justify-center items-start text-[#323232] text-[12px]">
 					<p class="leading-[1.5]">Комплектация: {{ cartProduct.productConfiguration?.name }}</p>
 
 					<p
@@ -73,12 +73,14 @@ const updateCartProduct = async () => {
 						}}
 					</p>
 					<div
-						class=""
+						class="flex items-center gap-4 mt-2"
 						@click="toggle"
 					>
-						<Button class="text-sm px-3 py-2 mt-2">
-							<i class="pi pi-pencil mr-2"></i>Изменить размер</Button
-						>
+						<Button class="text-sm px-3 py-2"> <i class="pi pi-pencil mr-2"></i>Изменить размер</Button>
+						<LikeIcon
+							custom-class="border-1 border-solid border-gray-300 "
+							:productId="cartProduct.product.id"
+						/>
 					</div>
 				</div>
 			</div>

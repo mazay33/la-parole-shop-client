@@ -1,11 +1,19 @@
 <script setup>
+import { useWishlistStore } from './modules/wishlist/stores/wishlist';
+
 useHead({
 	title: 'La Parole',
 });
 const sizesStore = useSizesStore();
 const userStore = useUserStore();
+const authStore = useAuthStore();
+const wishlistStore = useWishlistStore();
 
 await userStore.getMe();
+
+if (authStore.isAuthenticated) {
+	await wishlistStore.getWishlistProducts();
+}
 
 await sizesStore.getSizes();
 </script>

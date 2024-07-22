@@ -25,22 +25,42 @@
 				<Sidebar
 					class="xl:w-[45vw] w-[55vw]"
 					blockScroll
-					v-model:visible="isSidebarActive"
+					v-model:visible="wishlistStore.isWishlistSidebarOpen"
 					header="Избранное"
 					position="right"
 				>
-					фыфв
+					<Wishlist />
 				</Sidebar>
 				<AppFooter />
 			</div>
+			<Dialog
+				@after-hide="authStore.authModalCustomText = ''"
+				v-model:visible="isAuthModalOpen"
+				modal
+				header="Вход"
+				:style="{ width: '40rem' }"
+				:pt="{
+					mask: {
+						style: 'backdrop-filter: blur(4px)',
+					},
+				}"
+			>
+				<AuthModal @@close="isAuthModalOpen = false" />
+			</Dialog>
 			<div class="layout-mask" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import Wishlist from '~/modules/wishlist/components/Wishlist.vue';
+import { useWishlistStore } from '~/modules/wishlist/stores/wishlist';
+
 const themeStore = useThemeStore();
 const cartStore = useCartStore();
+const authStore = useAuthStore();
+const { isAuthModalOpen } = storeToRefs(authStore);
+const wishlistStore = useWishlistStore();
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 

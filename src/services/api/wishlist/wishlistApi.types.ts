@@ -18,21 +18,16 @@ export interface IAddProductToWishListRequest {
 
 export interface IWishListProductItem {
 	id: number;
-	cartId: string;
+	wishlistId: string;
 	productId: number;
-	quantity: number; //
-	configurataionId: number | null;
-	cupSizeId: number | null;
-	clothingSizeId: number | null;
-	beltSizeId: number | null;
 	createdAt: Date;
 	updatedAt: Date;
 	product: Omit<IProduct, 'cupSizes' | 'clothingSizes' | 'beltSizes' | 'info'>;
 }
 export interface IWishList {
+	id: number;
 	userId: string;
 	createdAt: Date;
 	updatedAt: Date;
-
-	cartProducts: IWishListProductItem[];
+	wishlistProducts: IWishListProductItem[];
 }
