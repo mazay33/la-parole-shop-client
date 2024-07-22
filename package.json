@@ -64,6 +64,7 @@
 		"vitest": "^1.6.0"
 	},
 	"dependencies": {
+		"@formkit/auto-animate": "^0.8.2",
 		"defu": "^6.1.4",
 		"vee-validate": "^4.13.1",
 		"yup": "^1.4.0"

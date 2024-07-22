@@ -38,6 +38,7 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'nuxt-primevue',
 		'@formkit/nuxt',
+		'@formkit/auto-animate/nuxt',
 		'@unocss/nuxt',
 		'@pinia/nuxt',
 		'@pinia-plugin-persistedstate/nuxt',
@@ -45,6 +46,8 @@ export default defineNuxtConfig({
 		'~/modules/auth/module',
 		'~/modules/product/module',
 		'~/modules/cart/module',
+		'~/modules/wishlist/module',
+		'~/modules/profile/module',
 		'@nuxt/image',
 	],
 
