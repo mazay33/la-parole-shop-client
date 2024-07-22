@@ -140,13 +140,13 @@ const addToCart = async () => {
 			>
 				{{ size.size }}
 			</Button>
-			<div v-if="selectedConfiguration?.name.includes('С поясом и гартерами')">
-				<p m-0>Гартеры:</p>
-				<p font-300>Соответствует размеру трусиков*</p>
+			<div v-if="selectedConfiguration?.name.includes('гартерами')">
+				<p class="m-0">Гартеры:</p>
+				<p class="font-300">Соответствует размеру трусиков*</p>
 			</div>
 		</div>
 
-		<div class="mt-10 flex">
+		<div class="mt-10 flex items-center gap-4">
 			<Button
 				:disabled="isAddToCartDisabled"
 				@click="addToCart()"
@@ -154,14 +154,11 @@ const addToCart = async () => {
 				class="uppercase px-[30px] py-4 font-500 bg-black border-black hover:bg-[#e4aa9f] hover:border-[#e4aa9f] rounded-xl"
 				>Добавить в корзину</Button
 			>
+			<LikeIcon :product-id="product.id" />
 		</div>
 		<div class="mt-10">
 			Закажите
-			<NuxtLink
-				to="/poshiv"
-				class="text-red-300"
-				>пошив по индивидуальным меркам</NuxtLink
-			>
+			<NuxtLink to="/poshiv">пошив по индивидуальным меркам</NuxtLink>
 			данного комплекта
 		</div>
 		<div class="pt-10">

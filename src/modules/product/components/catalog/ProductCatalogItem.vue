@@ -14,11 +14,15 @@ const config = useRuntimeConfig();
 		class="relative"
 		v-if="props.product"
 	>
+		<LikeIcon
+			:productId="props.product.id"
+			customClass="absolute top-3 right-3 z-10"
+		/>
 		<nuxt-link
 			class="product flex-col overflow-hidden"
 			:to="`/product/${props.product.id}`"
 		>
-			<div class="product__image">
+			<div class="product__image relative">
 				<img
 					:class="product.images[1] ? 'hover:opacity-100 duration-200' : ''"
 					v-if="product.images[0]?.url"

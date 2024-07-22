@@ -1,5 +1,7 @@
 {
   "globals": {
+    "useWishlistStore": "readonly",
+    "useCartStore": "readonly",
     "useAuthStore": "readonly",
     "useUserStore": "readonly",
     "useLayout": "readonly",
@@ -8,6 +10,7 @@
     "fetchWithCookie": "readonly",
     "useCounterStore": "readonly",
     "useDataStore": "readonly",
+    "useSizesStore": "readonly",
     "updateTheme": "readonly",
     "useThemeStore": "readonly",
     "usePrimeVue": "readonly",
@@ -15,6 +18,8 @@
     "useConfirm": "readonly",
     "useToast": "readonly",
     "useDialog": "readonly",
+    "autoAnimate": "readonly",
+    "useAutoAnimate": "readonly",
     "defineStore": "readonly",
     "acceptHMRUpdate": "readonly",
     "usePinia": "readonly",
