@@ -9,31 +9,54 @@ const router = useRouter();
 const page = ref(1);
 const pageSize = ref(50);
 const name = ref<string | undefined>(route.query.name as string);
+const subCategoryId = ref<string | undefined>(route.query.subCategory as string);
 const categoryId = ref<string | undefined>((route.query.categoryId as string) || undefined);
 const sortBy = ref<string | undefined>(route.query.sortBy as string);
 const sortType = ref<'asc' | 'desc' | undefined>((route.query.sortType as 'asc' | 'desc') || undefined);
 const debounceName = useDebounce(name, 500);
 
-watch([debounceName, categoryId, sortBy, sortType], ([newName, newCategoryId, newSortBy, newSortType]) => {
-	if (!newName) {
-		newName = undefined;
-	}
-	if (!newSortBy) {
-		newSortBy = undefined;
-	}
-	if (!newSortType) {
-		newSortType = undefined;
-	}
-	router.push({
-		query: {
-			...route.query,
-			name: newName,
-			categoryId: newCategoryId,
-			sortBy: newSortBy,
-			sortType: newSortType,
-		},
-	});
-});
+watch(
+	[debounceName, categoryId, sortBy, sortType, subCategoryId],
+	([newName, newCategoryId, newSortBy, newSortType, newSubCategoryId]) => {
+		if (!newName) {
+			name.value = undefined;
+		}
+		if (!newSortBy) {
+			sortBy.value = undefined;
+		}
+		if (!newSortType) {
+			sortType.value = undefined;
+		}
+		if (!newSubCategoryId) {
+			subCategoryId.value = undefined;
+		}
+		if (!newCategoryId) {
+			categoryId.value = undefined;
+		}
+
+		router.push({
+			query: {
+				...route.query,
+				name: newName,
+				categoryId: newCategoryId,
+				subCategory: newSubCategoryId,
+				sortBy: newSortBy,
+				sortType: newSortType,
+			},
+		});
+	},
+);
+
+watch(
+	() => route.query,
+	() => {
+		name.value = route.query.name as string | undefined;
+		categoryId.value = (route.query.categoryId as string) || undefined;
+		sortBy.value = (route.query.sortBy as string) || undefined;
+		sortType.value = (route.query.sortType as 'asc' | 'desc') || undefined;
+		subCategoryId.value = (route.query.subCategory as string) || undefined;
+	},
+);
 
 const { data: products } = await apiService.product.getProducts({
 	query: {
@@ -41,8 +64,9 @@ const { data: products } = await apiService.product.getProducts({
 		pageSize,
 		name: debounceName,
 		categoryId,
-		sortBy: sortBy,
-		sortType: sortType,
+		sortBy,
+		sortType,
+		subCategoryId,
 	},
 });
 
@@ -76,13 +100,12 @@ const setGridClass = (size: 'small' | 'medium' | 'large') => {
 		</div> -->
 
 		<!-- TODO: filter component -->
-		<!--  -->
 		<ProductCatalogFilter
 			v-model:model-name="name"
 			v-model:model-sort-type="sortType"
 			v-model:model-sort-by="sortBy"
-			:category-id="categoryId"
-			@update:category-id="v => (categoryId = v)"
+			v-model:model-sub-category="subCategoryId"
+			v-model:model-category="categoryId"
 		/>
 
 		<div

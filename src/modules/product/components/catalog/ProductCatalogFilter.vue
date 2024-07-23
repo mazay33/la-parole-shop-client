@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { ISubCategory } from '~/services/api/sub-category/subCategoryApi.types';
 import useApiService from '~/services/apiService';
 
 const name = defineModel('modelName');
 const sortBy = defineModel<string>('modelSortBy');
 const sortType = defineModel<string>('modelSortType');
-const emit = defineEmits(['update:categoryId']);
-const props = defineProps<{ categoryId: string | undefined }>();
+const categoryId = defineModel<string>('modelCategory');
+const subCategoryId = defineModel<string>('modelSubCategory');
 
 const apiService = useApiService();
 
@@ -19,13 +20,41 @@ const sortOptions = [
 	{ label: 'По названию (Z-A)', type: 'desc', value: 'name' },
 ];
 const selectedSortOption = ref(sortOptions[0]);
+const selectedSubCategory = ref<ISubCategory>();
+
+let isCategoryChangeTriggeredByUser = false;
 
 watchEffect(() => {
 	sortBy.value = selectedSortOption.value?.value;
 	sortType.value = selectedSortOption.value?.type;
+	subCategoryId.value = selectedSubCategory.value?.id.toString();
+});
+
+watch(selectedSubCategory, newSubCategory => {
+	if (newSubCategory && newSubCategory.categoryId) {
+		isCategoryChangeTriggeredByUser = false;
+		categoryId.value = newSubCategory.categoryId.toString();
+	}
+});
+
+watch(categoryId, newCategoryId => {
+	if (isCategoryChangeTriggeredByUser) {
+		selectedSubCategory.value = undefined; // Reset subcategory when category changes
+	}
 });
 
 const { data: categories } = await apiService.category.getCategories();
+const { data: subCategories } = await apiService.subCategory.getSubCategories();
+
+const subCategoriesByCategoryId = computed(() => {
+	if (!categoryId.value) return subCategories.value;
+	return subCategories.value?.filter(subCategory => subCategory.categoryId == +categoryId.value!);
+});
+
+const handleCategoryClick = (id: string | undefined) => {
+	isCategoryChangeTriggeredByUser = true;
+	categoryId.value = id;
+};
 </script>
 
 <template>
@@ -42,17 +71,17 @@ const { data: categories } = await apiService.category.getCategories();
 				<template v-if="categories">
 					<div
 						class="cursor-pointer"
-						:class="!+props.categoryId! ? 'text-[--primary-color]' : 'text-gray-400'"
-						@click="emit('update:categoryId', undefined)"
+						:class="!+categoryId! ? 'text-[--primary-color]' : 'text-gray-400'"
+						@click="handleCategoryClick(undefined)"
 					>
 						Все
 					</div>
 					<div
-						@click="emit('update:categoryId', category.id)"
+						@click="handleCategoryClick(category.id.toString())"
 						v-for="category in categories"
 						:key="category.id"
 						class="cursor-pointer"
-						:class="+props.categoryId! === category.id ? 'text-[--primary-color]' : 'text-gray-500'"
+						:class="+categoryId! === category.id ? 'text-[--primary-color]' : 'text-gray-500'"
 					>
 						{{ category.name }}
 					</div>
@@ -60,10 +89,14 @@ const { data: categories } = await apiService.category.getCategories();
 			</div>
 
 			<div class="flex justify-between items-center">
-				<div>
+				<div v-if="subCategoriesByCategoryId">
 					<Dropdown
 						class="min-w-[180px]"
 						placeholder="Раздел"
+						:options="subCategoriesByCategoryId"
+						option-label="name"
+						v-model="selectedSubCategory"
+						showClear
 					/>
 				</div>
 				<div class="flex gap-5">

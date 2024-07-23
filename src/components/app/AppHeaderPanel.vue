@@ -5,7 +5,7 @@ interface Link {
 }
 
 interface Category {
-	title: string;
+	mainLink: Link;
 	links: Link[];
 }
 
@@ -13,9 +13,12 @@ const emit = defineEmits(['@close']);
 
 const categories = ref<Category[]>([
 	{
-		title: 'КОМПЛЕКТЫ',
+		mainLink: {
+			text: 'КАТАЛОГ',
+			to: '/product/catalog?categoryId=1',
+		},
 		links: [
-			{ text: 'БАЗОВЫЕ КОМПЛЕКТЫ', to: '/product/catalog' },
+			{ text: 'БАЗОВЫЕ КОМПЛЕКТЫ', to: '/product/catalog?categoryId=1' },
 			{ text: 'КРУЖЕВНОЕ БЕЛЬЕ', to: '/product/catalog' },
 			{ text: 'ЧЕРНОЕ БЕЛЬЕ', to: '/product/catalog' },
 			{ text: 'ТЕЛЕСНОЕ БЕЛЬЕ', to: '/product/catalog' },
@@ -24,9 +27,9 @@ const categories = ref<Category[]>([
 		],
 	},
 	{
-		title: 'БЮСТГАЛЬТЕРЫ',
+		mainLink: { text: 'БЮСТГАЛЬТЕРЫ', to: '/product/catalog?categoryId=2' },
 		links: [
-			{ text: 'КЛАССИЧЕСКАЯ ЧАШКА', to: '/product/catalog' },
+			{ text: 'КЛАССИЧЕСКАЯ ЧАШКА', to: '/product/catalog?categoryId=2' },
 			{ text: 'УКОРОЧЕННАЯ ЧАШКА', to: '/product/catalog' },
 			{ text: 'БАЛКОНЕТ', to: '/product/catalog' },
 			{ text: 'КОРСЕТ', to: '/product/catalog' },
@@ -34,7 +37,7 @@ const categories = ref<Category[]>([
 	},
 
 	{
-		title: 'ТРУСИКИ',
+		mainLink: { text: 'ТРУСИКИ', to: '/product/catalog?categoryId=3' },
 		links: [
 			{ text: 'СТРИНГИ', to: '/product/catalog' },
 			{ text: 'СТРИНГИ НА РЕГУЛЯТОРАХ', to: '/product/catalog' },
@@ -45,7 +48,7 @@ const categories = ref<Category[]>([
 		],
 	},
 	{
-		title: 'АКСЕССУАРЫ',
+		mainLink: { text: 'АКСЕССУАРЫ', to: '/product/catalog?categoryId=4' },
 		links: [{ text: 'ПОЯСА', to: '/product/catalog' }],
 	},
 	// Добавьте другие категории здесь
@@ -66,7 +69,7 @@ const categories = ref<Category[]>([
 							@click="emit('@close')"
 							class="font-700 text-[--primary-color] p-3 cursor-pointer"
 						>
-							{{ category.title }}
+							<nuxt-link :to="category.mainLink.to">{{ category.mainLink.text }}</nuxt-link>
 						</li>
 						<li
 							@click="emit('@close')"
