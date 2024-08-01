@@ -18,6 +18,25 @@ const config = useRuntimeConfig();
 			:productId="props.product.id"
 			customClass="absolute top-3 right-3 z-10"
 		/>
+		<!-- TODO: new and bestseller on backend -->
+		<Tag
+			v-if="false"
+			class="absolute top-3 left-3 z-10 p-2 uppercase rounded-none text-base font-600"
+			severity="secondary"
+			value="New"
+		></Tag>
+		<Tag
+			v-else-if="false"
+			class="absolute top-3 left-3 z-10 p-2 uppercase rounded-none text-base font-600"
+			severity="secondary"
+			value="Bestseller"
+		></Tag>
+		<Tag
+			v-else-if="props.product.discount"
+			class="absolute top-3 left-3 z-10 p-2 uppercase rounded-none text-base font-600"
+			severity="secondary"
+			:value="`Sale ${props.product.discount}%`"
+		></Tag>
 		<nuxt-link
 			class="product flex-col overflow-hidden"
 			:to="`/product/${props.product.id}`"
