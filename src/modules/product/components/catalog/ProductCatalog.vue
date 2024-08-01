@@ -9,7 +9,7 @@ const router = useRouter();
 const page = ref(1);
 const pageSize = ref(50);
 const name = ref<string | undefined>(route.query.name as string);
-const subCategoryId = ref<string | undefined>(route.query.subCategory as string);
+const subCategoryId = ref<string | undefined>(route.query.subCategoryId as string);
 const categoryId = ref<string | undefined>((route.query.categoryId as string) || undefined);
 const sortBy = ref<string | undefined>(route.query.sortBy as string);
 const sortType = ref<'asc' | 'desc' | undefined>((route.query.sortType as 'asc' | 'desc') || undefined);
@@ -19,19 +19,19 @@ watch(
 	[debounceName, categoryId, sortBy, sortType, subCategoryId],
 	([newName, newCategoryId, newSortBy, newSortType, newSubCategoryId]) => {
 		if (!newName) {
-			name.value = undefined;
+			newName = undefined;
 		}
 		if (!newSortBy) {
-			sortBy.value = undefined;
+			newSortBy = undefined;
 		}
 		if (!newSortType) {
-			sortType.value = undefined;
+			newSortType = undefined;
 		}
 		if (!newSubCategoryId) {
-			subCategoryId.value = undefined;
+			newSubCategoryId = undefined;
 		}
 		if (!newCategoryId) {
-			categoryId.value = undefined;
+			newCategoryId = undefined;
 		}
 
 		router.push({
@@ -39,7 +39,7 @@ watch(
 				...route.query,
 				name: newName,
 				categoryId: newCategoryId,
-				subCategory: newSubCategoryId,
+				subCategoryId: newSubCategoryId,
 				sortBy: newSortBy,
 				sortType: newSortType,
 			},
@@ -54,7 +54,7 @@ watch(
 		categoryId.value = (route.query.categoryId as string) || undefined;
 		sortBy.value = (route.query.sortBy as string) || undefined;
 		sortType.value = (route.query.sortType as 'asc' | 'desc') || undefined;
-		subCategoryId.value = (route.query.subCategory as string) || undefined;
+		subCategoryId.value = (route.query.subCategoryId as string) || undefined;
 	},
 );
 
@@ -106,54 +106,29 @@ const setGridClass = (size: 'small' | 'medium' | 'large') => {
 			v-model:model-sort-by="sortBy"
 			v-model:model-sub-category="subCategoryId"
 			v-model:model-category="categoryId"
+			:products-count="products.total"
 		/>
 
-		<div
-			v-auto-animate
-			:class="`grid gap-y-5 gap-x-5 ${gridClass}`"
-		>
-			<ProductCatalogItem
-				v-for="product in products.data"
-				:key="product.id"
-				:product="product"
-			/>
+		<div v-auto-animate>
+			<div
+				v-if="products.total > 0"
+				v-auto-animate
+				:class="`grid gap-y-5 gap-x-5 mt-30 ${gridClass}`"
+			>
+				<ProductCatalogItem
+					v-for="product in products.data"
+					:key="product.id"
+					:product="product"
+				/>
+			</div>
+			<div
+				class="flex justify-center items-center h-[calc(100vh-400px)] border-1 border-black border-solid mt-100px"
+				v-else
+			>
+				<h2>Ничего не найдено</h2>
+			</div>
 		</div>
 	</div>
 </template>
 
-<style scoped>
-.list-enter-from {
-	opacity: 0;
-	transform: scale(0.6);
-}
-.list-enter-active {
-	transition: all 0.4s ease;
-}
-.list-leave-to {
-	opacity: 0;
-	transform: scale(0.6);
-}
-.list-leave-active {
-	transition: all 0.4s ease;
-	position: absolute;
-	width: 0;
-}
-.list-move {
-	transition: all 0.3s ease;
-}
-
-/* switch transitions */
-.switch-enter-from,
-.switch-leave-to {
-	opacity: 0;
-	transform: translateY(20px);
-}
-.switch-enter-active {
-	transition: all 0.5s ease;
-}
-.switch-leave-active {
-	transition: all 0.5s ease;
-	position: absolute;
-	width: 100%;
-}
-</style>
+<style scoped></style>

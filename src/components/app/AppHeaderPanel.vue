@@ -1,65 +1,98 @@
 <script setup lang="ts">
-interface Link {
+import type { ICategory } from '~/services/api/category/categoryApi.types';
+import type { ISubCategory } from '~/services/api/sub-category/subCategoryApi.types';
+import useApiService from '~/services/apiService';
+
+type MenuLink = {
 	text: string;
 	to: string;
-}
+};
 
-interface Category {
-	mainLink: Link;
-	links: Link[];
-}
+type MenuItem = {
+	mainLink: MenuLink;
+	links: MenuLink[];
+};
+
+const apiService = useApiService();
 
 const emit = defineEmits(['@close']);
 
-const categories = ref<Category[]>([
-	{
-		mainLink: {
-			text: 'КАТАЛОГ',
-			to: '/product/catalog?categoryId=1',
-		},
-		links: [
-			{ text: 'БАЗОВЫЕ КОМПЛЕКТЫ', to: '/product/catalog?categoryId=1' },
-			{ text: 'КРУЖЕВНОЕ БЕЛЬЕ', to: '/product/catalog' },
-			{ text: 'ЧЕРНОЕ БЕЛЬЕ', to: '/product/catalog' },
-			{ text: 'ТЕЛЕСНОЕ БЕЛЬЕ', to: '/product/catalog' },
-			{ text: 'КРАСНОЕ БЕЛЬЕ', to: '/product/catalog' },
-			{ text: 'БЕЛЬЕ ДЛЯ СВИДАНИЙ', to: '/product/catalog' },
-		],
-	},
-	{
-		mainLink: { text: 'БЮСТГАЛЬТЕРЫ', to: '/product/catalog?categoryId=2' },
-		links: [
-			{ text: 'КЛАССИЧЕСКАЯ ЧАШКА', to: '/product/catalog?categoryId=2' },
-			{ text: 'УКОРОЧЕННАЯ ЧАШКА', to: '/product/catalog' },
-			{ text: 'БАЛКОНЕТ', to: '/product/catalog' },
-			{ text: 'КОРСЕТ', to: '/product/catalog' },
-		],
-	},
+const { data: categories } = await apiService.category.getCategories();
 
-	{
-		mainLink: { text: 'ТРУСИКИ', to: '/product/catalog?categoryId=3' },
-		links: [
-			{ text: 'СТРИНГИ', to: '/product/catalog' },
-			{ text: 'СТРИНГИ НА РЕГУЛЯТОРАХ', to: '/product/catalog' },
-			{ text: 'БРАЗИЛЬЯНО', to: '/product/catalog' },
-			{ text: 'БРАЗИЛЬЯНО НА РЕГУЛЯТОРАХ', to: '/product/catalog' },
-			{ text: 'ВЫСОКИЕ', to: '/product/catalog' },
-			{ text: 'КРУЖЕВНЫЕ', to: '/product/catalog' },
-		],
-	},
-	{
-		mainLink: { text: 'АКСЕССУАРЫ', to: '/product/catalog?categoryId=4' },
-		links: [{ text: 'ПОЯСА', to: '/product/catalog' }],
-	},
-	// Добавьте другие категории здесь
-]);
+const { data: subCategories } = await apiService.subCategory.getSubCategories();
+
+const generateMenu = (categories: ICategory[], subCategories: ISubCategory[]): MenuItem[] => {
+	return categories.map(category => {
+		const links = subCategories
+			.filter(subCategory => subCategory.categoryId === category.id)
+			.map(subCategory => ({
+				text: subCategory.name,
+				to: `/product/catalog?categoryId=${category.id}&subCategoryId=${subCategory.id}`,
+			}));
+
+		return {
+			mainLink: {
+				text: category.name,
+				to: `/product/catalog?categoryId=${category.id}`,
+			},
+			links,
+		};
+	});
+};
+
+const menu = generateMenu(categories.value, subCategories.value);
+
+console.log(menu);
+
+// const categories1 = ref<Category[]>([
+// 	{
+// 		mainLink: {
+// 			text: 'КАТАЛОГ',
+// 			to: '/product/catalog?categoryId=1',
+// 		},
+// 		links: [
+// 			{ text: 'БАЗОВЫЕ КОМПЛЕКТЫ', to: '/product/catalog?categoryId=1' },
+// 			{ text: 'КРУЖЕВНОЕ БЕЛЬЕ', to: '/product/catalog' },
+// 			{ text: 'ЧЕРНОЕ БЕЛЬЕ', to: '/product/catalog' },
+// 			{ text: 'ТЕЛЕСНОЕ БЕЛЬЕ', to: '/product/catalog' },
+// 			{ text: 'КРАСНОЕ БЕЛЬЕ', to: '/product/catalog' },
+// 			{ text: 'БЕЛЬЕ ДЛЯ СВИДАНИЙ', to: '/product/catalog' },
+// 		],
+// 	},
+// 	{
+// 		mainLink: { text: 'БЮСТГАЛЬТЕРЫ', to: '/product/catalog?categoryId=2' },
+// 		links: [
+// 			{ text: 'КЛАССИЧЕСКАЯ ЧАШКА', to: '/product/catalog?categoryId=2' },
+// 			{ text: 'УКОРОЧЕННАЯ ЧАШКА', to: '/product/catalog' },
+// 			{ text: 'БАЛКОНЕТ', to: '/product/catalog' },
+// 			{ text: 'КОРСЕТ', to: '/product/catalog' },
+// 		],
+// 	},
+
+// 	{
+// 		mainLink: { text: 'ТРУСИКИ', to: '/product/catalog?categoryId=3' },
+// 		links: [
+// 			{ text: 'СТРИНГИ', to: '/product/catalog' },
+// 			{ text: 'СТРИНГИ НА РЕГУЛЯТОРАХ', to: '/product/catalog' },
+// 			{ text: 'БРАЗИЛЬЯНО', to: '/product/catalog' },
+// 			{ text: 'БРАЗИЛЬЯНО НА РЕГУЛЯТОРАХ', to: '/product/catalog' },
+// 			{ text: 'ВЫСОКИЕ', to: '/product/catalog' },
+// 			{ text: 'КРУЖЕВНЫЕ', to: '/product/catalog' },
+// 		],
+// 	},
+// 	{
+// 		mainLink: { text: 'АКСЕССУАРЫ', to: '/product/catalog?categoryId=4' },
+// 		links: [{ text: 'ПОЯСА', to: '/product/catalog' }],
+// 	},
+// 	// Добавьте другие категории здесь
+// ]);
 </script>
 
 <template>
 	<div class="dropdown-menu">
 		<div class="grid grid-cols-10 w-full">
 			<div
-				v-for="(category, index) in categories"
+				v-for="(category, index) in menu"
 				:key="index"
 				class="col-span-2 [&:nth-last-child(2)]:col-span-1"
 			>
