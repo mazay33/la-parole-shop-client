@@ -43,16 +43,25 @@ const config = useRuntimeConfig();
 		>
 			<div class="product__image relative">
 				<img
-					:class="product.images[1] ? 'hover:opacity-100 duration-200' : ''"
-					v-if="product.images[0]?.url"
-					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[0]?.url}`"
+					v-lazy="{
+						src: `${config.public.api.replace('/api/', '')}/uploads/${props.product.images[0]?.url}`,
+						placeholder: '/_nuxt/public/placeholder.svg',
+					}"
+					:class="props.product.images[1] ? 'hover:opacity-100 duration-200' : ''"
+					v-if="props.product.images[0]?.url"
+					alt="Product Image"
+					lazy
 				/>
-				<img
-					v-if="product.images[1]?.url"
+
+				<!-- <img
+					v-lazy="{
+						src: `${config.public.api.replace('/api/', '')}/uploads/${props.product.images[1]?.url}`,
+						placeholder: 'https://placehold.co/305x505',
+					}"
+					v-if="props.product.images[1]?.url"
 					class="opacity-0 hover:opacity-100 duration-200"
-					:src="`${config.public.api.replace('/api/', '')}/uploads/${product.images[1]?.url}`"
-					alt=""
-				/>
+					alt="Product Image"
+				/> -->
 			</div>
 			<div class="flex-1 mt-5 text-dark">
 				<div class="font-600">{{ props.product.name }}</div>
@@ -74,7 +83,17 @@ const config = useRuntimeConfig();
 			position: absolute;
 			top: 0;
 			width: 100%;
+			background-color: #f5f5f5;
 		}
+
+		& img.loading {
+			opacity: 0.5;
+		}
+
+		& img.loaded {
+			opacity: 1;
+		}
+
 		&::after {
 			background-color: inherit;
 			content: '';
@@ -83,13 +102,5 @@ const config = useRuntimeConfig();
 			pointer-events: none;
 		}
 	}
-}
-
-.likes {
-	position: absolute;
-	top: 5px;
-	right: 3px;
-	z-index: 10;
-	pointer-events: auto;
 }
 </style>
