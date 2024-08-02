@@ -9,6 +9,7 @@ const lazyDirective = {
 		return {
 			src: binding.value.placeholder,
 			loading: 'lazy',
+			class: 'loading',
 		};
 	},
 	mounted(el: LazyImageElement, binding: { value: { src: string; placeholder: string } }) {

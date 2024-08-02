@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ProductListItem } from '~/services/api/product/productApi.types';
+import placeholder from '~/public/placeholder.svg';
 
 interface Props {
 	product: ProductListItem;
@@ -45,12 +46,11 @@ const config = useRuntimeConfig();
 				<img
 					v-lazy="{
 						src: `${config.public.api.replace('/api/', '')}/uploads/${props.product.images[0]?.url}`,
-						placeholder: '/_nuxt/public/placeholder.svg',
+						placeholder,
 					}"
 					:class="props.product.images[1] ? 'hover:opacity-100 duration-200' : ''"
 					v-if="props.product.images[0]?.url"
 					alt="Product Image"
-					lazy
 				/>
 
 				<!-- <img
@@ -88,10 +88,14 @@ const config = useRuntimeConfig();
 
 		& img.loading {
 			opacity: 0.5;
+			transition: all 0.4s;
+			aspect-ratio: 9/16;
+			animation: skeleton-loading 0.8s linear infinite alternate;
 		}
 
 		& img.loaded {
 			opacity: 1;
+			transition: all 0.4s;
 		}
 
 		&::after {
@@ -101,6 +105,15 @@ const config = useRuntimeConfig();
 			padding-top: 134%;
 			pointer-events: none;
 		}
+	}
+}
+
+@keyframes skeleton-loading {
+	0% {
+		background-color: #f9fafb;
+	}
+	100% {
+		background-color: #d1d5db;
 	}
 }
 </style>
