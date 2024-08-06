@@ -1,5 +1,3 @@
-// ~/directives/v-lazy.ts
-
 interface LazyImageElement extends HTMLImageElement {
 	_lazyLoadObserver?: IntersectionObserver;
 }
@@ -8,7 +6,6 @@ const lazyDirective = {
 	getSSRProps(binding: { value: { src: string; placeholder: string } }, vnode: VNode) {
 		return {
 			src: binding.value.placeholder,
-			loading: 'lazy',
 			class: 'loading',
 		};
 	},
@@ -22,6 +19,7 @@ const lazyDirective = {
 				el.src = binding.value.src;
 				el.classList.add('loaded');
 				el.classList.remove('loading');
+				el.parentElement?.classList.remove('loading');
 			};
 		};
 
@@ -29,7 +27,7 @@ const lazyDirective = {
 		const onIntersect = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
-					el.classList.add('loading'); // Add loading class for styling
+					el.classList.add('loading');
 					loadImage();
 					observer.unobserve(el);
 				}

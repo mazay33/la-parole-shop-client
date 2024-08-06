@@ -42,8 +42,9 @@ const config = useRuntimeConfig();
 			class="product flex-col overflow-hidden"
 			:to="`/product/${props.product.id}`"
 		>
-			<div class="product__image relative">
+			<div class="product__image loading">
 				<img
+					loading="lazy"
 					v-lazy="{
 						src: `${config.public.api.replace('/api/', '')}/uploads/${props.product.images[0]?.url}`,
 						placeholder,
@@ -96,6 +97,32 @@ const config = useRuntimeConfig();
 		& img.loaded {
 			opacity: 1;
 			transition: all 0.4s;
+		}
+
+		&.loading::before {
+			content: '';
+			position: absolute;
+			width: 48px;
+			height: 48px;
+			z-index: 11111;
+			border: 5px solid #fff;
+			border-bottom-color: #f6b7ac;
+			border-radius: 50%;
+			display: block;
+			box-sizing: border-box;
+			animation: rotation 1s linear infinite;
+			left: 45%;
+			top: 42%;
+			transform: translate(-50%, -50%);
+		}
+
+		@keyframes rotation {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
 		}
 
 		&::after {
