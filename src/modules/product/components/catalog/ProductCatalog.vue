@@ -68,6 +68,7 @@ const { data: products } = await apiService.product.getProducts({
 		sortType,
 		subCategoryId,
 	},
+	lazy: true,
 });
 
 const gridClass = ref('grid-cols-1 sm:grid-cols-2 lg:grid-cols-3');
