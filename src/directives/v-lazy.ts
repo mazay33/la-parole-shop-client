@@ -6,7 +6,6 @@ const lazyDirective = {
 	getSSRProps(binding: { value: { src: string; placeholder: string } }, vnode: VNode) {
 		return {
 			src: binding.value.placeholder,
-			class: 'loading',
 		};
 	},
 	mounted(el: LazyImageElement, binding: { value: { src: string; placeholder: string } }) {

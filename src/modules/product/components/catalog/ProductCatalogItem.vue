@@ -17,7 +17,7 @@ const config = useRuntimeConfig();
 	>
 		<LikeIcon
 			:productId="props.product.id"
-			customClass="absolute top-3 right-3 z-10"
+			customClass="absolute top-3 right-3 z-20"
 		/>
 		<!-- TODO: new and bestseller on backend -->
 		<Tag
@@ -42,27 +42,25 @@ const config = useRuntimeConfig();
 			class="product flex-col overflow-hidden"
 			:to="`/product/${props.product.id}`"
 		>
-			<div class="product__image loading">
+			<div class="product__image loading relative">
 				<img
-					loading="lazy"
 					v-lazy="{
 						src: `${config.public.api.replace('/api/', '')}/uploads/${props.product.images[0]?.url}`,
 						placeholder,
 					}"
-					:class="props.product.images[1] ? 'hover:opacity-100 duration-200' : ''"
+					:class="props.product.images[1] ? 'first-image' : ''"
 					v-if="props.product.images[0]?.url"
 					alt="Product Image"
 				/>
-
-				<!-- <img
+				<img
 					v-lazy="{
 						src: `${config.public.api.replace('/api/', '')}/uploads/${props.product.images[1]?.url}`,
-						placeholder: 'https://placehold.co/305x505',
+						placeholder,
 					}"
+					:class="props.product.images[1] ? 'second-image' : ''"
 					v-if="props.product.images[1]?.url"
-					class="opacity-0 hover:opacity-100 duration-200"
-					alt="Product Image"
-				/> -->
+					alt=""
+				/>
 			</div>
 			<div class="flex-1 mt-5 text-dark">
 				<div class="font-600">{{ props.product.name }}</div>
@@ -77,6 +75,24 @@ const config = useRuntimeConfig();
 .product {
 	&__image {
 		position: relative;
+
+		& .first-image {
+			z-index: 1;
+		}
+
+		& .second-image {
+			z-index: 0;
+			opacity: 0;
+		}
+
+		&:hover .first-image {
+			opacity: 0;
+		}
+
+		&:hover .second-image {
+			opacity: 1;
+			z-index: 1;
+		}
 		& img {
 			height: 100%;
 			left: 0;
