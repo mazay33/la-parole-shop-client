@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ICategory } from '~/services/api/category/categoryApi.types';
 import type { ISubCategory } from '~/services/api/sub-category/subCategoryApi.types';
-import useApiService from '~/services/apiService';
 
 type MenuLink = {
 	text: string;
@@ -13,13 +12,10 @@ type MenuItem = {
 	links: MenuLink[];
 };
 
-const apiService = useApiService();
-
 const emit = defineEmits(['@close']);
 
-const { data: categories } = await apiService.category.getCategories();
-
-const { data: subCategories } = await apiService.subCategory.getSubCategories();
+const categoryStore = useCategoryStore();
+const { categories, subCategories } = storeToRefs(categoryStore);
 
 const generateMenu = (categories: ICategory[], subCategories: ISubCategory[]): MenuItem[] => {
 	return categories.map(category => {
@@ -40,9 +36,7 @@ const generateMenu = (categories: ICategory[], subCategories: ISubCategory[]): M
 	});
 };
 
-const menu = generateMenu(categories.value, subCategories.value);
-
-console.log(menu);
+const menu = categories.value && subCategories.value && generateMenu(categories.value, subCategories.value);
 
 // const categories1 = ref<Category[]>([
 // 	{

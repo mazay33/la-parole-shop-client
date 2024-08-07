@@ -31,8 +31,6 @@ let isCategoryChangeTriggeredByUser = false;
 const selectedFilters = ref<string[]>([]); // Array to hold the selected filters
 
 watch(selectedSubCategory, newSubCategoryId => {
-	console.log(newSubCategoryId, 'newSubCategory');
-
 	if (newSubCategoryId && newSubCategoryId.categoryId) {
 		isCategoryChangeTriggeredByUser = false;
 		categoryId.value = newSubCategoryId.categoryId.toString();

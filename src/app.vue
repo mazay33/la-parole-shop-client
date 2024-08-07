@@ -4,6 +4,7 @@ import { useWishlistStore } from './modules/wishlist/stores/wishlist';
 useHead({
 	title: 'La Parole',
 });
+const categoryStore = useCategoryStore();
 const sizesStore = useSizesStore();
 const userStore = useUserStore();
 const authStore = useAuthStore();
@@ -16,6 +17,8 @@ if (authStore.isAuthenticated) {
 }
 
 await sizesStore.getSizes();
+await categoryStore.getCategories();
+await categoryStore.getSubCategories();
 </script>
 
 <template>

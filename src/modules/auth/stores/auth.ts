@@ -27,7 +27,6 @@ export const useAuthStore = defineStore('auth', () => {
 
 	const loginWithGoogle = async (tokenQuery: string) => {
 		const { data, error } = await apiService.auth.loginWithGoogle(tokenQuery);
-		console.log(data);
 
 		if (data.value) {
 			accessToken.value = data?.value?.accessToken;
