@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 import type { ICategory } from '~/services/api/category/categoryApi.types';
 import type { ISubCategory } from '~/services/api/sub-category/subCategoryApi.types';
 
@@ -16,6 +19,7 @@ const emit = defineEmits(['@close']);
 
 const categoryStore = useCategoryStore();
 const { categories, subCategories } = storeToRefs(categoryStore);
+const route = useRoute();
 
 const generateMenu = (categories: ICategory[], subCategories: ISubCategory[]): MenuItem[] => {
 	return categories.map(category => {
@@ -36,50 +40,16 @@ const generateMenu = (categories: ICategory[], subCategories: ISubCategory[]): M
 	});
 };
 
-const menu = categories.value && subCategories.value && generateMenu(categories.value, subCategories.value);
+const menu = computed(() => {
+	if (categories.value && subCategories.value) {
+		return generateMenu(categories.value, subCategories.value);
+	}
+	return [];
+});
 
-// const categories1 = ref<Category[]>([
-// 	{
-// 		mainLink: {
-// 			text: 'КАТАЛОГ',
-// 			to: '/product/catalog?categoryId=1',
-// 		},
-// 		links: [
-// 			{ text: 'БАЗОВЫЕ КОМПЛЕКТЫ', to: '/product/catalog?categoryId=1' },
-// 			{ text: 'КРУЖЕВНОЕ БЕЛЬЕ', to: '/product/catalog' },
-// 			{ text: 'ЧЕРНОЕ БЕЛЬЕ', to: '/product/catalog' },
-// 			{ text: 'ТЕЛЕСНОЕ БЕЛЬЕ', to: '/product/catalog' },
-// 			{ text: 'КРАСНОЕ БЕЛЬЕ', to: '/product/catalog' },
-// 			{ text: 'БЕЛЬЕ ДЛЯ СВИДАНИЙ', to: '/product/catalog' },
-// 		],
-// 	},
-// 	{
-// 		mainLink: { text: 'БЮСТГАЛЬТЕРЫ', to: '/product/catalog?categoryId=2' },
-// 		links: [
-// 			{ text: 'КЛАССИЧЕСКАЯ ЧАШКА', to: '/product/catalog?categoryId=2' },
-// 			{ text: 'УКОРОЧЕННАЯ ЧАШКА', to: '/product/catalog' },
-// 			{ text: 'БАЛКОНЕТ', to: '/product/catalog' },
-// 			{ text: 'КОРСЕТ', to: '/product/catalog' },
-// 		],
-// 	},
-
-// 	{
-// 		mainLink: { text: 'ТРУСИКИ', to: '/product/catalog?categoryId=3' },
-// 		links: [
-// 			{ text: 'СТРИНГИ', to: '/product/catalog' },
-// 			{ text: 'СТРИНГИ НА РЕГУЛЯТОРАХ', to: '/product/catalog' },
-// 			{ text: 'БРАЗИЛЬЯНО', to: '/product/catalog' },
-// 			{ text: 'БРАЗИЛЬЯНО НА РЕГУЛЯТОРАХ', to: '/product/catalog' },
-// 			{ text: 'ВЫСОКИЕ', to: '/product/catalog' },
-// 			{ text: 'КРУЖЕВНЫЕ', to: '/product/catalog' },
-// 		],
-// 	},
-// 	{
-// 		mainLink: { text: 'АКСЕССУАРЫ', to: '/product/catalog?categoryId=4' },
-// 		links: [{ text: 'ПОЯСА', to: '/product/catalog' }],
-// 	},
-// 	// Добавьте другие категории здесь
-// ]);
+const isActiveLink = (link: string): boolean => {
+	return route.fullPath.includes(link);
+};
 </script>
 
 <template>
@@ -94,7 +64,10 @@ const menu = categories.value && subCategories.value && generateMenu(categories.
 					<ul class="list-none p-1 flex flex-col gap-2">
 						<li
 							@click="emit('@close')"
-							class="font-700 text-[--primary-color] p-3 cursor-pointer"
+							:class="[
+								'font-700 p-3 cursor-pointer',
+								isActiveLink(category.mainLink.to) ? 'text-[--primary-color]' : '',
+							]"
 						>
 							<nuxt-link :to="category.mainLink.to">{{ category.mainLink.text }}</nuxt-link>
 						</li>
@@ -102,10 +75,13 @@ const menu = categories.value && subCategories.value && generateMenu(categories.
 							@click="emit('@close')"
 							v-for="(link, linkIndex) in category.links"
 							:key="linkIndex"
-							class="link-item p-3 cursor-pointer"
+							:class="[
+								'link-item p-3 cursor-pointer',
+								isActiveLink(link.to) ? 'text-[--primary-color]' : '',
+							]"
 						>
 							<nuxt-link
-								class="text-gray-500 link"
+								:class="isActiveLink(link.to) ? 'text-[--primary-color]' : 'link text-gray-500'"
 								:to="link.to"
 								>{{ link.text }}</nuxt-link
 							>
