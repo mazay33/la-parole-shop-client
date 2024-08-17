@@ -5,6 +5,10 @@ const props = defineProps<{
 	product: IProduct;
 }>();
 
+const cartStore = useCartStore();
+
+const toast = useToast();
+
 const selectedCupSize = ref<number | null>(null);
 const selectedBeltSize = ref<number | null>(null);
 const selectedClothingSize = ref<number | null>(null);
@@ -49,7 +53,7 @@ const addToCart = async () => {
 		selectedBeltSize.value = null;
 	}
 
-	await useCartStore().addProductToCart(props.product, {
+	await cartStore.addProductToCart(props.product, {
 		beltSizeId: selectedBeltSize.value ?? null,
 		clothingSizeId: selectedClothingSize.value ?? null,
 		productConfigurationId: selectedConfiguration.value?.id ?? null,
@@ -57,6 +61,7 @@ const addToCart = async () => {
 		quantity: 1,
 	});
 	buttonClass.value = 'add-to-cart-animation';
+	toast.add({ severity: 'contrast', summary: `${props.product.name} добавлен в корзину`, life: 3000 });
 	setTimeout(() => {
 		buttonClass.value = '';
 	}, 500);
@@ -65,6 +70,14 @@ const addToCart = async () => {
 
 <template>
 	<div class="flex flex-col justify-start mx-5">
+		<Toast
+			@click="cartStore.isCartSidebarVisible = true"
+			position="bottom-right"
+			:pt="{
+				container: { class: 'p-3 rounded-xl cursor-pointer' },
+				text: { class: 'flex' },
+			}"
+		/>
 		<h4 class="text-[20px] font-bold">{{ product?.name }}</h4>
 
 		<p class="mb-2">Артикул: {{ product?.sku }}</p>
