@@ -48,6 +48,7 @@ export default defineNuxtConfig({
 		'~/modules/cart/module',
 		'~/modules/wishlist/module',
 		'~/modules/profile/module',
+		'~/modules/about/module',
 		'@nuxt/image',
 	],
 
